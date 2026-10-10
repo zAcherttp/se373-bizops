@@ -1,0 +1,38 @@
+[project]
+name = "bizops"
+version = "0.1.0"
+description = "Business Ops Agent: agent điều phối và các agent phòng ban (SE373, UIT)"
+authors = [
+    { name = "zAcherttp", email = "60420569+zAcherttp@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "langchain>=1.4",
+    "langchain-anthropic>=1.7",
+    "langchain-deepseek>=1.1",
+    "langchain-openai>=1.7",
+    "langgraph>=1.2",
+    "pydantic>=2.13",
+    "python-dotenv>=1.0",
+    "pyyaml>=6",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9",
+    "ruff>=0.14",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

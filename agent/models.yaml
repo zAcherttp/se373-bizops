@@ -1,0 +1,36 @@
+# Profile model. Mỗi profile = một model + một kiểu harness.
+#   strong: model có tool calling native, harness mỏng
+#   weak:   model không có tool calling native (endpoint trường), đi qua JsonToolChat, harness dày hơn
+# Chọn profile bằng biến môi trường BIZOPS_PROFILE hoặc tham số --profile.
+
+default: haiku
+
+profiles:
+  haiku:
+    provider: anthropic
+    model: claude-haiku-5-5
+    harness: strong
+  deepseek:
+    provider: deepseek
+    model: deepseek-v4-flash
+    harness: strong
+  gemma-uit:
+    provider: uit
+    endpoint: gemma
+    model: gemma-4-26b
+    harness: weak
+  qwen-uit:
+    provider: uit
+    endpoint: qwen
+    model: qwen3.8-27b
+    harness: weak
+    extra_body:
+      chat_template_kwargs: {enable_thinking: false}   # Qwen mặc định bật thinking
+
+harness:
+  strong:
+    model_call_limit: 15
+    tool_call_limit: 25
+  weak:
+    model_call_limit: 12
+    tool_call_limit: 15

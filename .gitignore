@@ -1,0 +1,20 @@
+# bí mật: không bao giờ commit (lộ API key bị trừ 1 điểm)
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+
+# trace của các lần chạy local (eval cần giữ thì lưu ở evals/results/)
+agent/traces/
+
+.DS_Store
