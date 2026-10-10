@@ -15,5 +15,8 @@ are in `docs/YEU-CAU.md`; research and design direction in `docs/NGHIEN-CUU.md`.
   need a key or network.
 - **Checks before commit:** `uv run ruff check . && uv run pytest` in `agent/`; `pnpm run lint &&
   pnpm run build` in `app/`. Read exit codes, don't pipe into `tail`.
+- **`main` is protected** (ruleset `main`): changes land only through a pull request, after the three
+  CI checks pass (secret scan, Agent, App) on a branch that is up to date with `main`. No force push,
+  no deleting `main`. Required approvals are 0 until teammates are collaborators, then 1.
 - **Lessons** go in `LESSONS.md`, append-only, one tagged English line each.
 - Code identifiers in English; docs and comments may be Vietnamese.
