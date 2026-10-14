@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Quy trình làm việc của nhóm
+    url: https://github.com/zAcherttp/se373-bizops/blob/main/docs/QUY-TRINH.md
+    about: Đọc trước khi mở issue hoặc PR đầu tiên.

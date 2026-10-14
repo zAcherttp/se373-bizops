@@ -1,0 +1,22 @@
+name: Decision
+description: Một lựa chọn cả nhóm cần chốt. Bàn ở đây, chốt xong thì ghi vào docs/decisions/.
+title: "Chốt: "
+labels: ["decision"]
+projects: ["zAcherttp/2"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Câu hỏi
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Các phương án
+      description: Mỗi phương án kèm được và mất. Nếu ảnh hưởng điểm, nói nó tác động use case hay vùng K nào.
+  - type: input
+    id: by
+    attributes:
+      label: Chốt trước
+      placeholder: "buổi học thứ Tư 21/10"

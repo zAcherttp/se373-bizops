@@ -1,0 +1,27 @@
+name: Task
+description: Một việc có người nhận và tiêu chí xong.
+title: ""
+labels: ["task"]
+projects: ["zAcherttp/2"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Làm gì
+      description: Một hai câu nói việc cần làm. Việc thuộc use case nào thì ghi tên use case.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Xong khi
+      description: Cách ai cũng kiểm được là đã xong, ví dụ "pytest có case X và qua", "trace của use case Y hiện đủ bước", "màn hình giống mockup".
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Mảng
+      options: [Agent, App, Eval, Dữ liệu công ty, Docs & báo cáo, Hạ tầng & CI]
+    validations:
+      required: true
