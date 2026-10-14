@@ -1,0 +1,4 @@
+# Mỗi PR chạm vào đường dẫn nào sẽ tự xin review của người sở hữu đường dẫn đó. Dòng khớp CUỐI CÙNG thắng.
+# Khi một bạn nhận phụ trách một mảng (vd agent/src/bizops/rag/), thêm dòng của mảng đó bên dưới, trong chính PR nhận việc.
+
+*    @zAcherttp

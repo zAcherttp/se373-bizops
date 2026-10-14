@@ -1,0 +1,22 @@
+name: Blocker
+description: Bị kẹt quá 30 phút. Mở ngay, mỗi vấn đề một issue.
+title: "Kẹt: "
+labels: ["blocked"]
+projects: ["zAcherttp/2"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Chuyện gì xảy ra
+      description: Đang làm task nào (link), mong đợi gì, thấy gì. Dán lỗi dạng chữ. Xoá API key, token, cookie trước khi dán, vì repo này công khai.
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: Đã thử gì
+  - type: dropdown
+    id: area
+    attributes:
+      label: Mảng
+      options: [Agent, App, Eval, Dữ liệu công ty, Docs & báo cáo, Hạ tầng & CI]
