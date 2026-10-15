@@ -1,10 +1,18 @@
 # tldraw alignment specification
 
-Tracking: [#16](https://github.com/zAcherttp/se373-bizops/issues/16). Source of truth: [architecture proposal](ARCHITECTURE.md). Status: ready to apply after transfer; **the existing board has not been edited**. `docs/SE373.tldr` is not present in this checkout. Do not create a replacement and claim that it preserves the original board.
+Tracking: [#16](https://github.com/zAcherttp/se373-bizops/issues/16). Source of truth: [architecture proposal](ARCHITECTURE.md). Status: **applied to the uploaded original board** on 2026-10-15. Open [SE373.tldr](SE373.tldr) in tldraw. The architecture remains a proposal for team review.
 
-## Apply to the existing board
+## Applied page structure
 
-Preserve the original view as a dated comparison frame. Build three linked frames from the architecture document's three Mermaid diagrams; label each as proposed, with phase markers and explicit implementation status.
+The original had 562 records: three pages, 449 shapes, 108 bindings, one user and one document. All original shapes, bindings, user and document records are preserved unchanged. Original page IDs are preserved; names/order now mark them as reference material. Added 107 records for three proposal pages, native editable shapes/connectors and reference banners (669 records total).
+
+| Current proposal | Preserved earlier page |
+|---|---|
+| 01 Kiến trúc | Tham khảo · Tổng Quan |
+| 02 Request bền | Tham khảo · Chi Tiết |
+| 03 Skill & Phase | Tham khảo · Roadmap |
+
+The new pages carry phase gates and a proposed/not-implemented banner. Old concrete choices remain visible for discussion rather than being silently promoted to decisions.
 
 ### Frame 1 — system and trust boundaries
 
@@ -43,8 +51,12 @@ Preserve the original view as a dated comparison frame. Build three linked frame
 - Split completion logging from optional scoped memory publication.
 - Final verification includes business receipts and recipient access, not just schema/citations.
 
-## Review before saving
+## Validation and review
 
-Confirm the actual board's page IDs, assets and original content after transfer. Preserve unrelated content and verify the edited file opens correctly in tldraw. Check three frames against ARCHITECTURE.md, including the phase gates: P1 one bounded slice, P2 RAG/persistence/LangGraph approval/recovery, P3 multi-agent/MCP and skill evolution. Company, owners and concrete use cases stay marked pending.
+- Compared every original non-page record with the uploaded source: all preserved unchanged.
+- Confirmed unique record IDs, valid parent/binding references and six page entries.
+- Opened the generated file through tldraw's parser/schema migration and browser editor; inspected the current proposal pages and switched through all reference pages.
+- Native shapes and bound arrows remain editable. Browser screenshots were used for visual inspection; they are not substitutes for the editable file.
+- No original assets were present; no assets or unrelated content were removed.
 
-Record the actual board update in a follow-up commit after the original file is available. This specification is not evidence of board completion or acceptance of an ADR.
+Team review is still required for architecture, company/use-case choices and provisional rubric wording. The desktop rubric and transcript research are still missing; receiving the board does not transfer those files.

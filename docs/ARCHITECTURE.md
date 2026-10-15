@@ -4,7 +4,7 @@
 
 This proposal consolidates the brainstorming session, the supplied topic description, the teammate's workflow image, and research into Hermes and DeepSeek Harness/Cordis. It proposes the final system target and a phased delivery path. It does not claim that these capabilities are implemented.
 
-The desktop rubric draft, research changes on `14-transcript-research`, and `SE373.tldr` have not been transferred to this cloud checkout. The supplied screenshot was reviewed; the actual board was not. No company or use-case selection below is already agreed.
+The desktop rubric draft and research changes on `14-transcript-research` have not been transferred to this cloud checkout. The uploaded `SE373.tldr` has now been inspected and updated: three current proposal pages precede three preserved reference pages. See [board notes](TLDRAW-UPDATE.md). No company or use-case selection below is already agreed.
 
 ## 1. Product and scope
 
@@ -354,11 +354,11 @@ Repository links: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team w
 5. Select the messaging channel and the Phase 1 vertical slice with observable completion conditions.
 6. Choose identity, storage/checkpointer, background execution and retrieval implementations at the phase where needed. LangGraph checkpointing and business request state must not become conflicting sources of truth; define their IDs and synchronization contract.
 7. Decide provider data handling, disclosure policy and retention before introducing confidential information.
-8. Reconcile the rubric draft and inspect `SE373.tldr` after transfer. Update the board only from the reviewed proposal.
+8. Reconcile the rubric draft after transfer. Review the updated `SE373.tldr` alongside this proposal; the three original pages remain reference material, not accepted decisions.
 9. Record accepted decisions in Decision issues and ADRs, then create small implementation issues and task branches.
 10. Set recovery objectives, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring. Select the dispatch/checkpoint synchronization contract.
 11. Define the cost catalog, invoice import/reconciliation method, allocation and rounding policies, visibility permissions and budget limits. Set measurable calculator and recovery acceptance criteria before implementation.
 
-Board update specification: [TLDRAW-UPDATE.md](TLDRAW-UPDATE.md). The existing desktop board is still unavailable; this specification is not an edited `.tldr` file.
+Updated editable board: [SE373.tldr](SE373.tldr). Preservation, page mapping and validation are documented in [TLDRAW-UPDATE.md](TLDRAW-UPDATE.md).
 
 Board layout after agreement: (1) system architecture and trust boundaries, (2) request lifecycle plus one concrete business workflow, (3) skill proposal/activation lifecycle. Annotate phase gates and distinguish implemented capabilities from future targets.
