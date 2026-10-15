@@ -1,6 +1,6 @@
 # Nghiên cứu nền · Business Ops Agent
 
-Tổng hợp ngày 10/10/2026. Mỗi nhận định có nguồn; mục nào chưa kiểm chứng được thì ghi rõ.
+Tổng hợp ban đầu ngày 10/10/2026; đồng bộ hướng thiết kế ngày 15/10/2026 theo [đề xuất kiến trúc](ARCHITECTURE.md), issue [#16](https://github.com/zAcherttp/se373-bizops/issues/16). Tài liệu này là nghiên cứu, không phải ADR. Các nhận định về sản phẩm/model và giá cần xác minh lại trước khi triển khai; không dùng bảng so sánh cũ làm bằng chứng một framework thiếu năng lực.
 
 ## 1. Các hệ thống tham khảo
 
@@ -12,8 +12,8 @@ Tổng hợp ngày 10/10/2026. Mỗi nhận định có nguồn; mục nào chư
 | Báo cáo theo lịch | cron, mỗi lần chạy một phiên mới, gửi kết quả lên kênh | cron và heartbeat 30 phút | routine theo lịch hoặc sự kiện | việc định kỳ, mục tiêu đứng |
 | Nhớ qua nhiều phiên | `MEMORY.md` và `USER.md` nhỏ, tìm lại phiên cũ bằng FTS5 | `MEMORY.md` và ghi chú theo ngày, tìm lai vector và từ khoá | memory theo bot; dữ liệu gốc phải nằm ở hệ thống chính | người dùng không xem hay sửa được memory (chưa kiểm chứng) |
 | Tự tạo skill | `skill_manage`; **duyệt tắt mặc định**, bật thì skill chờ ở thư mục pending, xem diff rồi duyệt | Skill Workshop, áp dụng ngay, có phiên bản để hoàn tác, **không có bước duyệt** | skill học từ thao tác mẫu chỉ là **bản nháp** | không có |
-| Phân quyền | chỉ allowlist người dùng, **không có RBAC** | allow/deny tool theo agent | các bot dùng chung một máy, "không phải ranh giới bảo mật" | danh tính riêng cho Dot chuyên trách (preview) |
-| Duyệt hành động tốn tiền | chỉ duyệt lệnh shell nguy hiểm, quá 300 giây thì từ chối | duyệt lệnh exec, không ai trả lời thì từ chối | mua, gửi, xoá đều phải duyệt; "hỏi trước thắng"; hết hạn sau khoảng 10 phút | auto-review hành động, agent không sửa được bộ kiểm |
+| Phân quyền | allowlist/pairing và profile; chưa xác minh đáp ứng RBAC nghiệp vụ của nhóm | allow/deny tool theo agent | các bot dùng chung một máy, "không phải ranh giới bảo mật" | danh tính riêng cho Dot chuyên trách (preview) |
+| Duyệt hành động tốn tiền | có gate lệnh và tool hook; cần thiết kế riêng quyền duyệt nghiệp vụ, action/version và hạn duyệt | duyệt lệnh exec, không ai trả lời thì từ chối | mua, gửi, xoá đều phải duyệt; "hỏi trước thắng"; hết hạn sau khoảng 10 phút | auto-review hành động, agent không sửa được bộ kiểm |
 
 Ba ý tưởng đáng học từ các hệ thống khác:
 - **Paperclip** ([repo](https://github.com/paperclipai/paperclip)): mô hình công ty như sơ đồ tổ chức; ngân sách theo agent dừng cứng; mọi duyệt và chi phí vào nhật ký kiểm toán.
@@ -24,38 +24,34 @@ Rủi ro đã được ghi nhận: skill và memory học được là bề mặ
 
 ## 2. Hướng thiết kế: hơn một bản sao Hermes ở đâu
 
-Hermes là tài liệu tham khảo tốt nhưng không nên làm nền: nó quá lớn để cả nhóm giải thích hết khi vấn đáp, không có phân quyền theo phòng ban hay duyệt chi tiền, và cần tool calling native mà endpoint trường không có. Tám nguyên tắc:
+Bản thiết kế để nhóm review nằm ở [ARCHITECTURE.md](ARCHITECTURE.md); không duy trì một kiến trúc song song tại đây. Hướng đề xuất:
 
-1. **Mỗi bước một chủ.** Agent phòng ban hẹp; điều phối định tuyến rõ ràng, không để một agent làm mọi thứ.
-2. **Chính sách phòng ban là dữ liệu, thi hành ngoài LLM.** Mỗi phòng ban một file khai báo tool, phạm vi dữ liệu, hạn mức chi; kiểm trước mọi tool call. Đây là chỗ Hermes không có.
-3. **Phiếu duyệt là object lưu bền.** Có trạng thái (chờ, duyệt, từ chối, hết hạn), vai trò người được duyệt, ngưỡng tiền, hạn, dòng nhật ký. Hành động tốn tiền chỉ chạy từ một phiếu đã duyệt.
-4. **Đề xuất skill như một pull request kèm eval.** Diff được xem trước; skill chỉ được dùng khi bài kiểm phát lại đạt và người duyệt đồng ý.
-5. **Routine là chương trình kiểm chứng được.** Báo cáo = truy vấn dữ liệu xác định + phần LLM viết diễn giải; có nút "chạy ngay" để demo và test.
-6. **Memory là bản ghi có nguồn, người dùng xem được.** Dữ liệu gốc vẫn ở hệ thống chính. Câu trả lời hỏi đáp phải trích mã đoạn tài liệu; câu không có trích dẫn bị chặn.
-7. **Trace trước tiên.** Mọi quyết định chính sách, phiếu duyệt và tool call đều là sự kiện trong trace; eval chấm trên trace.
-8. **Coi skill, memory và tin nhắn vào là không tin cậy.** Không cài skill bên thứ ba; quét nội dung trước khi ghi vào memory.
+1. **Hỗ trợ nhân viên:** specialist thực thi thay mặt principal đã xác thực; phân vai không cấp quyền.
+2. **Core tin cậy + extension:** identity, policy, approval, lifecycle và audit bắt buộc; phòng ban, connector, channel và model theo contract rõ ràng.
+3. **Tool theo scope:** lọc catalog theo quyền; kiểm lại tool, tham số và record lúc thực thi. Delegation chỉ giữ hoặc thu hẹp quyền.
+4. **Request bền:** admission, checkpoint, lease/heartbeat, recovery và escalation có chủ; không mất việc im lặng; retry không lặp hành động chi tiền.
+5. **Duyệt ngoài LLM:** phiếu gắn action/version, số tiền, người duyệt và hạn; resume kiểm lại quyền.
+6. **Memory/skill có nguồn và scope:** bản tóm tắt giữ policy của nguồn; không tự học dữ liệu riêng vào bộ nhớ chung. Skill mới qua eval và người duyệt trước activation.
+7. **Audit và chi phí:** phân biệt transcript, ledger quyền/hành động và ledger usage/cost; hạn chế payload nhạy cảm. Chi phí ước tính phải phân biệt với bill đã đối soát.
+8. **Theo phase:** làm vertical slice có demo/eval/trace trước; RAG/persistence/workflow ở phase 2, multi-agent/MCP ở phase 3.
+
+Hermes hiện có durable Kanban, bounded delegation, staged skill writes và tool approval hooks. Tham khảo [source snapshot đã khảo sát](https://github.com/NousResearch/hermes-agent/tree/dfa79389773271ee78c41a7af340848948d461ee); đây là khảo sát tĩnh, chưa phải runtime/security benchmark. Quyền nghiệp vụ của nhóm vẫn phải được kiểm chứng riêng.
 
 ## 3. Framework: Python + LangChain/LangGraph
 
-| Yêu cầu | LangChain/LangGraph (Python) | DSH (TypeScript) |
-|---|---|---|
-| Workflow LangGraph có bước duyệt (bắt buộc phase 2) | có sẵn: `StateGraph`, `interrupt()`, `Command(resume)` | không có |
-| Endpoint trường (không có tool calling native) | đã có `JsonToolChat` từ BTVN-03 | phải viết adapter mới |
-| RAG có trích dẫn | có loader, splitter, vector store; trích dẫn tự làm | không có |
-| Memory qua nhiều phiên | LangGraph Store (SQLite, Postgres) | không có |
-| Kênh Telegram/Slack/Discord | python-telegram-bot, slack-bolt, discord.py, đều không cần URL public | không có |
-| Lưu state, chạy tiếp, nén context | checkpointer, `SummarizationMiddleware` | có |
-| Multi-agent, MCP | subagent, `langchain-mcp-adapters` | có |
-| Trace | Langfuse, LangSmith, JSONL tự viết | có log JSONL |
-| Độ ổn định | bản minor hằng tuần, pin bằng `uv.lock` | chưa có bản stable nào; 33 bản pre-release từ tháng 8 |
+Chọn Python/LangChain/LangGraph theo stack đã có và yêu cầu LangGraph phase 2. Giữ adapter JSON cho endpoint không có native tool calling; test offline dùng model giả.
 
-Ý tưởng plugin của DSH vẫn giữ, viết lại bằng Python: phòng ban là package có `manifest.yaml` được tự phát hiện; đăng ký trả về hàm huỷ để gỡ sạch; một file `company.yaml` quyết định bật gì; kênh chat và các tầng RAG là interface đổi được. Không dùng `deepagents` ở phase 1 vì nó gói sẵn subagent và filesystem, tức kiến thức chưa học.
+DeepSeek Harness dùng **Cordis**, không phải Cortex. Mượn contract dịch vụ, khai báo dependency, lifecycle và cấu hình composition; không port runtime TypeScript. Bắt đầu bằng package registry lúc startup, không hot reload hay marketplace plugin không tin cậy. Một plugin in-process không phải security sandbox.
+
+Các connector, retrieval/store và channel là interface đổi được. Capability khai báo permission cần dùng; backend mới cấp và kiểm quyền thực tế. Tình trạng support RAG/memory/channel của DSH thay đổi theo extension và cần đánh giá riêng, không khẳng định là không có. Xem [DeepSeek Harness architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md).
 
 ## 4. System 1: model quyết định nhanh (Jev, Laya)
 
-Dùng cho quyết định có kiểu, lặp nhiều, tập lựa chọn nhỏ: định tuyến phòng ban, lọc prompt injection, kiểm câu hỏi có trả lời được từ tài liệu không, chấm trích dẫn, khớp skill (nhiều lần "không khớp" là tín hiệu đề xuất skill mới), quyết định có ghi nhớ không, mức độ gấp của ticket CSKH, chấm eval theo rubric. Một interface, ba backend: Laya chạy local (Apache 2.0, có tiếng Việt), Jev qua API (early access), LLM với output enum làm đường lùi. **Classifier không bao giờ nới một luật cứng**: chi tiền luôn phải duyệt.
+Đây là **thử nghiệm tùy chọn**, chưa chọn Jev/Laya hay backend khác. Candidate: routing phòng ban, phân loại request, answerability và escalation. So sánh với rule và LLM structured output trên cùng tập eval: accuracy, unsafe false acceptance, latency, cost và fallback. Không dùng classifier để cấp quyền, công bố memory/skill nhạy cảm hay thay duyệt chi tiền bắt buộc. Các claim về license, availability và giá cần xác minh trước khi chọn.
 
 ## 5. Model
+
+Thông tin model/giá dưới đây là ghi chú nghiên cứu ban đầu, không phải lựa chọn kiến trúc hay bảng giá billing đã xác nhận. Calculator dùng price catalog có version và đối soát provider; không hard-code các giá này vào ledger.
 
 Baseline có tool calling native: Claude Haiku 5.5 (`claude-haiku-5-5`, $0,10 / $0,50 mỗi triệu token input/output với prompt dưới 100K) hoặc DeepSeek V4. Gemma 4 26B và Qwen3.8-27B của trường là profile model yếu (chỉ trong Wi-Fi trường, context 32K, không tool calling native). Chạy cùng bộ eval trên các model để thấy phần nào do harness gánh.
 

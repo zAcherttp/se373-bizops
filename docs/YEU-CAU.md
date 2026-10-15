@@ -1,7 +1,7 @@
 # Yêu cầu đồ án · Business Ops Agent
 
 Tổng hợp từ slide giới thiệu đồ án (07/10/2026) và mô tả đề tài #7. Danh sách use case chính thức
-còn chờ tài liệu riêng của đề tài; mục 5 là bản nháp, sẽ thay khi có.
+chưa được đánh số trong mô tả đề tài đã cung cấp; mục 5 là gợi ý, không phải danh sách đã chốt. Xem [ARCHITECTURE.md](ARCHITECTURE.md) cho đề xuất hệ thống và phase plan.
 
 ## 1. Đề tài
 
@@ -55,11 +55,13 @@ trước lớp.
 | K3 | RAG | hỏi đáp quy trình nội bộ có trích dẫn |
 | K4 | Memory và context | nhớ công ty qua nhiều phiên; nén context |
 | K5 | Workflow orchestration | workflow LangGraph có bước duyệt chi tiền; báo cáo theo lịch |
-| K6 | Multi-agent | agent điều phối giao việc cho agent phòng ban |
-| K7 | MCP | hệ thống hư cấu (CRM, ERP) phơi ra dưới dạng MCP server |
+| K6 | Multi-agent / MCP | agent điều phối giao việc hoặc tích hợp MCP |
+| K7 | Evaluation | eval chạy lại được, so sánh regression |
 | K8 | Verification, security, observability | phân quyền theo phòng ban, kiểm thử an toàn, eval, trace |
 
-## 5. Use case (bản nháp, chờ danh sách chính thức)
+Mapping K6/K7 được sửa theo bản tóm tắt rubric v3 do người dùng cung cấp; file desktop chưa được chuyển nên còn phải đối chiếu nguyên văn. Để lập kế hoạch cuối kỳ: ≥2 reusable skills, workflow ≥3 node, ≥5 eval/use case + 5 attack case và 2 regression run. Đây là thông tin chờ kiểm tra nguồn, không thay điều kiện Phase 1 ≥10 eval.
+
+## 5. Use case (gợi ý, chờ nhóm chọn)
 
 | # | Use case | Mảng chính | Phase sớm nhất |
 |---|---|---|---|
@@ -84,4 +86,4 @@ trước lớp.
   LangGraph). Codebase ứng dụng có thể dùng TypeScript.
 - **Model:** baseline có tool calling native (Claude Haiku 5.5 hoặc DeepSeek V4); model của trường
   là profile model yếu để chứng minh harness.
-- **Còn mở:** danh sách use case chính thức của đề tài #7.
+- **Còn mở:** công ty, năm use case và owner. Giảng viên cho phép đề xuất use case; vẫn phải phủ các năng lực của đề tài. Portfolio đề xuất ở [ARCHITECTURE.md](ARCHITECTURE.md), chưa được nhóm thông qua.

@@ -11,3 +11,13 @@ Chưa chốt ngành. Thư mục này sẽ chứa mọi dữ liệu của doanh n
 
 Yêu cầu khi chọn ngành: đủ việc cho cả sáu phòng ban, dữ liệu dễ hiểu khi demo, có tình huống chi
 tiền cần duyệt.
+
+## Cấu hình theo đề xuất kiến trúc
+
+Theo [ARCHITECTURE.md](../docs/ARCHITECTURE.md), dữ liệu dưới đây là kế hoạch, chưa triển khai. Một công ty chính và cấu hình công ty nhỏ thứ hai có thể chứng minh cùng workflow thích nghi được; ngành và use case vẫn chờ nhóm chốt.
+
+- `company.yaml`: capability/package được bật, version và connector binding; cấu hình có schema, người quản lý và version.
+- `permissions.yaml`: role, quan hệ nhân viên-record, action/resource scope và quyền duyệt; không chỉ phòng ban × tool. Agent không tự sửa policy.
+- Record/tài liệu có nguồn và policy; chunk, memory, skill proposal và result kế thừa hạn chế của nguồn.
+- Chỉ dùng dữ liệu tổng hợp hư cấu; không đưa payroll hoặc PII thật vào repo public.
+- Quy mô 500 người là kịch bản mục tiêu; concurrency và capacity phải có workload/test chứng minh.
