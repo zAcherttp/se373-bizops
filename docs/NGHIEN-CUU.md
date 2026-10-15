@@ -1,5 +1,9 @@
 # Nghiên cứu nền · Business Ops Agent
 
+Nghiên cứu bổ sung: [Always-on agents: kiến trúc, context, persistence và eval](research/always-on-agents.md)
+(2026-10-15; có transcript và timestamp; đề xuất chưa phải quyết định đã chốt).
+Tool thu thập nguồn: [`tools/transcripts/`](../tools/transcripts/README.md).
+
 Tổng hợp ngày 10/10/2026. Mỗi nhận định có nguồn; mục nào chưa kiểm chứng được thì ghi rõ.
 
 ## 1. Các hệ thống tham khảo
