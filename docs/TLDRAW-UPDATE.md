@@ -1,18 +1,42 @@
 # tldraw alignment specification
 
-Tracking: [#16](https://github.com/zAcherttp/se373-bizops/issues/16). Source of truth: [architecture proposal](ARCHITECTURE.md). Status: **applied to the uploaded original board** on 2026-10-15. Open [SE373.tldr](SE373.tldr) in tldraw. The architecture remains a proposal for team review.
+Tracking: [#16](https://github.com/zAcherttp/se373-bizops/issues/16). Source of truth: [architecture proposal](ARCHITECTURE.md). Status: **applied and redesigned** on 2026-10-15. Open [SE373.tldr](SE373.tldr) in tldraw. The architecture remains a proposal for team review.
 
-## Applied page structure
+## Page structure (redesigned 2026-10-15)
 
-The original had 562 records: three pages, 449 shapes, 108 bindings, one user and one document. All original shapes, bindings, user and document records are preserved unchanged. Original page IDs are preserved; names/order now mark them as reference material. Added 107 records for three proposal pages, native editable shapes/connectors and reference banners (669 records total).
+The board is one consistent version of the proposal: **4 pages, 272 shapes, 86 bindings**. The three
+earlier reference pages (Tổng Quan, Chi Tiết, Roadmap) were merged into the proposal and removed, so no
+superseded version remains on the board. The pre-redesign file is in git history (commit `9d4815d`).
 
-| Current proposal | Preserved earlier page |
+| Page | Content |
 |---|---|
-| 01 Kiến trúc | Tham khảo · Tổng Quan |
-| 02 Request bền | Tham khảo · Chi Tiết |
-| 03 Skill & Phase | Tham khảo · Roadmap |
+| 01 Kiến trúc | Trusted boundary: identity/API, durable request runtime, queue/lease/recovery, plugin contract, coordinator, specialists, tools, knowledge, skills, audit, trace, human control, cost ledger; policy across every boundary |
+| 02 Request bền | 8-step request flow, request-state diagram, wait/escalation contract, recovery monitor, cost ledger, fault-injection acceptance, spending-approval example, amendments to the teammate's flow |
+| 03 Skill & Phase | 7-step skill lifecycle with reject/rollback, P1/P2/P3 gates, K1–K8 mapping (K6 multi-agent/MCP, K7 evaluation), use-case portfolio, one merged "Cần nhóm / thầy chốt" area |
+| 04 Feature map & Roadmap | 12 lanes, one per architecture node, each banded by phase P1 / P2 / P3 / tùy chọn; 83 mechanism cards tagged with phase, K area and source |
 
-The new pages carry phase gates and a proposed/not-implemented banner. Old concrete choices remain visible for discussion rather than being silently promoted to decisions.
+Each page has one "Đề xuất, chưa triển khai" banner and the same colour legend: blue interface and
+coordination, violet trusted core, green business capability, red policy and safety, orange human
+approval or open decision, grey audit, trace, cost and eval.
+
+### What changed from the earlier feature map
+
+- Room-wide memory → request / employee / department / company-scoped context; derivatives inherit
+  the source policy.
+- One-time department × tool grant and the four-layer permission model → effective scope (principal ∩
+  workflow ∩ resource policy ∩ approval), checked at discovery and execution; delegation only narrows it.
+- Skill flow → proposal, validation, offline eval, authorized review, versioned activation, monitoring
+  and rollback. "Factory sinh agent mới" dropped: only skills are proposed.
+- Approvals bound to action, version, amount and expiry, with separation of duties.
+- New lanes: durable request and recovery, cost ledger and acceptance tests, package registry.
+- Old "Góp ý" and "Hỏi thầy" stickies merged with ARCHITECTURE §12 into one decisions area; duplicate
+  detail/roadmap cards collapsed to one card each.
+- Phases follow ARCHITECTURE §8–§9: router and plan DAG move to P3 with the coordinator; skill
+  validator and review move to P3 with use case E; the loader and its evals stay P1.
+- Numbers carried over from the old cards (middleware order, token thresholds, quotas, approval tiers)
+  stay marked "đề xuất" and have not been re-verified.
+
+## Earlier specification (applied, then merged into the pages above)
 
 ### Frame 1 — system and trust boundaries
 
@@ -53,10 +77,8 @@ The new pages carry phase gates and a proposed/not-implemented banner. Old concr
 
 ## Validation and review
 
-- Compared every original non-page record with the uploaded source: all preserved unchanged.
-- Confirmed unique record IDs, valid parent/binding references and six page entries.
-- Opened the generated file through tldraw's parser/schema migration and browser editor; inspected the current proposal pages and switched through all reference pages.
-- Native shapes and bound arrows remain editable. Browser screenshots were used for visual inspection; they are not substitutes for the editable file.
-- No original assets were present; no assets or unrelated content were removed.
-
-Team review is still required for architecture, company/use-case choices and provisional rubric wording. The desktop rubric and transcript research are still missing; receiving the board does not transfer those files.
+- Unique record IDs, four pages, every arrow bound at both ends; tldraw lint clean on every page, no
+  text overflow.
+- Text scan: no email, student ID, API key or token.
+- Team review is still required for architecture, company/use-case choices and provisional rubric
+  wording.
