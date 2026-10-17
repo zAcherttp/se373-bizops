@@ -7,9 +7,17 @@ dẫn, báo cáo theo lịch, nhớ qua nhiều phiên, tự đề xuất skill 
 chi tiền phải có người duyệt.
 
 - Yêu cầu, lộ trình, cách chấm: [docs/YEU-CAU.md](docs/YEU-CAU.md)
+- Đề xuất kiến trúc và kế hoạch phase (gồm workspace bền, device recovery, notification): [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Bảng kiến trúc tldraw: [docs/SE373.tldr](docs/SE373.tldr)
+- Thuật ngữ kiến trúc: [docs/NAMING.md](docs/NAMING.md)
 - Nghiên cứu nền và hướng thiết kế: [docs/NGHIEN-CUU.md](docs/NGHIEN-CUU.md)
 - Quy trình làm việc nhóm (issue, PR, review): [docs/QUY-TRINH.md](docs/QUY-TRINH.md)
 - Bảng việc: [SE373 BizOps](https://github.com/users/zAcherttp/projects/2)
+
+Hướng đề xuất: agent core TypeScript do nhóm tự xây, tham khảo contract của Pi Durable, không dùng
+Pi Durable làm runtime dependency. Python/LangGraph không còn là ràng buộc theo cập nhật giảng viên
+do người dùng cung cấp (17/10/2026). Scaffold và lệnh chạy dưới đây vẫn là hiện trạng Python; chưa migrate.
+Xem [kiến trúc](docs/ARCHITECTURE.md#runtime-ownership-and-pi-durable) và [quy trình vấn đáp module](docs/QUY-TRINH.md#6-agent-lập-trình-claude-code-codex-cursor).
 
 ## Cấu trúc
 

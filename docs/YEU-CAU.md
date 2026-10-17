@@ -1,7 +1,7 @@
 # Yêu cầu đồ án · Business Ops Agent
 
 Tổng hợp từ slide giới thiệu đồ án (07/10/2026) và mô tả đề tài #7. Danh sách use case chính thức
-còn chờ tài liệu riêng của đề tài; mục 5 là bản nháp, sẽ thay khi có.
+chưa được đánh số trong mô tả đề tài đã cung cấp; mục 5 là gợi ý, không phải danh sách đã chốt. Xem [ARCHITECTURE.md](ARCHITECTURE.md) cho đề xuất hệ thống và phase plan.
 
 ## 1. Đề tài
 
@@ -28,7 +28,7 @@ Cuối mỗi phase: gắn tag trên repo và nộp video demo ngắn. **Mỗi ph
 | Phase | Hạn | Phải có |
 |---|---|---|
 | 1 · Bootstrap | 27/10 (tuần 7), kiến thức buổi 1–5 | đăng ký nhóm, đề tài, use case và người sở hữu; repo, CI, codebase ứng dụng và codebase agent; agent loop ≥ 2 tool, 1 skill, log từng bước; 1 use case chạy từ ứng dụng tới agent; ≥ 10 eval case |
-| 2 · Mở rộng | 10/11 (tuần 9), buổi 6–8 | RAG có trích dẫn; lưu state, dừng rồi chạy tiếp được, nén context; **workflow LangGraph có bước người duyệt**; ≥ 3 use case |
+| 2 · Mở rộng | 10/11 (tuần 9), buổi 6–8 | RAG có trích dẫn; lưu state, dừng rồi chạy tiếp được, nén context; **workflow có bước người duyệt**; ≥ 3 use case |
 | 3 · Hoàn thiện | 06/12 (tuần 12), buổi 9–11 | eval đầy đủ, chạy lại để so sánh; multi-agent hoặc MCP; kiểm thử an toàn; xem được trace; ≥ 5 use case phủ K1–K8; báo cáo, video |
 
 ## 3. Cách chấm (50% điểm môn, thang 10)
@@ -50,21 +50,30 @@ trước lớp.
 
 | Mã | Mảng | Năng lực của đề tài phủ mảng này |
 |---|---|---|
-| K1 | Agent và Agent Skills | skill theo phòng ban; agent tự đề xuất skill mới, có duyệt |
-| K2 | Tool use / function calling | tool CRM, kế toán, lịch, gửi tin trên kênh chat |
+| K1 | Tích hợp model, structured output, agent loop, kiến trúc model + harness | agent điều phối và agent phòng ban; giao thức JSON cho model yếu |
+| K2 | Tool use và agent skills | tool CRM, kế toán, lịch, kênh chat; skill theo phòng ban, đề xuất skill có duyệt |
 | K3 | RAG | hỏi đáp quy trình nội bộ có trích dẫn |
-| K4 | Memory và context | nhớ công ty qua nhiều phiên; nén context |
-| K5 | Workflow orchestration | workflow LangGraph có bước duyệt chi tiền; báo cáo theo lịch |
-| K6 | Multi-agent | agent điều phối giao việc cho agent phòng ban |
-| K7 | MCP | hệ thống hư cấu (CRM, ERP) phơi ra dưới dạng MCP server |
-| K8 | Verification, security, observability | phân quyền theo phòng ban, kiểm thử an toàn, eval, trace |
+| K4 | Memory, state, context | nhớ công ty qua nhiều phiên; nén context |
+| K5 | Workflow orchestration, human-in-the-loop | workflow có bước duyệt chi tiền; báo cáo theo lịch |
+| K6 | Multi-agent hoặc MCP | agent điều phối giao việc hoặc tích hợp MCP |
+| K7 | Verification và evaluation | eval chạy lại được, so sánh regression |
+| K8 | Security, governance, observability | phân quyền theo phòng ban, kiểm thử an toàn, eval, trace |
 
-## 5. Use case (bản nháp, chờ danh sách chính thức)
+Tên các mảng theo **bản nháp rubric v3** (06/10/2026, trên branch của PR #15; chưa rõ đã là bản chính thức). Theo bản nháp này:
+
+- Mỗi use case viết đủ 6 mục: mô tả; 1–3 mảng K chính; yêu cầu kỹ thuật; 3–6 tiêu chí chấp nhận có ngưỡng; ≥ 5 eval case, có ≥ 1 case biên hoặc lỗi; trace của ≥ 1 lần chạy thành công.
+- Mỗi use case chấm 3 tiêu chí × 0,5: chức năng (đạt tiêu chí chấp nhận, demo ổn định), thiết kế harness (mức của các mảng K chính), kiểm chứng (eval có case biên, số liệu, trace, phân tích case hỏng, regression).
+- Yêu cầu nền chung: workflow ≥ 3 node có điều kiện dừng; sơ đồ `agent = model + harness` chỉ rõ ≥ 4 lớp harness kèm bảng failure mode; ≥ 1 công cụ ngoài và ≥ 2 skill dùng lại được có contract đầy đủ; trace mọi lần chạy; eval chạy bằng một lệnh, tối thiểu 5 case × số use case + 5 case tấn công (5 use case = 30 case), regression ≥ 2 lần; README, `.env.example`, báo cáo, video, bảng phân công use case, mục minh bạch dùng AI.
+- Tool hoặc skill chạy lệnh nguy hiểm mà không có approval gate thì điểm thiết kế harness của use case đó bằng 0.
+
+Điều kiện Phase 1 (≥ 10 eval) vẫn theo slide.
+
+## 5. Use case (gợi ý, chờ nhóm chọn)
 
 | # | Use case | Mảng chính | Phase sớm nhất |
 |---|---|---|---|
 | 1 | Hỏi quy trình nội bộ, trả lời có trích dẫn | K3, K2 | 2 (RAG) |
-| 2 | Đề nghị chi tiền: kiểm hạn mức, trình duyệt, ghi sổ | K5, K8 | 2 (LangGraph + duyệt) |
+| 2 | Đề nghị chi tiền: kiểm hạn mức, trình duyệt, ghi sổ | K5, K8 | 2 (workflow + duyệt) |
 | 3 | Báo cáo doanh số tuần tự gửi lên kênh chat theo lịch | K1, K2, K5 | 1 |
 | 4 | Một yêu cầu liên phòng ban, điều phối chia việc rồi tổng hợp | K6 | 3 |
 | 5 | Agent nhận ra việc lặp lại, đề xuất skill mới, người duyệt rồi mới dùng | K1, K8 | 3 |
@@ -80,8 +89,12 @@ trước lớp.
 ## 7. Đã chốt và còn mở
 
 - **Nhóm 5 người là bắt buộc.** Hiện có 3, đang tìm thêm 2 (10/10).
-- **Codebase agent: Python + LangChain 1.x + LangGraph** (khớp lab của môn; phase 2 bắt buộc
-  LangGraph). Codebase ứng dụng có thể dùng TypeScript.
+- **Stack tự chọn:** theo cập nhật giảng viên do người dùng cung cấp (17/10/2026), Python và
+  LangGraph không bắt buộc. Scaffold hiện tại dùng Python/LangChain/LangGraph; hướng đề xuất mới là
+  core TypeScript tự xây, Pi Durable chỉ làm reference. Phase gates và năng lực workflow/HITL vẫn giữ.
+- **Vấn đáp:** cập nhật trên cho phép giải thích code ở cấp module thay cho mọi dòng: phải hiểu
+  trách nhiệm, input/output, state, dependency và hành vi khi lỗi. Đây là thông tin người dùng báo lại,
+  chưa phải bản rubric chính thức thay thế.
 - **Model:** baseline có tool calling native (Claude Haiku 5.5 hoặc DeepSeek V4); model của trường
   là profile model yếu để chứng minh harness.
-- **Còn mở:** danh sách use case chính thức của đề tài #7.
+- **Còn mở:** công ty, năm use case và owner. Giảng viên cho phép đề xuất use case; vẫn phải phủ các năng lực của đề tài. Portfolio đề xuất ở [ARCHITECTURE.md](ARCHITECTURE.md), chưa được nhóm thông qua.
