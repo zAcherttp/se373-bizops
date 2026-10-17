@@ -9,6 +9,7 @@ chi tiền phải có người duyệt.
 - Yêu cầu, lộ trình, cách chấm: [docs/YEU-CAU.md](docs/YEU-CAU.md)
 - Đề xuất kiến trúc và kế hoạch phase (gồm workspace bền, device recovery, notification): [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Bảng kiến trúc tldraw: [docs/SE373.tldr](docs/SE373.tldr)
+- Thuật ngữ kiến trúc: [docs/NAMING.md](docs/NAMING.md)
 - Nghiên cứu nền và hướng thiết kế: [docs/NGHIEN-CUU.md](docs/NGHIEN-CUU.md)
 - Quy trình làm việc nhóm (issue, PR, review): [docs/QUY-TRINH.md](docs/QUY-TRINH.md)
 - Bảng việc: [SE373 BizOps](https://github.com/users/zAcherttp/projects/2)

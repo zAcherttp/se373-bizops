@@ -51,7 +51,7 @@ Các connector, retrieval/store và channel là interface đổi được. Capab
 
 ## 5. Model
 
-Thông tin model/giá dưới đây là ghi chú nghiên cứu ban đầu, không phải lựa chọn kiến trúc hay bảng giá billing đã xác nhận. Calculator dùng price catalog có version và đối soát provider; không hard-code các giá này vào ledger.
+Thông tin model/giá dưới đây là ghi chú nghiên cứu ban đầu, không phải lựa chọn kiến trúc hay bảng giá billing đã xác nhận. Cost Accounting dùng price catalog có version và đối soát provider; không hard-code các giá này vào ledger.
 
 Baseline có tool calling native: Claude Haiku 5.5 (`claude-haiku-5-5`, $0,10 / $0,50 mỗi triệu token input/output với prompt dưới 100K) hoặc DeepSeek V4. Gemma 4 26B và Qwen3.8-27B của trường là profile model yếu (chỉ trong Wi-Fi trường, context 32K, không tool calling native). Chạy cùng bộ eval trên các model để thấy phần nào do harness gánh.
 
@@ -71,4 +71,8 @@ Giới hạn nguồn: package experimental, storage một process sở hữu và
 
 ## 7. Workspace, thiết bị và notification (17/10/2026)
 
-Phần workspace/notification trong [ARCHITECTURE.md §5](ARCHITECTURE.md#workspaces-devices-notifications-and-deployment): server giữ authority/lifecycle; workspace độc lập laptop; device mất kết nối chuyển wait có deadline, reconnect event và backoff không gọi model. Notification broker dùng blocker chung để dedup, ack, reminder và escalation đa kênh theo policy. VM chỉ là spike P3 giới hạn, không phải bằng chứng durable hoặc HA. Agent map tổ chức chỉ tạo cấu hình dự thảo có nguồn để người duyệt; strict on-prem phải giải quyết ngoại lệ chat/model ngoài mạng. Các thử nghiệm optional phải chứng minh lợi ích so với baseline và không làm trượt mandatory coverage.
+Phần workspace/notification trong [ARCHITECTURE.md §5](ARCHITECTURE.md#workspaces-devices-notifications-and-deployment): server giữ authority/lifecycle; workspace độc lập laptop; device mất kết nối chuyển wait có deadline, reconnect event và backoff không gọi model. Delivery Service dùng blocker chung để dedup, ack, reminder và escalation đa kênh theo policy. VM chỉ là spike P3 giới hạn, không phải bằng chứng durable hoặc HA. Agent map tổ chức chỉ tạo cấu hình dự thảo có nguồn để người duyệt; strict on-prem phải giải quyết ngoại lệ chat/model ngoài mạng. Các thử nghiệm optional phải chứng minh lợi ích so với baseline và không làm trượt mandatory coverage.
+
+## Thuật ngữ hiện hành
+
+Dùng [NAMING.md](NAMING.md): Request Runtime, Scheduler, Dispatcher, Coordinator, Department Specialist, Worker, Workspace, Tool Gateway, Supervisor, Delivery Service, Audit Ledger, Usage Ledger và Cost Accounting. Thuật ngữ của upstream giữ nguyên khi mô tả nguồn; tên logical component không đồng nghĩa process riêng. Runtime/language selection là quyết định tách biệt.

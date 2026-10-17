@@ -4725,7 +4725,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Recovery monitor",
+                  "text": "Supervisor",
                   "marks": [
                     {
                       "type": "bold"
@@ -8405,7 +8405,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Usage & cost ledger [P1 ước tính · P2 bền · P3 đối soát]",
+                  "text": "Usage Ledger / Cost Accounting [P1 ước tính · P2 bền · P3 đối soát]",
                   "marks": [
                     {
                       "type": "bold"
@@ -9018,7 +9018,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Catalog giá, import / đối soát invoice, allocation, làm tròn, quyền xem cost, giới hạn budget; tiêu chí nghiệm thu calculator"
+                  "text": "Catalog giá, import / đối soát invoice, allocation, làm tròn, quyền xem cost, giới hạn budget; tiêu chí nghiệm thu Cost Accounting"
                 }
               ]
             }
@@ -12127,7 +12127,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Agent phòng ban",
+                  "text": "Department Specialists",
                   "marks": [
                     {
                       "type": "bold"
@@ -12177,7 +12177,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Điều phối",
+                  "text": "Coordinator",
                   "marks": [
                     {
                       "type": "bold"
@@ -12437,7 +12437,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Thông báo & escalate",
+                  "text": "Delivery Service",
                   "marks": [
                     {
                       "type": "bold"
@@ -12451,7 +12451,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "nhiều kênh, có hạn chờ"
+                  "text": "Thông báo · ack · escalation"
                 }
               ]
             }
@@ -12496,7 +12496,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Lịch / sự kiện",
+                  "text": "Scheduler / events",
                   "marks": [
                     {
                       "type": "bold"
@@ -13130,7 +13130,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Request bền",
+                  "text": "Request Runtime",
                   "marks": [
                     {
                       "type": "bold"
@@ -13230,12 +13230,21 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Sổ chi phí",
+                  "text": "Usage Ledger",
                   "marks": [
                     {
                       "type": "bold"
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Cost Accounting"
                 }
               ]
             }
@@ -13321,7 +13330,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Tool nghiệp vụ",
+                  "text": "Tool Gateway",
                   "marks": [
                     {
                       "type": "bold"
@@ -13371,7 +13380,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Trace & eval",
+                  "text": "Audit Ledger · trace · eval",
                   "marks": [
                     {
                       "type": "bold"
@@ -13423,7 +13432,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Workspace bền",
+                  "text": "Workers / Workspaces",
                   "marks": [
                     {
                       "type": "bold"
@@ -13437,7 +13446,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "chạy tiếp khi máy tắt"
+                  "text": "Môi trường chạy độc lập thiết bị"
                 }
               ]
             }
@@ -13482,7 +13491,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "COST LEDGER & BUDGET [P1 ước tính · P2 bền · P3 đối soát]",
+                  "text": "USAGE LEDGER / COST ACCOUNTING [P1 ước tính · P2 bền · P3 đối soát]",
                   "marks": [
                     {
                       "type": "bold"
@@ -14461,7 +14470,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "RECOVERY MONITOR [P2]",
+                  "text": "SUPERVISOR [P2]",
                   "marks": [
                     {
                       "type": "bold"
@@ -14591,7 +14600,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Queue bền · lease · recovery monitor [P2]",
+                  "text": "Queue bền · lease · Supervisor [P2]",
                   "marks": [
                     {
                       "type": "bold"
@@ -17817,7 +17826,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "TRUSTED CORE / ORCHESTRATOR",
+                  "text": "REQUEST RUNTIME / DISPATCHER",
                   "marks": [
                     {
                       "type": "bold"
@@ -17831,7 +17840,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Identity • policy • approval • request bền"
+                  "text": "Runtime giữ lifecycle; Dispatcher chọn nơi chạy"
                 }
               ]
             },
@@ -17840,7 +17849,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Queue/lease/checkpoint • recovery • audit/cost"
+                  "text": "Supervisor theo dõi stall và phục hồi"
                 }
               ]
             },
@@ -17849,7 +17858,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Placement theo data/scope/runtime/budget"
+                  "text": "ExecutionContext: principal, scope, request/run IDs"
                 }
               ]
             },
@@ -17858,7 +17867,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Persist trước ACK; kết quả kiểm chứng trước completion"
+                  "text": "Persist trước ACK; output kiểm chứng trước completion"
                 }
               ]
             }
@@ -17949,7 +17958,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "EXECUTOR / WORKSPACE",
+                  "text": "WORKERS / WORKSPACES",
                   "marks": [
                     {
                       "type": "bold"
@@ -18652,7 +18661,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "NOTIFICATION BROKER [P2]",
+                  "text": "DELIVERY SERVICE [P2]",
                   "marks": [
                     {
                       "type": "bold"
@@ -19099,7 +19108,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 durable wait + broker + server worker + reconnect"
+                  "text": "P2 durable wait + Delivery Service + Worker + reconnect"
                 }
               ]
             },

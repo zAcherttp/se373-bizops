@@ -21,3 +21,5 @@ Theo [ARCHITECTURE.md](../docs/ARCHITECTURE.md), dữ liệu dưới đây là k
 - Record/tài liệu có nguồn và policy; chunk, memory, skill proposal và result kế thừa hạn chế của nguồn.
 - Chỉ dùng dữ liệu tổng hợp hư cấu; không đưa payroll hoặc PII thật vào repo public.
 - Quy mô 500 người là kịch bản mục tiêu; concurrency và capacity phải có workload/test chứng minh.
+
+Tên miền cấu hình là **CompanyProfile**; đây là cấu hình có version và người quản lý, không phải quyền do agent tự suy ra. Xem [thuật ngữ](../docs/NAMING.md).

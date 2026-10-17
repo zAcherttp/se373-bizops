@@ -52,24 +52,27 @@ Accepted decisions follow Decision issue → ADR → PR → human review.
 
 ## 3. System structure
 
+Canonical terminology: [NAMING.md](NAMING.md). Request Runtime owns lifecycle; Scheduler decides when, Dispatcher decides where, Worker executes, Supervisor detects stalled execution, and Coordinator performs reasoning. These are logical roles, not additional microservices. Runtime selection is separate from this naming change.
+
 ```mermaid
 flowchart TD
     A[React app / messaging channel] --> B[Identity and request API]
-    B --> C[Request store and workflow runtime]
+    B --> C[Request Runtime]
     C --> D[Coordinator]
     D --> E[Department specialists]
-    E --> F[Authorized business tools]
+    E --> F[Tool Gateway]
     E --> G[Scoped knowledge and memory]
     E --> H[Approved skill registry]
     C --> I[Human questions and approvals]
     I --> C
     J[Scheduler / events] --> C
-    C --> K[Notification broker: blockers, ack, escalation]
+    C --> K[Delivery Service: blockers, ack, escalation]
     K --> A
-    C --> X[Workspace / internal worker / optional device executor]
-    C --> W[Durable queue, worker leases and recovery monitor]
+    C --> Z[Dispatcher: placement]
+    Z --> X[Workers and Workspaces]
+    C --> W[Supervisor: recovery and escalation]
     W --> C
-    C --> V[Usage and cost ledger]
+    C --> V[Usage Ledger and Cost Accounting]
     L[Authorization and information-flow policy] -.-> B
     L -.-> C
     L -.-> D
@@ -81,10 +84,11 @@ flowchart TD
     L -.-> J
     L -.-> K
     L -.-> X
+    L -.-> Z
     M[Protected traces and evaluations] -.-> C
 ```
 
-Dashed links are mandatory controls; traces cover the whole path. Scheduler, broker and executors are detailed in §5.
+Dashed links are mandatory controls; traces cover the whole path. Scheduler, Dispatcher, Supervisor, Delivery Service and Workers are detailed in §5. The ExecutionContext carries identity/authority; it is distinct from model context. Audit Ledger records authority/actions; Usage Ledger records consumption; Cost Accounting calculates and reconciles charges.
 
 These are logical boundaries in one Python application, not microservices. Add a background worker when durable execution needs it; nothing distributed without measured need.
 
@@ -99,7 +103,7 @@ Borrow Cordis's service contracts, dependency declaration, lifecycle cleanup and
 
 ### Business tool execution contract
 
-The gateway validates each versioned contract at registration and enforces it on model, nested, specialist and recovery calls. Filtered discovery is not the permission boundary. Missing policy denies; missing recovery metadata forbids replay.
+The Tool Gateway validates each versioned contract at registration and enforces it on model, nested, specialist and recovery calls. Filtered discovery is not the permission boundary. Missing policy denies; missing recovery metadata forbids replay.
 
 | Field | Meaning |
 |---|---|
@@ -164,7 +168,7 @@ A navigation aid, not a request for empty folders.
 
 ## 5. Requests, execution and human control
 
-A request holds requester, company, owner/department, goal, completion conditions, resource references, policy provenance, workflow/skill versions and attempts; runs record tool operations, budget use, checkpoints and evidence. One conversation can hold several requests, and each event must resolve to the right request and participants.
+A `WorkRequest` (employee-facing Request) holds requester, company, owner/department, goal, completion conditions, resource references, policy provenance, workflow/skill versions and attempts; runs record tool operations, budget use, checkpoints and evidence. One `Conversation` can hold several WorkRequests, and each event must resolve to the right request and participants.
 
 **States:** submitted → queued → running → completed, plus awaiting information, awaiting approval, blocked, failed, cancelled. Waits are persisted, never open model calls. Human takeover pauses automation until an authorized resume.
 
@@ -222,19 +226,19 @@ The request record is lifecycle authority, the queue carries dispatch, LangGraph
 
 ### Workspaces, devices, notifications and deployment
 
-The server decides identity, policy, approval and lifecycle; executors only run work items. A **browser worker/WASM** handles employee-chosen files, parsing, computation, preview and benchmarked small models, but may freeze or go offline and holds no shared credentials. An **internal worker near data** runs in-network queries, aggregation and batch with least privilege, never on other employees' machines. A **server workspace** (container/VM) continues after the user leaves; request, checkpoint and policy stay in the core.
+Request Runtime owns lifecycle; identity/policy services enforce authority. Dispatcher assigns work, Workers execute it in eligible Workspaces, and Supervisor initiates recovery. These responsibilities may share one process. A **browser worker/WASM** handles employee-chosen files, parsing, computation, preview and benchmarked small models, but may freeze or go offline and holds no shared credentials. An **internal worker near data** runs in-network queries, aggregation and batch with least privilege, never on other employees' machines. A **server workspace** (container/VM) continues after the user leaves; request, checkpoint and policy stay in the core.
 
-Placement follows capability, data location, permissions, resources and measured cost, by rules first; never move data to rescue a task. Offload order: compute at the source → local preprocessing → send only needed evidence → reuse valid artifacts by version/scope → model for reasoning and exceptions. The loop stays on the server. Local work does not lower token cost; cost shifted to a device has not vanished. Work items carry principal, scope, request/run/attempt/operation IDs, input references, version, lease and budget, never broad credentials. Client results are untrusted: verify by effect; they cannot skip approval or prove spending.
+Dispatcher selects an eligible Worker using capability, data location, permissions, resources and measured cost, by rules first; never move data to rescue a task. Offload order: compute at the source → local preprocessing → send only needed evidence → reuse valid artifacts by version/scope → model for reasoning and exceptions. The loop stays on the server. Local work does not lower token cost; cost shifted to a device has not vanished. Work items carry principal, scope, request/run/attempt/operation IDs, input references, version, lease and budget, never broad credentials. Client results are untrusted: verify by effect; they cannot skip approval or prove spending.
 
-**Device loss:** lease expiry sets `blocked` with `waiting_reason=device_offline`, device, owner, checkpoint, next action and deadline. Reconcile in-flight operations. Reassign only to a compatible executor allowed the data (same operation ID, new attempt ID); never copy employee A's data to machine B. Never poll with the model. An authenticated, deduplicated reconnect event resumes after rechecking device, principal, request, permissions and checkpoint version. A fallback timer uses capped, jittered backoff within the deadline, reset on progress. At the deadline escalate to the configured owner; late results from the old device are rejected or reconciled. The scheduler fires persisted timers/events, not polling crons. Waiting on a reply, an approval or a device are separate reasons with their own owners and policies.
+**Device loss:** lease expiry sets `blocked` with `waiting_reason=device_offline`, device, owner, checkpoint, next action and deadline. Reconcile in-flight operations. Reassign only to a compatible executor allowed the data (same operation ID, new attempt ID); never copy employee A's data to machine B. Never poll with the model. An authenticated, deduplicated reconnect event resumes after rechecking device, principal, request, permissions and checkpoint version. A fallback timer uses capped, jittered backoff within the deadline, reset on progress. At the deadline escalate to the configured owner; late results from the old device are rejected or reconciled. Scheduler fires persisted timers/events, not polling crons. Waiting on a reply, an approval or a device are separate reasons with their own owners and policies.
 
-**Notification broker:** channels are adapters of one broker, starting with the app inbox plus the course channel; an adapter is not permission to send or export data. A blocker records `blocker_id`, request, type, responder, action, severity, deadline, audience and resolution state (queued, sent, delivered if supported, acknowledged, resolved; no read receipt means unread). Each delivery has its own ID, receipt and dedup key (blocker, recipient, channel, reminder stage); resends create no business work. Channels follow preference, urgency and permission, stepping through fallbacks and reminders, never broadcasting; quiet hours, cooldown, quota and deadlines are configured, and only defined urgent cases bypass quiet hours. Callbacks are authenticated, links grant nothing, approval stays in the workflow. Broad messages carry generic status ("Request R is waiting for a file on your device"), never payroll, documents or sensitive links. Recipient and audience are checked per delivery, and jobs never borrow a revoked creator's credentials.
+**Delivery Service:** channels are adapters of the Delivery Service, starting with the app inbox plus the course channel; an adapter is not permission to send or export data. Request Runtime owns each `Blocker`: ID, WorkRequest, type, responder, action, severity, deadline, audience and resolution state. Delivery Service records queued/sent/delivered status separately for each delivery attempt and forwards authenticated acknowledgements/resolution inputs to Request Runtime; absent read receipts mean unknown, not unread. Each delivery has its own ID, receipt and dedup key (blocker, recipient, channel, reminder stage); resends create no business work. Channels follow preference, urgency and permission, stepping through fallbacks and reminders, never broadcasting; quiet hours, cooldown, quota and deadlines are configured, and only defined urgent cases bypass quiet hours. Callbacks are authenticated, links grant nothing, approval stays in the workflow. Broad messages carry generic status ("Request R is waiting for a file on your device"), never payroll, documents or sensitive links. Recipient and audience are checked per delivery, and jobs never borrow a revoked creator's credentials.
 
-**Workspace:** an authorized entity (ID, owner/scope, image/tool version, volume/artifact references); a conversation ID never grants filesystem access. The **P3 spike** is one internal Linux VM with a prepared image, Python worker, persistent volume and one workload. It starts after core persistence works, with the request store outside the guest; no VM platform, fleet, or VM per employee or specialist. Before sensitive data: CPU/RAM/disk/time quotas, egress allowlist, short-lived credentials or gateway, image patching. Also per-scope workspaces, retention-based sanitizing, no secrets in snapshots, and health/start/stop/drain with artifacts saved before deprovisioning. Snapshots neither back up business state nor roll back external effects. Structured tools only: no gateway-bypassing shell or GUI, no untrusted code; desktop streaming or computer use only if a use case needs it. A dead guest goes to the recovery monitor; a shared-host outage needs the external alert and backup/restore, which is not high availability.
+**Workspace:** an authorized entity (ID, owner/scope, image/tool version, volume/artifact references); a conversation ID never grants filesystem access. The **P3 spike** is one internal Linux VM with a prepared image, Python worker, persistent volume and one workload. It starts after core persistence works, with the request store outside the guest; no VM platform, fleet, or VM per employee or specialist. Before sensitive data: CPU/RAM/disk/time quotas, egress allowlist, short-lived credentials or gateway, image patching. Also per-scope workspaces, retention-based sanitizing, no secrets in snapshots, and health/start/stop/drain with artifacts saved before deprovisioning. Snapshots neither back up business state nor roll back external effects. Structured tools only: no gateway-bypassing shell or GUI, no untrusted code; desktop streaming or computer use only if a use case needs it. A dead guest goes to the Supervisor; a shared-host outage needs the external alert and backup/restore, which is not high availability.
 
 **Deployment:** one instance per company on its infrastructure, shared code, versioned and reviewed organization/policy/workflow/connector configuration; no multi-tenant SaaS. **Strict on-prem** means internal inference, storage, telemetry and processing with no cloud fallback. External chat channels and model APIs are declared exceptions; ask the lecturer if this conflicts with the chat requirement. Missing internal capacity means wait or escalate, never silent egress. Optional **auto-mapping:** employee CSV and permitted SOPs → sourced draft organization/authority → gaps → ask the owner → diff, validation, dry-run → human activation. Authority is never inferred from titles, access history or model confidence. Browser offloading, local models, auto-mapping and visual matching are candidate experiments: pick one once mandatory coverage and P1/P2 are on track.
 
-### Auditable usage and operating costs
+### Usage Ledger and Cost Accounting
 
 Report cost per request, attempt, department, company and billing period, covering failed attempts, retries, subagents, decision models, summarization, embedding, skill review and scheduled work. Cost metadata is access-controlled because usage reveals work.
 
@@ -249,7 +253,7 @@ Report cost per request, attempt, department, company and billing period, coveri
 - Append-only usage/charge events with stable IDs; corrections are new entries. Capture usage regardless of business success; unavailable usage is pending and reconciled from provider records.
 - Decimal or integer subunits, never floats. Keep sub-cent items, aggregate before rounding, show cents under a declared rule. Keep the billing currency; a VND view uses a recorded rate and date.
 - Show **estimated**, **provider-reported**, **invoice-confirmed** and **allocated shared** costs separately. Estimates use an effective-dated catalog (caching, batching, tiers, discounts); reconciliation covers credits, subscriptions, tax, rounding and FX, leaving differences visible. Exact cents hold only for reconciled bills.
-- The calculator shows direct request cost and total operating cost with allocation assumptions; shared infrastructure counts once. Forecasts state workload and uncertainty. Vendor pricing is a deployment decision.
+- Cost Accounting shows direct request cost and total operating cost with allocation assumptions; shared infrastructure counts once. Forecasts state workload and uncertainty. Vendor pricing is a deployment decision.
 - Reserve a conservative budget atomically (counting concurrent attempts) before billable work and settle on observed usage. Bound tokens, time, parallelism and attempts; uncertain budget pauses or escalates. No exact hard cap where providers bill unreported in-flight usage. Model-cost budgets and business-spending approval never substitute for each other.
 
 ## 6. Privacy, memory and information flow
@@ -330,7 +334,7 @@ Optional visual matching, if approved, sits inside a Sales/Support workflow: ima
 | Gate | Deliverable | Demonstration |
 |---|---|---|
 | Phase 1 · Oct 27 | One app-to-agent use case, ≥2 tools, 1 skill, step logs, ≥10 evals; synthetic data, basic identity boundaries; tool contracts, request/run/usage IDs, visible errors | Submit a request, inspect evidence, see correct success and controlled failure |
-| Phase 2 · Nov 10 | ≥3 use cases, cited RAG, scoped persistence/resume, context handling, LangGraph human approval; durable admission, worker recovery, cost-ledger persistence; durable blockers, broker with app + one channel, reconnect/backoff, server worker | Kill/restart a running or waiting workflow; resume or escalate visibly without duplicate action; show attempt costs |
+| Phase 2 · Nov 10 | ≥3 use cases, cited RAG, scoped persistence/resume, context handling, LangGraph human approval; durable admission, worker recovery, cost-ledger persistence; durable blockers, Delivery Service with app + one channel, reconnect/backoff, server worker | Kill/restart a running or waiting workflow; resume or escalate visibly without duplicate action; show attempt costs |
 | Phase 3 · Dec 6 | ≥5 use cases, multi-agent/MCP, security, complete evals/traces, final deliverables; recovery fault tests, full operating-cost view; one VM/workspace spike if feasible, placement and cost comparison | Cross-department workflow, safe denial, approved skill reuse, outage recovery, reconciled costs, regression results, final demo |
 
 Phase 1 has no bundled framework, VM, multi-agent or distributed runtime; a modular tool/skill registry is fine. No recoverability claim before Phase 2 fault tests. No VM fleet, marketplace, full desktop streaming or compute swarm in Phase 3.
@@ -348,7 +352,7 @@ Each use case defines expected effects, evidence, permitted readers, failure beh
 - **Security:** unauthorized payroll retrieval, restricted-to-shared memory/skill contamination, document prompt injection, approval bypass, cross-user leakage, revocation before resume/delivery, guessed IDs, group-chat exposure, duplicate execution, unknown remote outcomes. Inspect stored artifacts, not just answers. The scaffold currently traces raw payloads and skill loading lacks user scoping: fix both before sensitive data.
 - **Tool contracts:** reject missing authorization and incompatible contracts; exercise the three recovery categories with synthetic connectors; a crash after an effect but before its receipt creates no second order. Cover inconclusive lookup, revocation mid-reconciliation, nested-call checks, parent/child cancellation, subscriber disconnect without cancellation, and rollups counting children once with unknowns kept.
 - **Recovery:** kill the process after admission/before dispatch, mid-execution, after an effect/before its receipt, while awaiting approval, and after completion/before notification. Also test duplicate ingress, stale workers, provider and storage outages, exhausted budgets, failed escalation delivery. Afterwards every accepted request is discoverable and resumed, waiting with a deadline, or terminal with evidence; failures are escalated, uncertain effects reconciled, business records free of duplicates.
-- **Workspaces and notifications:** (1) closing the browser does not cancel workspace work, and a local-file step gets the right wait reason; (2) killed worker/guest, duplicate reconnect and stale worker yield one effect with audited attempts; (3) backoff never calls the model, reconnect wakes early, deadlines escalate, revoked permissions block resume; (4) channel A fails → fallback B per policy, ack on B stops ack reminders on A, ack without resolution keeps the deadline; (5) forged callbacks, under-authorized group chats, device-only data and forbidden egress are blocked; (6) broker crash after send/before receipt repeats no business work, with no exactly-once delivery promise; (7) VM restart loses no request, volume reuse leaks nothing across scopes, uncertain effects are reconciled; (8) cost reports include VM/local work and retries, and lower server CPU alone does not prove lower total cost.
+- **Workspaces and notifications:** (1) closing the browser does not cancel workspace work, and a local-file step gets the right wait reason; (2) killed worker/guest, duplicate reconnect and stale worker yield one effect with audited attempts; (3) backoff never calls the model, reconnect wakes early, deadlines escalate, revoked permissions block resume; (4) channel A fails → fallback B per policy, ack on B stops ack reminders on A, ack without resolution keeps the deadline; (5) forged callbacks, under-authorized group chats, device-only data and forbidden egress are blocked; (6) Delivery Service crash after send/before receipt repeats no business work, with no exactly-once delivery promise; (7) VM restart loses no request, volume reuse leaks nothing across scopes, uncertain effects are reconciled; (8) cost reports include VM/local work and retries, and lower server CPU alone does not prove lower total cost.
 - **Cost:** fixtures with sub-cent charges, cached-token rules, retries, failures, duplicate events, unknown usage, currency conversion and invoice corrections. Assert deterministic arithmetic, no duplicates, visible unknowns, totals matching fixture bills under the rounding rule, atomic concurrent reservations, and allocations reconciling to the total without double counting. Real billing is checked separately.
 
 **Scale and decision models:** measure a stated workload (queue wait, latency, errors, cost, delivery; bounded, fair concurrency) before any infrastructure choice or 500-user claim, and compare decision models with rules and structured-output LLMs on accuracy, unsafe acceptance, latency and cost, keeping deterministic controls and an approved fallback.
@@ -381,7 +385,7 @@ Repository: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team workflo
 8. Ask the lecturer whether rubric draft v3 is final and may be public (it sits on a branch of this public repo). Review [SE373.tldr](SE373.tldr) alongside this proposal (it shows proposals, not decisions); draw the `agent = model + harness` diagram (≥4 layers) and failure-mode table from its overview page.
 9. Record accepted decisions as Decision issues and ADRs, then open small issues and task branches.
 10. Set recovery objectives and thresholds, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring.
-11. Review the tool contract and assign connector reconciliation owners. Define cost catalog, invoice reconciliation, allocation and rounding, visibility and budget limits, and measurable calculator/recovery acceptance criteria before implementation.
-12. Workspaces and notifications: approve executor/broker boundaries and set blocker owners, deadlines and quiet hours. Pick the P3 spike's workload, VM host and resource cap. Decide strict on-prem or declared exceptions, data-transfer and executor-fallback policy, and semester-feasible scope. Optional experiments stay out of the mandatory portfolio.
+11. Review the tool contract and assign connector reconciliation owners. Define cost catalog, invoice reconciliation, allocation and rounding, visibility and budget limits, and measurable cost-accounting/recovery acceptance criteria before implementation.
+12. Workspaces and notifications: approve Worker/Delivery Service boundaries and set blocker owners, deadlines and quiet hours. Pick the P3 spike's workload, VM host and resource cap. Decide strict on-prem or declared exceptions, data-transfer and executor-fallback policy, and semester-feasible scope. Optional experiments stay out of the mandatory portfolio.
 
 After agreement the board shows (1) architecture and trust boundaries, (2) request lifecycle with one concrete workflow, (3) skill lifecycle, annotating phase gates and separating implemented from future capabilities.
