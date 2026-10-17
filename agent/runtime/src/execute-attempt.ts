@@ -1,4 +1,4 @@
-import { Cause, Clock, Effect, Exit, Option, Random, Stream } from "effect";
+import { Cause, Clock, Effect, Exit, Option, Random } from "effect";
 import { decideFailure, validateContext } from "./failure-policy.ts";
 import type { AttemptContext, Failure, FailureDecision } from "./failure-policy.ts";
 
@@ -57,15 +57,15 @@ function runAttempt<T, R>(attempt: PreparedAttempt, operation: Effect.Effect<T, 
       return yield* failureOutcomeEffect(c, { kind: "transient", effect: "not_started" });
     }
     if (now >= expiresAt) return yield* failureOutcomeEffect(c, { kind: "timeout", effect: "not_started" });
-    const exit = yield* Effect.exit(operation.pipe(Effect.timeoutFail({
+    const exit = yield* Effect.exit(operation.pipe(Effect.timeoutOrElse({
       duration: Math.max(1, expiresAt - now),
-      onTimeout: () => timeout,
+      orElse: () => Effect.fail(timeout),
     })));
     if (Exit.isFailure(exit)) {
       // Propagate fiber cancellation to its supervisor; do not turn it into retryable business failure.
-      if (Cause.isInterruptedOnly(exit.cause)) return yield* Effect.interrupt;
-      const failure = Cause.isDie(exit.cause) ? internalError
-        : Option.getOrElse(Cause.failureOption(exit.cause), () => internalError);
+      if (Cause.hasInterruptsOnly(exit.cause)) return yield* Effect.interrupt;
+      const failure = Cause.hasDies(exit.cause) ? internalError
+        : Option.getOrElse(Cause.findErrorOption(exit.cause), () => internalError);
       return yield* failureOutcomeEffect(c, failure);
     }
     // A timer cannot preempt synchronous JavaScript; reject a success observed after its cutoff.
@@ -103,14 +103,6 @@ export function fromPromiseOperation<T>(
   );
 }
 
-/** Effect's event stream owns subscription cleanup, including when this race branch loses. */
-function cancellation(signal: AbortSignal) {
-  return Effect.suspend(() => signal.aborted ? Effect.interrupt : Stream.fromEventListener(signal, "abort").pipe(
-    Stream.runHead,
-    Effect.zipRight(Effect.interrupt),
-  ));
-}
-
 /** Promise boundary: preserve the existing API and record supervised cancellation as an outcome. */
 export async function executeAttempt<T>(
   context: AttemptContext,
@@ -126,12 +118,10 @@ export async function executeAttempt<T>(
     return fromPromiseOperation(operation);
   });
   const program = runAttempt(attempt, work);
-  const exit = await Effect.runPromiseExit(signal
-    ? Effect.raceFirst(program, cancellation(signal))
-    : program);
+  const exit = await Effect.runPromiseExit(program, signal ? { signal } : undefined);
   if (Exit.isSuccess(exit)) {
     const outcome = exit.value;
-    // Event streams are asynchronous: cancellation observed at this boundary vetoes further work.
+    // Cancellation observed at the Promise boundary vetoes further work.
     // Keep explicit escalations (especially uncertain effects) rather than hiding them as cancellation.
     if (signal?.aborted && (outcome.status === "succeeded"
         || outcome.decision.action === "retry" || outcome.decision.action === "wait")) {
@@ -140,8 +130,8 @@ export async function executeAttempt<T>(
     }
     return outcome;
   }
-  const failure: Failure = Cause.isInterruptedOnly(exit.cause)
+  const failure: Failure = Cause.hasInterruptsOnly(exit.cause)
     ? { kind: "cancelled", effect: started ? "unknown" : "not_started" }
-    : Option.getOrElse(Cause.failureOption(exit.cause), () => internalError);
+    : Option.getOrElse(Cause.findErrorOption(exit.cause), () => internalError);
   return failureOutcome(attempt.context, failure, Date.now(), Math.random());
 }

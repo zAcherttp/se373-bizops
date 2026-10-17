@@ -19,6 +19,6 @@
     "typescript": "6.0.2"
   },
   "dependencies": {
-    "effect": "3.22.3"
+    "effect": "4.0.5"
   }
 }
