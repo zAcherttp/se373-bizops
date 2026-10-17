@@ -149,6 +149,10 @@ We read the pinned Pi Durable [README](https://github.com/earendil-works/pi/blob
 
 ### Module ownership and explainability
 
+Implementation starter: [agent/runtime](../agent/runtime/README.md) contains a TypeScript failure policy
+and bounded single-attempt executor with offline scenarios. It is not yet connected to the app,
+durable storage, approvals or delivery. The architecture below remains the proposed target.
+
 The user reports that the lecturer now expects understanding at module level, rather than explaining every line. For each authored module, its owner must explain its purpose, inputs/outputs, persisted state, dependencies, authorization boundary and failure/recovery behavior, then walk through one normal case and one failure case using a trace or focused test. Library use is allowed; explain the contracts and limits we rely on rather than rewriting databases or model SDKs. AI-generated code requires the same understanding.
 
 Keep the authored durability core bounded: admission and atomic state transitions; Task checkpoints and ownership; scheduling and stall recovery; persisted waits/approvals; and operation receipts/reconciliation through Tool Gateway. Add one piece at the allowed phase and prove it with interruption/recovery scenarios before extending it. This is a teaching and ownership boundary, not a request to implement the full Pi runtime.

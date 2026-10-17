@@ -16,7 +16,8 @@ are in `docs/YEU-CAU.md`; research and design direction in `docs/NGHIEN-CUU.md`.
 - **Models:** pick by profile in `agent/models.yaml`. Tests use a scripted fake model and must never
   need a key or network.
 - **Checks before commit:** `uv run ruff check . && uv run pytest` in `agent/`; `pnpm run lint &&
-  pnpm run build` in `app/`. Read exit codes, don't pipe into `tail`.
+  pnpm run build` in `app/`; `pnpm run typecheck && pnpm run lint && pnpm test` in `agent/runtime/`.
+  Read exit codes, don't pipe into `tail`.
 - **Team workflow** is in `docs/QUY-TRINH.md`: every task is an issue on the board
   (github.com/users/zAcherttp/projects/2), milestones are the phases, every change reaches `main` through
   a PR that closes its issue (`Closes #n`).
