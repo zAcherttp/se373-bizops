@@ -59,6 +59,13 @@
       "typeName": "page"
     },
     {
+      "meta": {},
+      "id": "page:bizops-overview-00",
+      "name": "00 Tổng quan",
+      "index": "a0",
+      "typeName": "page"
+    },
+    {
       "id": "page:bizops-review-20261015-004",
       "typeName": "page",
       "name": "01 Kiến trúc",
@@ -12077,6 +12084,1309 @@
       "typeName": "shape"
     },
     {
+      "x": 140,
+      "y": 451,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-HVCFKAlk-p7uDU-ax_iHl",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 595,
+          "y": -63.5
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a3if1",
+      "typeName": "shape"
+    },
+    {
+      "x": 735,
+      "y": 387.5,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-N2pnmLV21Qun2kY-kw774",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 290,
+          "y": 0.5
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a4mKOV",
+      "typeName": "shape"
+    },
+    {
+      "x": 435,
+      "y": 92.5,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-PCcFRRkOXyr_2K__b9X1b",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 165
+        },
+        "arrowheadStart": "arrow",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "shape:ov-frame",
+      "index": "a3rCw",
+      "typeName": "shape"
+    },
+    {
+      "x": 135,
+      "y": 196,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-PbfsGyniYupzLnzfHhraY",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 300,
+          "y": 61.5
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "shape:ov-frame",
+      "index": "a2lEH",
+      "typeName": "shape"
+    },
+    {
+      "x": 1275,
+      "y": 388,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-RIAqsBRDljjQ11xIwNNPV",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 275,
+          "y": -198
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a6zu2ZV",
+      "typeName": "shape"
+    },
+    {
+      "x": 1160,
+      "y": 312,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-agent",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 230,
+        "h": 150,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 2,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "green",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Agent phòng ban",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Sales · Kế toán · CSKH · Marketing · Nhân sự · Vận hành"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a5sij",
+      "typeName": "shape"
+    },
+    {
+      "x": 1275,
+      "y": 388,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-bd9ZuaGfSLeIW0XZiy5jp",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 275,
+          "y": -17
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a7aIe",
+      "typeName": "shape"
+    },
+    {
+      "x": 940,
+      "y": 342,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-dp",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 170,
+        "h": 90,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 2,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Điều phối",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "coordinator"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a49Nn",
+      "typeName": "shape"
+    },
+    {
+      "x": 20,
+      "y": 150,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-dt",
+      "type": "geo",
+      "parentId": "shape:ov-frame",
+      "props": {
+        "w": 230,
+        "h": 90,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 2,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "violet",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Danh tính & API",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "ai gửi, quyền gì"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1wFf",
+      "typeName": "shape"
+    },
+    {
+      "x": 310,
+      "y": 15,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-duyet",
+      "type": "geo",
+      "parentId": "shape:ov-frame",
+      "props": {
+        "w": 250,
+        "h": 90,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "orange",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Duyệt của người",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "hỏi lại · duyệt chi tiền"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a35NQ",
+      "typeName": "shape"
+    },
+    {
+      "x": 1025,
+      "y": 388,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-eIif-9RGjMlyoSlbT2Lss",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 250,
+          "y": 0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a5xaUh",
+      "typeName": "shape"
+    },
+    {
+      "x": 40,
+      "y": 845,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-foot",
+      "type": "text",
+      "props": {
+        "color": "black",
+        "size": "s",
+        "w": 8,
+        "font": "draw",
+        "textAlign": "start",
+        "autoSize": true,
+        "scale": 1,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Chi tiết: trang 01–04 và docs/ARCHITECTURE.md"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "aCwt2",
+      "typeName": "shape"
+    },
+    {
+      "x": 300,
+      "y": 130,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-frame",
+      "type": "frame",
+      "props": {
+        "w": 580,
+        "h": 590,
+        "name": "Lõi tin cậy (code kiểm, model không vượt được)",
+        "color": "violet"
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a10pI",
+      "typeName": "shape"
+    },
+    {
+      "x": 735,
+      "y": 387.5,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-jxav2wdfd4kuqYOQIo7x7",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 815,
+          "y": 278.5
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9wM7V",
+      "typeName": "shape"
+    },
+    {
+      "x": 40,
+      "y": 280,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-kenh",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 200,
+        "h": 90,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 2,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Kênh vào",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Web app · chat"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a2mk2",
+      "typeName": "shape"
+    },
+    {
+      "x": 1440,
+      "y": 620,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-kq",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 220,
+        "h": 80,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 12,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Kết quả & thông báo",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a9TSE",
+      "typeName": "shape"
+    },
+    {
+      "x": 40,
+      "y": 405,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-lich",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 200,
+        "h": 90,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 2,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Lịch / sự kiện",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "scheduler"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a34Mr",
+      "typeName": "shape"
+    },
+    {
+      "x": 40,
+      "y": 770,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-pol",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 1620,
+        "h": 50,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 12,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "red",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Policy kiểm ở mọi bước · giao việc chỉ thu hẹp quyền",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "aA2Qf",
+      "typeName": "shape"
+    },
+    {
+      "x": 1440,
+      "y": 310,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-rag",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 220,
+        "h": 100,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 22,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "green",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Tri thức & memory",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "RAG, theo phạm vi"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a7Ahj",
+      "typeName": "shape"
+    },
+    {
+      "x": 310,
+      "y": 175,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-rb",
+      "type": "geo",
+      "parentId": "shape:ov-frame",
+      "props": {
+        "w": 250,
+        "h": 165,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "violet",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Request bền",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "lưu trước khi nhận, chờ có hạn, phục hồi"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a2H2n",
+      "typeName": "shape"
+    },
+    {
+      "x": 1440,
+      "y": 490,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-skill",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 220,
+        "h": 80,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "green",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Skill đã duyệt",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a8NDE",
+      "typeName": "shape"
+    },
+    {
+      "x": 310,
+      "y": 400,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-so",
+      "type": "geo",
+      "parentId": "shape:ov-frame",
+      "props": {
+        "w": 250,
+        "h": 80,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "grey",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Sổ chi phí",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a4Uqe",
+      "typeName": "shape"
+    },
+    {
+      "x": 40,
+      "y": 40,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-title",
+      "type": "text",
+      "props": {
+        "color": "black",
+        "size": "l",
+        "w": 8,
+        "font": "draw",
+        "textAlign": "start",
+        "autoSize": true,
+        "scale": 1,
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Business Ops Agent · kiến trúc tổng quan (đề xuất)"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "aBgGM",
+      "typeName": "shape"
+    },
+    {
+      "x": 1440,
+      "y": 150,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-tool",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 220,
+        "h": 80,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "green",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Tool nghiệp vụ",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a6zXP",
+      "typeName": "shape"
+    },
+    {
+      "x": 310,
+      "y": 500,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-trace",
+      "type": "geo",
+      "parentId": "shape:ov-frame",
+      "props": {
+        "w": 250,
+        "h": 70,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "grey",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Trace & eval",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a53h6",
+      "typeName": "shape"
+    },
+    {
+      "x": 1275,
+      "y": 388,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-vCIq9KFzqMb08_8liIfk9",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 275,
+          "y": 142
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a8iXY",
+      "typeName": "shape"
+    },
+    {
+      "x": 140,
+      "y": 326,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-wMSl5rnRTzrlvx9xSRNgE",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "draw",
+        "size": "m",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 295,
+          "y": 0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a2vMWG",
+      "typeName": "shape"
+    },
+    {
       "x": 620,
       "y": 1140,
       "rotation": 0,
@@ -17580,6 +18890,366 @@
         },
         "snap": "none",
         "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov--1Sjp_CyWQ8fdFdSaIOWo",
+      "fromId": "shape:ov-jxav2wdfd4kuqYOQIo7x7",
+      "toId": "shape:ov-rb",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-2nAZAT1n3G-S54rkDnHQA",
+      "fromId": "shape:ov-N2pnmLV21Qun2kY-kw774",
+      "toId": "shape:ov-rb",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-BU7JFfJkmvXPlxdNt3ntT",
+      "fromId": "shape:ov-RIAqsBRDljjQ11xIwNNPV",
+      "toId": "shape:ov-tool",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-Ebh7OxuFyL_osYCcYy1AB",
+      "fromId": "shape:ov-PCcFRRkOXyr_2K__b9X1b",
+      "toId": "shape:ov-duyet",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-HAJzj8a0fiAUDOUJHzbJb",
+      "fromId": "shape:ov-N2pnmLV21Qun2kY-kw774",
+      "toId": "shape:ov-dp",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-HJlBns96HGzPmj_b8F7Ol",
+      "fromId": "shape:ov-eIif-9RGjMlyoSlbT2Lss",
+      "toId": "shape:ov-agent",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-HnekIj2O7VlzUnQsJLz4X",
+      "fromId": "shape:ov-HVCFKAlk-p7uDU-ax_iHl",
+      "toId": "shape:ov-lich",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-MhsE3rI4DJQV4UhBW6q6e",
+      "fromId": "shape:ov-PbfsGyniYupzLnzfHhraY",
+      "toId": "shape:ov-rb",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-StX8sSh2eXcAmdibt_lJ9",
+      "fromId": "shape:ov-vCIq9KFzqMb08_8liIfk9",
+      "toId": "shape:ov-agent",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-SyoyQBHZlwPCquD4IxvWp",
+      "fromId": "shape:ov-bd9ZuaGfSLeIW0XZiy5jp",
+      "toId": "shape:ov-agent",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-WVhl_GNAZHEAE_FponPC3",
+      "fromId": "shape:ov-eIif-9RGjMlyoSlbT2Lss",
+      "toId": "shape:ov-dp",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-X8ZwLrs9E28LVDA4vuHcE",
+      "fromId": "shape:ov-wMSl5rnRTzrlvx9xSRNgE",
+      "toId": "shape:ov-kenh",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-ZHfffQsihKySpeNinQkOV",
+      "fromId": "shape:ov-jxav2wdfd4kuqYOQIo7x7",
+      "toId": "shape:ov-kq",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-ZzDhOnOixm7-gHkAVXc_M",
+      "fromId": "shape:ov-PCcFRRkOXyr_2K__b9X1b",
+      "toId": "shape:ov-rb",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-m5zXbnbvc3q5PIHw3S37r",
+      "fromId": "shape:ov-PbfsGyniYupzLnzfHhraY",
+      "toId": "shape:ov-dt",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-mD-O_BRvOY6g4Sbo2kxmb",
+      "fromId": "shape:ov-RIAqsBRDljjQ11xIwNNPV",
+      "toId": "shape:ov-agent",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "start"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-pnbIu6o7nr1dQEkYMaop6",
+      "fromId": "shape:ov-vCIq9KFzqMb08_8liIfk9",
+      "toId": "shape:ov-skill",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-qJ13v27PUkcs76_UkLAgu",
+      "fromId": "shape:ov-bd9ZuaGfSLeIW0XZiy5jp",
+      "toId": "shape:ov-rag",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-qf2mUnv3YuMvjMSr3FaH-",
+      "fromId": "shape:ov-HVCFKAlk-p7uDU-ax_iHl",
+      "toId": "shape:ov-rb",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
+      },
+      "typeName": "binding"
+    },
+    {
+      "meta": {},
+      "id": "binding:ov-wKfF45YRNv6tJ-EnhBJR0",
+      "fromId": "shape:ov-wMSl5rnRTzrlvx9xSRNgE",
+      "toId": "shape:ov-dt",
+      "type": "arrow",
+      "props": {
+        "isPrecise": false,
+        "isExact": false,
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "snap": "none",
+        "terminal": "end"
       },
       "typeName": "binding"
     },
