@@ -4643,7 +4643,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Side effect có operation ID",
+                  "text": "Replay policy theo tool",
                   "marks": [
                     {
                       "type": "bold"
@@ -4657,7 +4657,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Ghi intent + ID trước khi chạy; mơ hồ thì query hệ thống ngoài trước replay; không giả định exactly-once"
+                  "text": "safe_to_repeat / reconcile_first / human_resolution_required; interrupted = unknown; đối soát operation ID trước replay"
                 }
               ]
             },
@@ -4666,12 +4666,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · DSH checkpoint policy",
-                  "marks": [
-                    {
-                      "type": "italic"
-                    }
-                  ]
+                  "text": "P2 · Pi Durable reference; Python/LangGraph"
                 }
               ]
             }
@@ -7417,7 +7412,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Connector có kiểu + receipt",
+                  "text": "Tool execution contract",
                   "marks": [
                     {
                       "type": "bold"
@@ -7431,7 +7426,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Input validation, policy check, operation ID, receipt; ghi qua workflow có duyệt"
+                  "text": "Quyền / approval / schema / recovery / metering; nested call qua gate; child usage không cộng hai lần"
                 }
               ]
             },
@@ -7440,12 +7435,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · ARCHITECTURE §3",
-                  "marks": [
-                    {
-                      "type": "italic"
-                    }
-                  ]
+                  "text": "P1 khai báo · P2 recovery · ARCHITECTURE §4"
                 }
               ]
             }
@@ -15182,7 +15172,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Ghi operation ID + intent trước khi chạy; receipt; checkpoint từng bước"
+                  "text": "Tool contract: safe_to_repeat / reconcile_first / human_resolution_required"
                 }
               ]
             },
@@ -15191,7 +15181,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Kết quả ngoài không rõ: đối soát trước khi replay; không hứa exactly-once"
+                  "text": "Operation ID + intent + receipt; interrupted = unknown. Đối soát trước replay; mỗi attempt ghi usage, child không cộng hai lần."
                 }
               ]
             }
@@ -16796,7 +16786,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Tool gateway & connector [P1]",
+                  "text": "Tool gateway & connector [P1 contract · P2 recovery]",
                   "marks": [
                     {
                       "type": "bold"
@@ -16810,7 +16800,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Schema chặt; kiểm tool + args + record mỗi call; operation ID, receipt"
+                  "text": "Quyền + approval + recovery + metering; kiểm mọi call, kể cả nested; intent / receipt"
                 }
               ]
             }

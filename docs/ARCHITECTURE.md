@@ -1,10 +1,10 @@
 # SE373 Business Ops Agent · team architecture proposal
 
-**Status:** proposal for team review; not an accepted ADR. **Tracking:** [#16](https://github.com/zAcherttp/se373-bizops/issues/16). **Date:** 2026-10-15.
+**Status:** proposal for team review; not an accepted ADR. **Tracking:** [#16](https://github.com/zAcherttp/se373-bizops/issues/16). **Date:** 2026-10-15. **Updated:** 2026-10-17.
 
 This proposal consolidates the brainstorming session, the supplied topic description, the teammate's workflow image, and research into Hermes and DeepSeek Harness/Cordis. It proposes the final system target and a phased delivery path. It does not claim that these capabilities are implemented.
 
-The desktop rubric draft and research changes on `14-transcript-research` have not been transferred to this cloud checkout. The editable board [SE373.tldr](SE373.tldr) shows this proposal on four pages: architecture, durable requests, skills and phases, and the feature map with roadmap. No company or use-case selection below is already agreed.
+The desktop rubric draft and research changes on `14-transcript-research` have not been transferred to this cloud checkout. The editable board [SE373.tldr](SE373.tldr) shows this proposal on five pages: a one-screen overview, architecture, durable requests, skills and phases, and the feature map with roadmap. No company or use-case selection below is already agreed.
 
 ## 1. Product and scope
 
@@ -35,6 +35,7 @@ No full ERP, real payroll/tax compliance, autonomous company management, untrust
 | Durable employee requests separated from chats and run attempts | Work must remain trackable across conversations, waits and failures |
 | Small trusted core with pluggable business capabilities | Supports team ownership and company configuration without building a general plugin platform |
 | Narrow typed tools and progressive skill loading | Keeps capability, cost and evaluation manageable |
+| Explicit authorization, approval, recovery and metering contract per tool | Safe recovery is a declared capability, never inferred from a tool name or model output |
 | Approved workflows first; bounded planning later | Makes important business processes explainable and replayable |
 | Authorization, money approval and state transitions enforced in code | Model output cannot establish authority or correctness |
 | Durable task admission, recovery and escalation | Accepted work must never disappear silently when a process stops |
@@ -114,6 +115,56 @@ A package declares its identifier/version, dependencies, provided capabilities, 
 Configuration selects reviewed, pinned packages. Begin with startup registration; hot reload is out of scope. If a package is disabled, stop new admissions and explicitly drain, cancel or migrate active requests while preserving history. Never silently resume an old request against an incompatible workflow or skill version.
 
 All initial plugins are trusted, reviewed application code. An in-process Python plugin is not a sandbox: untrusted extensions would require separate execution, restricted credentials and a dedicated threat assessment.
+
+### Business tool execution contract
+
+Every registered business tool declares a versioned contract. The tool gateway validates it at registration and enforces it on model calls, nested tool calls, specialist calls and recovery attempts alike. Filtered model discovery is not the full callable permission boundary. Missing policy denies access; missing recovery metadata never authorizes automatic replay.
+
+| Contract field | Meaning |
+|---|---|
+| Identity/version and schemas | Stable tool identifier, input/output schemas, contract version and compatible workflow versions |
+| Authorization | Required action/resource permissions; server-provided principal and record/field constraints; output classification/provenance |
+| Approval | Whether the proposed action requires human approval and how its exact arguments/version bind to the approval record |
+| Recovery | Explicit replay category, supported idempotency mechanism, operation lookup/reconciliation and escalation path |
+| Execution limits | Timeout, bounded retries, concurrency and cancellation behavior; side effects already committed may require separate compensation |
+| Evidence | Intent, stable operation ID, result/receipt, observed state and policy/approval references |
+| Metering | Usage units/source, charge-event identity, pricing reference and handling of interrupted/unknown usage |
+
+The following is an illustrative proposed contract, not an existing connector guarantee. A connector may declare idempotency/lookup support only after its backend implements and passes the corresponding tests.
+
+```yaml
+name: create_purchase_order
+contract_version: 1
+required_permission: purchasing.create
+approval_required: true
+recovery:
+  replay: reconcile_first
+  idempotency_supported: true
+  lookup_by_operation_id: true
+```
+
+Recovery categories:
+
+- **`safe_to_repeat`:** another invocation has no additional harmful effect. A read may qualify, but a fresh answer may differ; reuse a committed result when the workflow requires the original observation. Read operations can still incur cost and require current authorization.
+- **`reconcile_first`:** the external effect might already exist. Query using the stable operation ID, persist the observed receipt, and only retry after establishing that it is safe. Backend idempotency is preferred; an inconclusive lookup does not establish absence.
+- **`human_resolution_required`:** no reliable lookup/idempotency path exists or reconciliation remains ambiguous. Block and assign an escalation; never blindly repeat the action.
+
+An interrupted external call is **unknown** until reconciled, not automatically failed. For example, a crash after purchase submission but before receipt persistence must lead to order lookup, not a second purchase. Reauthorization applies before reconciliation reads and any new action. If authority was revoked, escalate to an authorized owner rather than reusing the old permission snapshot.
+
+Keep completed receipts and cost events durable. Retries share the business operation ID where appropriate but have distinct attempt/usage IDs. A child tool records its own usage; parent aggregation references it without adding the same charge again. Unknown provider usage remains pending rather than zero, and recovery never repeats a paid call solely to recover its usage count.
+
+### Runtime ownership and Pi Durable reference
+
+Retain Python/LangGraph. Adopt Pi Durable's useful contracts without introducing a second agent scheduler or checkpoint engine:
+
+- The business request store owns the employee-visible lifecycle; dispatch/recovery owns scheduling; LangGraph owns workflow position; authoritative business systems establish actual external effects. Link them with request/run/operation IDs and replayable or transactional transitions.
+- Persist admitted work and durable progress before publishing them as accepted/completed facts. An acknowledgement must not outrun storage. If transient model streaming is introduced, explicitly distinguish provisional text from committed outcomes.
+- A status subscriber disconnecting or cancelling its wait does not cancel accepted business work. Task cancellation requires a separate authenticated command. Define parent/child ownership so failure and cancellation leave no untracked background work.
+- Human waits persist their state and release workers. Process recovery is distinct from rolling back external business effects.
+
+Pi Durable's inspected package is experimental TypeScript with a single owning process per storage and no cross-process locking. Its SQLite defaults distinguish process-crash survival from host/power-failure guarantees. These are not the distributed lease, high-availability or backup guarantees of our proposed target. Its selectable guard extensions are also not a substitute for our mandatory policy enforcement.
+
+Do not wrap LangGraph in Pi Durable by default: overlapping task ownership, cancellation and checkpoint systems would introduce a synchronization problem. Any later adoption requires a separate ADR with a clear division of responsibility and measured benefit. This review inspected documentation/specification, not a runtime benchmark or security validation.
 
 ### Suggested eventual layout
 
@@ -323,6 +374,8 @@ For each use case, define expected tool effects, evidence, permitted readers, fa
 
 At minimum test unauthorized payroll retrieval, restricted-to-shared memory/skill contamination, document prompt injection, approval bypass and cross-user leakage. Also test revocation before resume/delivery, guessed resource IDs, group-chat exposure, duplicate execution and unknown remote outcomes. Inspect stored artifacts, not only final answers. Current scaffold traces record raw payloads and skill loading has no user-scope enforcement; these must be addressed before sensitive data.
 
+**Tool-contract acceptance:** reject missing authorization and incompatible contracts; verify `safe_to_repeat`, `reconcile_first` and `human_resolution_required` behavior with synthetic connectors. Crash after an external effect but before receipt persistence must not create a second order. Test inconclusive lookup, revoked access during reconciliation, nested-call permission checks, parent/child cancellation and subscriber disconnect without task cancellation. Usage rollups count child attempts once and preserve unknown usage.
+
 **Recovery acceptance:** inject process termination after admission/before dispatch, during execution, after an external action/before its receipt is saved, while awaiting approval, and after completion/before notification. Also test duplicated ingress, stale workers, provider outage, storage outage, exhausted budgets and failed escalation delivery. Once dependencies recover, every accepted request must remain discoverable and become safely resumed, explicitly waiting with a deadline, or terminal with success/cancellation/failure evidence. Failures have assigned escalations; uncertain external effects are reconciled rather than blindly repeated. Verify actual business records for duplicate actions.
 
 **Cost acceptance:** use synthetic pricing and usage fixtures with sub-cent charges, cached-token rules, retries, failed calls, duplicate events, unknown usage, currency conversion and invoice corrections. Assert deterministic arithmetic, no duplicate charges, transparent unknowns, and totals matching fixture bills under the declared rounding rule. Concurrent budget tests must show atomic reservations. Shared allocations must reconcile to the operating total without counting infrastructure twice. Real billing evidence is a separate check from offline fixtures.
@@ -337,11 +390,14 @@ The teammate's supplied flow contributes clarification, single/multiple speciali
 
 Hermes informs gateway separation, progressive skills, bounded delegation, durable Kanban collaboration and scheduled delivery. Cordis informs composition, dependencies and lifecycle. We adopt selected principles in Python; neither system is the mandatory runtime or a proven business-security boundary.
 
-Primary references inspected during this session:
+Primary references inspected during this session (Pi Durable added 2026-10-17):
 
 - [Hermes architecture, pinned source](https://github.com/NousResearch/hermes-agent/blob/dfa79389773271ee78c41a7af340848948d461ee/website/docs/developer-guide/architecture.md)
 - [Hermes durable task collaboration, pinned source](https://github.com/NousResearch/hermes-agent/blob/dfa79389773271ee78c41a7af340848948d461ee/website/docs/user-guide/features/kanban.md)
 - [DeepSeek Harness architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
+
+- [Pi Durable README, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md)
+- [Pi Durable normative specification, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md)
 
 Repository links: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team workflow](QUY-TRINH.md), [ADR process](decisions/README.md). This proposal supersedes neither an accepted ADR nor course rules.
 
@@ -357,7 +413,7 @@ Repository links: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team w
 8. Reconcile the rubric draft after transfer. Review `SE373.tldr` alongside this proposal; the board shows the proposal, not accepted decisions.
 9. Record accepted decisions in Decision issues and ADRs, then create small implementation issues and task branches.
 10. Set recovery objectives, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring. Select the dispatch/checkpoint synchronization contract.
-11. Define the cost catalog, invoice import/reconciliation method, allocation and rounding policies, visibility permissions and budget limits. Set measurable calculator and recovery acceptance criteria before implementation.
+11. Review the per-tool authorization/approval/recovery/metering contract and assign connector-specific reconciliation owners. Define the cost catalog, invoice import/reconciliation method, allocation and rounding policies, visibility permissions and budget limits. Set measurable calculator and recovery acceptance criteria before implementation.
 
 Editable board: [SE373.tldr](SE373.tldr).
 

@@ -60,3 +60,11 @@ Baseline có tool calling native: Claude Haiku 5.5 (`claude-haiku-5-5`, $0,10 / 
 **profile harness** khai báo trong `models.yaml`: profile mạnh dùng tool calling native và ít
 middleware; profile yếu dùng `JsonToolChat`, chọn bớt tool mỗi bước (`LLMToolSelectorMiddleware`),
 retry, giới hạn chặt hơn, nén context sớm hơn. Bộ eval là pytest chạy lặp qua các profile.
+
+## 6. Pi Durable: execution contract (17/10/2026)
+
+Khảo sát README/spec ở [commit 8efd314](https://github.com/earendil-works/pi/tree/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable), chưa chạy benchmark. Giữ Python/LangGraph; không thêm một runtime TypeScript/checkpoint engine thứ hai. Xem contract chi tiết trong [ARCHITECTURE.md](ARCHITECTURE.md).
+
+Mượn durable admission, committed progress, task ownership, wait không đồng nghĩa cancel, explicit replay policy và usage theo attempt. Nhóm đề xuất ba nhánh recovery: safe_to_repeat / reconcile_first / human_resolution_required. Call bên ngoài bị ngắt là unknown đến khi đối soát; không tự mua/gửi lại. Tool contract gắn quyền, approval, operation/receipt, recovery và metering; nested call vẫn qua gate, chi phí child không cộng hai lần.
+
+Giới hạn nguồn: package experimental, storage một process sở hữu và không có cross-process locking; cấu hình SQLite mặc định không bảo đảm không mất commit mới nhất khi host/power failure. Không coi guard extension tùy chọn là policy bắt buộc của sản phẩm.
