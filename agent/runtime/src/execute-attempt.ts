@@ -1,3 +1,4 @@
+import { Cause, Clock, Effect, Exit, Option, Random, Stream } from "effect";
 import { decideFailure, validateContext } from "./failure-policy.ts";
 import type { AttemptContext, Failure, FailureDecision } from "./failure-policy.ts";
 
@@ -14,65 +15,133 @@ export interface AttemptOptions {
   signal?: AbortSignal;
 }
 
-/** Runs once. Supply a gated operation: this module is not an authorization boundary. */
+type PreparedAttempt = { context: AttemptContext; expiresAt: number };
+const internalError: Failure = { kind: "internal_error", effect: "unknown" };
+const timeout: Failure = { kind: "timeout", effect: "unknown" };
+
+function prepare(context: AttemptContext, timeoutMs: number, now: number): PreparedAttempt {
+  validateContext(context, now);
+  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 2_147_483_647) {
+    throw new TypeError("Invalid attempt timeout");
+  }
+  return { context: { ...context }, expiresAt: Math.min(context.deadlineAt, now + timeoutMs) };
+}
+
+function ids(c: AttemptContext) {
+  return { requestId: c.requestId, operationId: c.operationId, attemptId: c.attemptId };
+}
+
+function failureOutcome(c: AttemptContext, failure: Failure, now: number, jitter: number): AttemptOutcome<never> {
+  // Invalid adapter classifications are internal failures, never a new permission or retry grant.
+  try {
+    const decision = decideFailure(failure, c, now, jitter);
+    return { ...ids(c), status: "not_succeeded", failure: { kind: failure.kind, effect: failure.effect }, decision };
+  } catch {
+    return { ...ids(c), status: "not_succeeded", failure: internalError,
+      decision: decideFailure(internalError, c, now, jitter) };
+  }
+}
+
+const failureOutcomeEffect = (c: AttemptContext, failure: Failure) => Effect.gen(function* () {
+  const now = yield* Clock.currentTimeMillis;
+  const jitter = yield* Random.next;
+  return failureOutcome(c, failure, now, jitter);
+});
+
+/** One bounded operation. Effect owns interruption, timeout fibers and their finalizers. */
+function runAttempt<T, R>(attempt: PreparedAttempt, operation: Effect.Effect<T, Failure, R>) {
+  return Effect.gen(function* () {
+    const { context: c, expiresAt } = attempt;
+    const now = yield* Clock.currentTimeMillis;
+    if (now >= c.deadlineAt || c.budgetExhausted || c.attempt > c.maxAttempts) {
+      return yield* failureOutcomeEffect(c, { kind: "transient", effect: "not_started" });
+    }
+    if (now >= expiresAt) return yield* failureOutcomeEffect(c, { kind: "timeout", effect: "not_started" });
+    const exit = yield* Effect.exit(operation.pipe(Effect.timeoutFail({
+      duration: Math.max(1, expiresAt - now),
+      onTimeout: () => timeout,
+    })));
+    if (Exit.isFailure(exit)) {
+      // Propagate fiber cancellation to its supervisor; do not turn it into retryable business failure.
+      if (Cause.isInterruptedOnly(exit.cause)) return yield* Effect.interrupt;
+      const failure = Cause.isDie(exit.cause) ? internalError
+        : Option.getOrElse(Cause.failureOption(exit.cause), () => internalError);
+      return yield* failureOutcomeEffect(c, failure);
+    }
+    // A timer cannot preempt synchronous JavaScript; reject a success observed after its cutoff.
+    if ((yield* Clock.currentTimeMillis) >= expiresAt) return yield* failureOutcomeEffect(c, timeout);
+    return { ...ids(c), status: "succeeded" as const, value: exit.value };
+  });
+}
+
+/** Preferred composable API: expected failures use Effect's typed error channel. */
+export function executeAttemptEffect<T, R>(
+  context: AttemptContext,
+  operation: Effect.Effect<T, Failure, R>,
+  options: Pick<AttemptOptions, "timeoutMs">,
+): Effect.Effect<AttemptOutcome<T>, TypeError, R> {
+  return Effect.gen(function* () {
+    const now = yield* Clock.currentTimeMillis;
+    const attempt = yield* Effect.try({
+      try: () => prepare(context, options.timeoutMs, now),
+      catch: () => new TypeError("Invalid attempt configuration"),
+    });
+    return yield* runAttempt(attempt, operation);
+  });
+}
+
+/** Bridge for existing Promise adapters. Effect creates and cleans up their AbortSignal. */
+export function fromPromiseOperation<T>(
+  operation: (signal: AbortSignal) => Promise<OperationResult<T>>,
+): Effect.Effect<T, Failure> {
+  return Effect.tryPromise({ try: operation, catch: () => internalError }).pipe(
+    Effect.flatMap((result) => {
+      if (result?.ok === true && Object.hasOwn(result, "value")) return Effect.succeed(result.value);
+      if (result?.ok === false) return Effect.fail(result.failure);
+      return Effect.fail(internalError);
+    }),
+  );
+}
+
+/** Effect's event stream owns subscription cleanup, including when this race branch loses. */
+function cancellation(signal: AbortSignal) {
+  return Effect.suspend(() => signal.aborted ? Effect.interrupt : Stream.fromEventListener(signal, "abort").pipe(
+    Stream.runHead,
+    Effect.zipRight(Effect.interrupt),
+  ));
+}
+
+/** Promise boundary: preserve the existing API and record supervised cancellation as an outcome. */
 export async function executeAttempt<T>(
   context: AttemptContext,
   operation: (signal: AbortSignal) => Promise<OperationResult<T>>,
   options: AttemptOptions,
 ): Promise<AttemptOutcome<T>> {
-  validateContext(context, Date.now());
-  if (!Number.isSafeInteger(options.timeoutMs) || options.timeoutMs < 1 || options.timeoutMs > 2_147_483_647) {
-    throw new TypeError("Invalid attempt timeout");
-  }
-  // Caller mutations must not change the policy/correlation of an in-flight attempt.
-  const c = { ...context };
-  const { signal, timeoutMs } = options;
-  const expiresAt = Math.min(c.deadlineAt, Date.now() + timeoutMs);
-  const ids = { requestId: c.requestId, operationId: c.operationId, attemptId: c.attemptId };
-  const failed = (f: Failure): AttemptOutcome<T> => ({ ...ids, status: "not_succeeded",
-    failure: { kind: f.kind, effect: f.effect },
-    decision: decideFailure(f, c, Date.now(), Math.random()) });
-  if (signal?.aborted) return failed({ kind: "cancelled", effect: "not_started" });
-  if (Date.now() >= c.deadlineAt || c.budgetExhausted || c.attempt > c.maxAttempts) {
-    return failed({ kind: "transient", effect: "not_started" });
-  }
-  const controller = new AbortController();
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  let abortListener: (() => void) | undefined;
-  const interrupted = new Promise<OperationResult<T>>((resolve) => {
-    const interrupt = (kind: "timeout" | "cancelled") => {
-      // Settle first: synchronous abort handlers must not turn cancellation into success.
-      resolve({ ok: false, failure: { kind, effect: "unknown" } });
-      controller.abort();
-    };
-    timer = setTimeout(() => interrupt("timeout"), Math.max(1, expiresAt - Date.now()));
-    abortListener = () => interrupt("cancelled");
-    signal?.addEventListener("abort", abortListener, { once: true });
+  const attempt = prepare(context, options.timeoutMs, Date.now());
+  const { signal } = options;
+  if (signal?.aborted) return failureOutcome(attempt.context, { kind: "cancelled", effect: "not_started" }, Date.now(), Math.random());
+  let started = false;
+  const work = Effect.suspend(() => {
+    started = true;
+    return fromPromiseOperation(operation);
   });
-  try {
-    // Also catch synchronous throws; race observes late rejections without publishing late success.
-    const work = Promise.resolve().then(() => {
-      if (controller.signal.aborted) return { ok: false, failure: { kind: "cancelled", effect: "not_started" } } as const;
-      return operation(controller.signal);
-    });
-    const result = await Promise.race([interrupted, work]);
-    // Preserve explicit denial/uncertainty; a late denial must not become a retryable timeout.
-    if (result.ok === false) {
-      if (signal?.aborted && result.failure.kind !== "permission_denied" && result.failure.kind !== "unknown_effect") {
-        return failed({ kind: "cancelled", effect: result.failure.effect });
-      }
-      return failed(result.failure);
+  const program = runAttempt(attempt, work);
+  const exit = await Effect.runPromiseExit(signal
+    ? Effect.raceFirst(program, cancellation(signal))
+    : program);
+  if (Exit.isSuccess(exit)) {
+    const outcome = exit.value;
+    // Event streams are asynchronous: cancellation observed at this boundary vetoes further work.
+    // Keep explicit escalations (especially uncertain effects) rather than hiding them as cancellation.
+    if (signal?.aborted && (outcome.status === "succeeded"
+        || outcome.decision.action === "retry" || outcome.decision.action === "wait")) {
+      return failureOutcome(attempt.context, { kind: "cancelled",
+        effect: outcome.status === "succeeded" ? "unknown" : outcome.failure.effect }, Date.now(), Math.random());
     }
-    if (result.ok !== true || !Object.hasOwn(result, "value")) throw new TypeError("Invalid operation result");
-    // Timers cannot preempt synchronous work. Reject results observed after the cutoff as well.
-    if (signal?.aborted) return failed({ kind: "cancelled", effect: "unknown" });
-    if (Date.now() >= expiresAt) return failed({ kind: "timeout", effect: "unknown" });
-    return { ...ids, status: "succeeded", value: result.value };
-  } catch {
-    // Raw exceptions may contain payroll, tokens or documents; never publish their text here.
-    return failed({ kind: "internal_error", effect: "unknown" });
-  } finally {
-    if (timer !== undefined) clearTimeout(timer);
-    if (abortListener) signal?.removeEventListener("abort", abortListener);
+    return outcome;
   }
+  const failure: Failure = Cause.isInterruptedOnly(exit.cause)
+    ? { kind: "cancelled", effect: started ? "unknown" : "not_started" }
+    : Option.getOrElse(Cause.failureOption(exit.cause), () => internalError);
+  return failureOutcome(attempt.context, failure, Date.now(), Math.random());
 }

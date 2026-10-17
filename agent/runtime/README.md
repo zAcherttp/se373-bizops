@@ -2,7 +2,7 @@
 
 First implementation slice for [task #19](https://github.com/zAcherttp/se373-bizops/issues/19),
 based on the [architecture proposal](../../docs/ARCHITECTURE.md). Pi Durable is reference-only;
-this package has no Pi, Cordis, LangGraph or model runtime dependency. Node 24 executes erasable
+this package uses Effect for in-process execution, with no Pi, Cordis, LangGraph or model runtime dependency. Node 24 executes erasable
 TypeScript directly; `tsc` checks it separately. The existing Python scaffold is still the app's
 agent baseline; this package is not wired into its invocation or an employee-facing API yet.
 
@@ -16,15 +16,56 @@ pnpm run demo
 ```
 
 The demo prints six JSONL scenario outcomes using synthetic IDs and no network or API keys.
-Policy decisions use fixed time/jitter for repeatability; the last example runs a hanging Promise.
+Policy decisions use fixed time/jitter for repeatability; the last example times out a native `Effect.never`.
 These are inspectable demo events, not an authenticated Audit Ledger or persistent request trace.
+
+## Effect API
+
+`executeAttemptEffect(context, operation, { timeoutMs })` accepts an
+`Effect<Result, Failure, Requirements>` and returns an
+`Effect<AttemptOutcome<Result>, TypeError, Requirements>`. Expected operation failures use the typed
+error channel; successful operations return a value directly. Caller-provided services remain in
+the effect's requirements. Configuration errors are typed `TypeError`s, distinct from business
+failure decisions. Effect is pinned to `3.22.3` in this package and lockfile.
+
+```ts
+import { Effect } from "effect";
+import { executeAttemptEffect } from "./src/execute-attempt.ts";
+import type { Failure } from "./src/failure-policy.ts";
+
+// Within a caller's Effect program, with its authorized context:
+const operation = Effect.fail<Failure>({
+  kind: "approval_required",
+  effect: "not_started",
+});
+const program = Effect.gen(function* () {
+  const outcome = yield* executeAttemptEffect(context, operation, { timeoutMs: 5_000 });
+  return outcome; // Correlated wait with responder/deadline; nothing is retried here.
+});
+```
+
+`fromPromiseOperation` adapts the existing `(signal) => Promise<OperationResult<T>>` contract into
+an effect. `executeAttempt` preserves the Promise-facing API for existing callers and tests.
+New Effect callers should use `executeAttemptEffect` directly instead of nesting `runPromise` calls.
+
+Effect owns timeout fibers, interruption and operation finalizers. `Effect.tryPromise` supplies the
+operation's abort signal. `Stream.fromEventListener` scopes the compatibility caller's external
+abort subscription; `Stream.runHead` consumes the first event and closes it, and interruption also
+closes the losing race branch. There are no handwritten event listeners, manual timeout handles,
+operation AbortControllers, Promise races or `finally` cleanup in the executor.
+
+Native parent interruption remains interruption, so a supervisor can observe its `Exit` and record
+the cancellation; it is not silently converted into a successful fiber. The Promise boundary acts
+as that supervisor and returns an explicit cancelled/uncertain-effect outcome. Unclassified defects,
+including finalizer defects, escalate with sanitized messages. Effect retry combinators are not used:
+business retry eligibility remains in the pure policy, preventing accidental payment replay.
 
 ## Module walkthrough
 
 | Module | Inputs → outputs | State/dependencies | Failure behavior |
 |---|---|---|---|
 | `src/failure-policy.ts` | Trusted failure classification, attempt/owner/budget policy, time and jitter → retry, wait, escalation or cancellation | Pure function; no I/O, database, model or retained state | Invalid inputs throw before dispatch; uncertain effects take precedence over expiry/cancellation; no implicit retries |
-| `src/execute-attempt.ts` | Context, already-gated async operation, timeout and optional AbortSignal → correlated success or failure decision | One in-memory attempt, timer and abort listener; depends on failure policy | Catches sync/async exceptions, bounds waits, signals abort, suppresses late results and cleans its timer/listener |
+| `src/execute-attempt.ts` | Context, already-gated Effect and timeout → correlated success or failure decision; Promise compatibility wrapper | One in-memory attempt; Effect Clock/Random, timeout, interruption and scoped cleanup; pure failure policy | Separates expected failures, defects and interruption; rejects late success; preserves uncertain effects |
 
 Normal path: validate context → snapshot policy → invoke the supplied gated operation once →
 return its result with request/operation/attempt IDs. Success means **this operation returned a
@@ -72,3 +113,5 @@ Abort is cooperative: it cannot kill CPU-blocking JavaScript, undo an external a
 provider stopped billing. A cutoff check rejects a late-observed result, but the event loop must be
 able to run to return an outcome. Non-cooperative workloads need a process/Worker boundary and
 supervision in a later slice. Late external effects need authoritative reconciliation, not replay.
+Effect timeouts wait for resource finalizers: finalizers must be bounded. An uninterruptible operation
+or stuck finalizer can still delay termination; Effect is not a process supervisor or durable runtime.
