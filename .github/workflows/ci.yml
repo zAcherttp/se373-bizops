@@ -30,6 +30,27 @@ jobs:
       - run: uv run ruff check .
       - run: uv run pytest -q   # chạy bằng model giả, không cần API key
 
+  runtime:
+    name: Runtime (TypeScript)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agent/runtime
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: agent/runtime/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.19.0
+          cache: pnpm
+          cache-dependency-path: agent/runtime/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run typecheck
+      - run: pnpm run lint
+      - run: pnpm test
+
   app:
     name: App (TypeScript)
     runs-on: ubuntu-latest

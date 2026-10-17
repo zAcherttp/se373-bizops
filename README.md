@@ -24,6 +24,7 @@ Xem [kiến trúc](docs/ARCHITECTURE.md#runtime-ownership-and-pi-durable) và [q
 | Thư mục | Là gì |
 |---|---|
 | `agent/` | codebase agent: Python 3.12, uv, LangChain 1.x, LangGraph |
+| `agent/runtime/` | TypeScript failure-policy + bounded single-attempt executor; offline demo/tests, chưa nối app |
 | `app/` | codebase ứng dụng: TypeScript, Vite, React |
 | `company/` | dữ liệu doanh nghiệp hư cấu (chưa chốt ngành) |
 | `docs/` | yêu cầu, nghiên cứu, thiết kế |
