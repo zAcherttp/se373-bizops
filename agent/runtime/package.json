@@ -1,0 +1,19 @@
+{
+  "name": "@bizops/runtime",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.19.0 <25" },
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "lint": "oxlint",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.ts",
+    "demo": "node src/demo.ts"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "oxlint": "1.81.0",
+    "typescript": "6.0.2"
+  }
+}
