@@ -26,7 +26,7 @@ These are inspectable demo events, not an authenticated Audit Ledger or persiste
 `Effect<AttemptOutcome<Result>, TypeError, Requirements>`. Expected operation failures use the typed
 error channel; successful operations return a value directly. Caller-provided services remain in
 the effect's requirements. Configuration errors are typed `TypeError`s, distinct from business
-failure decisions. Effect is pinned to `3.22.3` in this package and lockfile.
+failure decisions. Effect is pinned to `4.0.5` in this package and lockfile.
 
 ```ts
 import { Effect } from "effect";
@@ -49,10 +49,14 @@ an effect. `executeAttempt` preserves the Promise-facing API for existing caller
 New Effect callers should use `executeAttemptEffect` directly instead of nesting `runPromise` calls.
 
 Effect owns timeout fibers, interruption and operation finalizers. `Effect.tryPromise` supplies the
-operation's abort signal. `Stream.fromEventListener` scopes the compatibility caller's external
-abort subscription; `Stream.runHead` consumes the first event and closes it, and interruption also
-closes the losing race branch. There are no handwritten event listeners, manual timeout handles,
-operation AbortControllers, Promise races or `finally` cleanup in the executor.
+operation's abort signal. The Promise boundary passes the external signal directly to
+`Effect.runPromiseExit(program, { signal })`; v4 owns the abort subscription and removes it when
+the fiber exits. There are no handwritten event listeners, cancellation streams, manual timeout
+handles, operation AbortControllers, Promise races or `finally` cleanup in the executor.
+
+The implementation uses v4's `timeoutOrElse`, cause inspection helpers and service API. Tests use
+`forkChild` and `TestClock.layer()` from `effect/testing`; they verify that interruption releases
+resources and completed attempts leave no external abort subscription behind.
 
 Native parent interruption remains interruption, so a supervisor can observe its `Exit` and record
 the cancellation; it is not silently converted into a successful fiber. The Promise boundary acts
