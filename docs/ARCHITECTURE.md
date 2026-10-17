@@ -36,7 +36,7 @@ The demo company is fictional. Configuration sets departments, roles, policies, 
 
 ## 2. Proposed decisions
 
-- Python/LangChain/LangGraph backend; React/TypeScript/Vite app.
+- Proposed target: team-authored TypeScript agent core; React/TypeScript/Vite app. Per the user's lecturer clarification (2026-10-17), Python and LangGraph are optional. The existing Python scaffold remains until a separate implementation change; phase gates still apply.
 - One shared service, isolated identity and context per request.
 - Durable requests separate from chats and run attempts.
 - Small trusted core, pluggable business capabilities.
@@ -90,11 +90,11 @@ flowchart TD
 
 Dashed links are mandatory controls; traces cover the whole path. Scheduler, Dispatcher, Supervisor, Delivery Service and Workers are detailed in §5. The ExecutionContext carries identity/authority; it is distinct from model context. Audit Ledger records authority/actions; Usage Ledger records consumption; Cost Accounting calculates and reconciles charges.
 
-These are logical boundaries in one Python application, not microservices. Add a background worker when durable execution needs it; nothing distributed without measured need.
+These are logical boundaries in one TypeScript application, not microservices. Add a background worker when durable execution needs it; nothing distributed without measured need.
 
 ## 4. Composition inspired by Cordis
 
-Borrow Cordis's service contracts, dependency declaration, lifecycle cleanup and configuration-driven composition as a small Python registry; do not port Cordis or replace LangGraph.
+Use Cordis's service contracts, dependency declaration, lifecycle cleanup and configuration-driven composition as a reference. Cordis itself remains a candidate composition dependency to evaluate, not a selected runtime. Start with startup registration; do not build a plugin platform. Composition never owns a second task scheduler or bypasses mandatory policy.
 
 - **Trusted core:** plugins cannot disable identity, authorization, approval, request lifecycle or audit. Unresolved policy denies.
 - **Extension points:** department packages (tools, skills, request types, workflows) and connectors (catalog, inventory, CRM, accounting). Also channel adapters (app plus one messaging platform), retrieval/storage adapters and model adapters (existing profiles, optional measured classifiers).
@@ -143,15 +143,23 @@ An interrupted call is **unknown** until reconciled: a crash after purchase subm
 
 ### Runtime ownership and Pi Durable
 
-Keep LangGraph; borrow Pi Durable's contracts, not its engine. The request store owns the visible lifecycle, dispatch/recovery owns scheduling, LangGraph owns workflow position, business systems own actual effects, linked by request/run/operation IDs and transactional or replayable transitions. Persist before reporting accepted/completed; streamed text is provisional. A subscriber disconnecting cancels nothing (cancellation is an authenticated command); parent/child ownership leaves no orphaned work. Human waits release workers; process recovery is not rollback of business effects.
+Pi Durable is an architecture reference and optional isolated comparison testbed, **not a production runtime dependency**. The team authors a small TypeScript durability core. The request store owns the visible lifecycle, Scheduler/Dispatcher/Supervisor handle eligibility, placement and recovery, persisted Task checkpoints record workflow position, and business systems own actual effects, linked by request/run/operation IDs and transactional or replayable transitions. Persist before reporting accepted/completed; streamed text is provisional. A subscriber disconnecting cancels nothing (cancellation is an authenticated command); parent/child ownership leaves no orphaned work. Human waits release workers; process recovery is not rollback of business effects.
 
-We read the pinned Pi Durable [README](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md) and [spec](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md) (no benchmark): it is experimental single-process TypeScript without our leases, HA, backups or mandatory policy. Wrapping LangGraph in it would duplicate task, cancellation and checkpoint ownership, so adoption needs its own ADR.
+We read the pinned Pi Durable [README](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md) and [spec](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md) (no benchmark): it is experimental single-process TypeScript without our leases, HA, backups or mandatory policy. Borrow its admission, committed progress, task ownership and explicit recovery contracts; do not reproduce its entire engine or claim its implementation supplies our guarantees. Any future proposal to adopt its runtime must explicitly revise this reference-only direction through team review.
+
+### Module ownership and explainability
+
+The user reports that the lecturer now expects understanding at module level, rather than explaining every line. For each authored module, its owner must explain its purpose, inputs/outputs, persisted state, dependencies, authorization boundary and failure/recovery behavior, then walk through one normal case and one failure case using a trace or focused test. Library use is allowed; explain the contracts and limits we rely on rather than rewriting databases or model SDKs. AI-generated code requires the same understanding.
+
+Keep the authored durability core bounded: admission and atomic state transitions; Task checkpoints and ownership; scheduling and stall recovery; persisted waits/approvals; and operation receipts/reconciliation through Tool Gateway. Add one piece at the allowed phase and prove it with interruption/recovery scenarios before extending it. This is a teaching and ownership boundary, not a request to implement the full Pi runtime.
 
 ### Suggested eventual layout
 
+Target TypeScript layout; this is not the existing Python scaffold or a migration in this PR.
+
 ```text
-agent/src/bizops/
-  core/                 # existing models, JSON adapter, skills, trace
+agent/src/
+  core/                 # model adapters, JSON tool protocol, skills, traces
   runtime/              # identity context, policy enforcement, requests, approvals
   extensions/           # contracts, registry, dependency/phase validation
   departments/          # six specialist packages, introduced at permitted gates
@@ -222,7 +230,7 @@ Every accepted request has a persisted owner, state, last progress time and next
 
 Attempt, elapsed-time, no-progress and cost limits end in an assigned escalation, not a loop. Notifications have retry/expiry rules; approvals and clarifications get reminders and an escalation deadline. Hard failures carry error code, reason, evidence, owner and next action; missing information, missing permission, transient error, device loss, unknown external outcome and unsupported request are classified separately.
 
-The request record is lifecycle authority, the queue carries dispatch, LangGraph checkpoints carry position. Workflow upgrades need compatible resume or explicit migration. Before acceptance tests, set heartbeat, lease, scan, stall, waiting and delivery thresholds, recovery objectives and backup/restore (including reconciling effects after restore). A self-hosted monitor cannot report its own host outage: an external health check alerts operators, and work is rescanned on restart.
+The request record is lifecycle authority, the queue carries dispatch, Task checkpoints carry position. Workflow upgrades need compatible resume or explicit migration. Before acceptance tests, set heartbeat, lease, scan, stall, waiting and delivery thresholds, recovery objectives and backup/restore (including reconciling effects after restore). A self-hosted monitor cannot report its own host outage: an external health check alerts operators, and work is rescanned on restart.
 
 ### Workspaces, devices, notifications and deployment
 
@@ -234,7 +242,7 @@ Dispatcher selects an eligible Worker using capability, data location, permissio
 
 **Delivery Service:** channels are adapters of the Delivery Service, starting with the app inbox plus the course channel; an adapter is not permission to send or export data. Request Runtime owns each `Blocker`: ID, WorkRequest, type, responder, action, severity, deadline, audience and resolution state. Delivery Service records queued/sent/delivered status separately for each delivery attempt and forwards authenticated acknowledgements/resolution inputs to Request Runtime; absent read receipts mean unknown, not unread. Each delivery has its own ID, receipt and dedup key (blocker, recipient, channel, reminder stage); resends create no business work. Channels follow preference, urgency and permission, stepping through fallbacks and reminders, never broadcasting; quiet hours, cooldown, quota and deadlines are configured, and only defined urgent cases bypass quiet hours. Callbacks are authenticated, links grant nothing, approval stays in the workflow. Broad messages carry generic status ("Request R is waiting for a file on your device"), never payroll, documents or sensitive links. Recipient and audience are checked per delivery, and jobs never borrow a revoked creator's credentials.
 
-**Workspace:** an authorized entity (ID, owner/scope, image/tool version, volume/artifact references); a conversation ID never grants filesystem access. The **P3 spike** is one internal Linux VM with a prepared image, Python worker, persistent volume and one workload. It starts after core persistence works, with the request store outside the guest; no VM platform, fleet, or VM per employee or specialist. Before sensitive data: CPU/RAM/disk/time quotas, egress allowlist, short-lived credentials or gateway, image patching. Also per-scope workspaces, retention-based sanitizing, no secrets in snapshots, and health/start/stop/drain with artifacts saved before deprovisioning. Snapshots neither back up business state nor roll back external effects. Structured tools only: no gateway-bypassing shell or GUI, no untrusted code; desktop streaming or computer use only if a use case needs it. A dead guest goes to the Supervisor; a shared-host outage needs the external alert and backup/restore, which is not high availability.
+**Workspace:** an authorized entity (ID, owner/scope, image/tool version, volume/artifact references); a conversation ID never grants filesystem access. The **P3 spike** is one internal Linux VM with a prepared image, TypeScript worker, persistent volume and one workload. It starts after core persistence works, with the request store outside the guest; no VM platform, fleet, or VM per employee or specialist. Before sensitive data: CPU/RAM/disk/time quotas, egress allowlist, short-lived credentials or gateway, image patching. Also per-scope workspaces, retention-based sanitizing, no secrets in snapshots, and health/start/stop/drain with artifacts saved before deprovisioning. Snapshots neither back up business state nor roll back external effects. Structured tools only: no gateway-bypassing shell or GUI, no untrusted code; desktop streaming or computer use only if a use case needs it. A dead guest goes to the Supervisor; a shared-host outage needs the external alert and backup/restore, which is not high availability.
 
 **Deployment:** one instance per company on its infrastructure, shared code, versioned and reviewed organization/policy/workflow/connector configuration; no multi-tenant SaaS. **Strict on-prem** means internal inference, storage, telemetry and processing with no cloud fallback. External chat channels and model APIs are declared exceptions; ask the lecturer if this conflicts with the chat requirement. Missing internal capacity means wait or escalate, never silent egress. Optional **auto-mapping:** employee CSV and permitted SOPs → sourced draft organization/authority → gaps → ask the owner → diff, validation, dry-run → human activation. Authority is never inferred from titles, access history or model confidence. Browser offloading, local models, auto-mapping and visual matching are candidate experiments: pick one once mandatory coverage and P1/P2 are on track.
 
@@ -319,7 +327,7 @@ flowchart LR
 |---|---|---|---|
 | A | Operational briefing, on demand first, scheduled later | 1 for on-demand slice | Tool use, reusable skill, reporting, schedule, chat delivery |
 | B | Internal procedure assistance with citations and scoped recall | 2 | RAG, persistent company context, memory, permissions |
-| C | Spending request checked, approved/rejected, resumed and recorded | 2 | LangGraph workflow, human approval, persistence, accounting |
+| C | Spending request checked, approved/rejected, resumed and recorded | 2 | Versioned workflow, human approval, persistence, accounting |
 | D | Cross-department service/fulfillment exception resolved or escalated | 3 | Coordinator, department specialists, bounded handoffs |
 | E | Repeated procedure proposed as a skill, evaluated and approved before reuse | 3 | Skill evolution, review, regression, scoped publication |
 
@@ -334,7 +342,7 @@ Optional visual matching, if approved, sits inside a Sales/Support workflow: ima
 | Gate | Deliverable | Demonstration |
 |---|---|---|
 | Phase 1 · Oct 27 | One app-to-agent use case, ≥2 tools, 1 skill, step logs, ≥10 evals; synthetic data, basic identity boundaries; tool contracts, request/run/usage IDs, visible errors | Submit a request, inspect evidence, see correct success and controlled failure |
-| Phase 2 · Nov 10 | ≥3 use cases, cited RAG, scoped persistence/resume, context handling, LangGraph human approval; durable admission, worker recovery, cost-ledger persistence; durable blockers, Delivery Service with app + one channel, reconnect/backoff, server worker | Kill/restart a running or waiting workflow; resume or escalate visibly without duplicate action; show attempt costs |
+| Phase 2 · Nov 10 | ≥3 use cases, cited RAG, scoped persistence/resume, context handling, human approval in a persisted workflow; durable admission, worker recovery, cost-ledger persistence; durable blockers, Delivery Service with app + one channel, reconnect/backoff, server worker | Kill/restart a running or waiting workflow; resume or escalate visibly without duplicate action; show attempt costs |
 | Phase 3 · Dec 6 | ≥5 use cases, multi-agent/MCP, security, complete evals/traces, final deliverables; recovery fault tests, full operating-cost view; one VM/workspace spike if feasible, placement and cost comparison | Cross-department workflow, safe denial, approved skill reuse, outage recovery, reconciled costs, regression results, final demo |
 
 Phase 1 has no bundled framework, VM, multi-agent or distributed runtime; a modular tool/skill registry is fine. No recoverability claim before Phase 2 fault tests. No VM fleet, marketplace, full desktop streaming or compute swarm in Phase 3.

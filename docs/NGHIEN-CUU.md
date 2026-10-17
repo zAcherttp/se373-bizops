@@ -37,11 +37,11 @@ Bản thiết kế để nhóm review nằm ở [ARCHITECTURE.md](ARCHITECTURE.m
 
 Hermes hiện có durable Kanban, bounded delegation, staged skill writes và tool approval hooks. Tham khảo [source snapshot đã khảo sát](https://github.com/NousResearch/hermes-agent/tree/dfa79389773271ee78c41a7af340848948d461ee); đây là khảo sát tĩnh, chưa phải runtime/security benchmark. Quyền nghiệp vụ của nhóm vẫn phải được kiểm chứng riêng.
 
-## 3. Framework: Python + LangChain/LangGraph
+## 3. Framework: hướng TypeScript, scaffold Python hiện tại
 
-Chọn Python/LangChain/LangGraph theo stack đã có và yêu cầu LangGraph phase 2. Giữ adapter JSON cho endpoint không có native tool calling; test offline dùng model giả.
+Theo cập nhật giảng viên do người dùng cung cấp (17/10/2026), Python/LangGraph không bắt buộc. Hướng đề xuất là agent core TypeScript tự xây; scaffold Python hiện tại chưa migrate. Giữ contract adapter JSON cho endpoint không có native tool calling và test offline bằng model giả. Nhóm phải hiểu trách nhiệm, state và failure/recovery của từng module.
 
-DeepSeek Harness dùng **Cordis**, không phải Cortex. Mượn contract dịch vụ, khai báo dependency, lifecycle và cấu hình composition; không port runtime TypeScript. Bắt đầu bằng package registry lúc startup, không hot reload hay marketplace plugin không tin cậy. Một plugin in-process không phải security sandbox.
+DeepSeek Harness dùng **Cordis**, không phải Cortex. Mượn contract dịch vụ, khai báo dependency, lifecycle và cấu hình composition; Cordis là candidate dependency composition cần đánh giá, chưa chốt. Bắt đầu bằng package registry lúc startup, không hot reload hay marketplace plugin không tin cậy. Một plugin in-process không phải security sandbox.
 
 Các connector, retrieval/store và channel là interface đổi được. Capability khai báo permission cần dùng; backend mới cấp và kiểm quyền thực tế. Tình trạng support RAG/memory/channel của DSH thay đổi theo extension và cần đánh giá riêng, không khẳng định là không có. Xem [DeepSeek Harness architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md).
 
@@ -55,7 +55,7 @@ Thông tin model/giá dưới đây là ghi chú nghiên cứu ban đầu, khôn
 
 Baseline có tool calling native: Claude Haiku 5.5 (`claude-haiku-5-5`, $0,10 / $0,50 mỗi triệu token input/output với prompt dưới 100K) hoặc DeepSeek V4. Gemma 4 26B và Qwen3.8-27B của trường là profile model yếu (chỉ trong Wi-Fi trường, context 32K, không tool calling native). Chạy cùng bộ eval trên các model để thấy phần nào do harness gánh.
 
-Đổi provider bằng `init_chat_model("anthropic:…" / "deepseek:…" / "openai:…")` (langchain-anthropic
+Scaffold Python hiện tại đổi provider bằng `init_chat_model("anthropic:…" / "deepseek:…" / "openai:…")` (langchain-anthropic
 1.7.5, langchain-deepseek 1.1.1 có `deepseek-v4-flash` và `deepseek-v4-pro`). Mỗi model một
 **profile harness** khai báo trong `models.yaml`: profile mạnh dùng tool calling native và ít
 middleware; profile yếu dùng `JsonToolChat`, chọn bớt tool mỗi bước (`LLMToolSelectorMiddleware`),
@@ -63,7 +63,7 @@ retry, giới hạn chặt hơn, nén context sớm hơn. Bộ eval là pytest c
 
 ## 6. Pi Durable: execution contract (17/10/2026)
 
-Khảo sát README/spec ở [commit 8efd314](https://github.com/earendil-works/pi/tree/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable), chưa chạy benchmark. Giữ Python/LangGraph; không thêm một runtime TypeScript/checkpoint engine thứ hai. Xem contract chi tiết trong [ARCHITECTURE.md](ARCHITECTURE.md).
+Khảo sát README/spec ở [commit 8efd314](https://github.com/earendil-works/pi/tree/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable), chưa chạy benchmark. Pi Durable chỉ làm reference và testbed so sánh tùy chọn, không phải runtime dependency. Nhóm tự viết durability core TypeScript có giới hạn, không clone toàn bộ Pi hay thêm scheduler thứ hai. Xem contract chi tiết trong [ARCHITECTURE.md](ARCHITECTURE.md).
 
 Mượn durable admission, committed progress, task ownership, wait không đồng nghĩa cancel, explicit replay policy và usage theo attempt. Nhóm đề xuất ba nhánh recovery: safe_to_repeat / reconcile_first / human_resolution_required. Call bên ngoài bị ngắt là unknown đến khi đối soát; không tự mua/gửi lại. Tool contract gắn quyền, approval, operation/receipt, recovery và metering; nested call vẫn qua gate, chi phí child không cộng hai lần.
 

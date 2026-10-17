@@ -4082,7 +4082,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Persist phiếu, nhả worker; resume Command cùng thread, kiểm lại quyền và trạng thái; hết hạn = từ chối (24h, đề xuất); có reminder"
+                  "text": "Persist phiếu, nhả worker; resume cùng request/checkpoint, kiểm lại quyền và trạng thái; hết hạn = từ chối (24h, đề xuất); có reminder"
                 }
               ]
             },
@@ -4091,7 +4091,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · K5 · LangGraph interrupts",
+                  "text": "P2 · K5 · durable approval/resume",
                   "marks": [
                     {
                       "type": "italic"
@@ -4164,7 +4164,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · LangGraph interrupts",
+                  "text": "P2 · durable approval/resume",
                   "marks": [
                     {
                       "type": "italic"
@@ -4593,7 +4593,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Request là nguồn sự thật nghiệp vụ; checkpoint giữ vị trí chạy; nối bằng ID. InMemorySaver (P1) → saver bền (SQLite / Postgres chưa chốt)"
+                  "text": "Request là nguồn sự thật nghiệp vụ; checkpoint giữ vị trí chạy; nối bằng ID. P1 state tối thiểu → P2 checkpoint bền (SQLite / Postgres chưa chốt)"
                 }
               ]
             },
@@ -4602,7 +4602,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · K4 · LangGraph persistence",
+                  "text": "P2 · K4 · checkpoint do nhóm xây",
                   "marks": [
                     {
                       "type": "italic"
@@ -4675,7 +4675,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · Pi Durable reference; Python/LangGraph",
+                  "text": "P2 · Pi Durable: reference, core TypeScript tự viết",
                   "marks": [
                     {
                       "type": "italic"
@@ -4885,7 +4885,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "get_state_history + replay theo checkpoint_id; dọn checkpoint cũ theo retention"
+                  "text": "Đọc lịch sử state + replay có kiểm soát theo checkpoint_id; dọn checkpoint cũ theo retention"
                 }
               ]
             },
@@ -4894,7 +4894,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P3 · K7 · LangGraph persistence",
+                  "text": "P3 · K7 · state history / controlled replay",
                   "marks": [
                     {
                       "type": "italic"
@@ -6354,7 +6354,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P3 · K6 · LangGraph Send",
+                  "text": "P3 · K6 · bounded task fan-out",
                   "marks": [
                     {
                       "type": "italic"
@@ -6710,7 +6710,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "issue_refund, pay_invoice là T2 qua bước duyệt LangGraph + khóa chống lặp (xem trang 02)"
+                  "text": "issue_refund, pay_invoice là T2 qua bước duyệt workflow + khóa chống lặp (xem trang 02)"
                 }
               ]
             },
@@ -6719,7 +6719,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · K5 · LangChain HITL",
+                  "text": "P2 · K5 · persisted human approval",
                   "marks": [
                     {
                       "type": "italic"
@@ -7513,7 +7513,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "mcp 2.3.0: MCPServer (FastMCP đã đổi tên); annotation readOnly / destructive chỉ là gợi ý, Tool gateway dùng registry quyết định"
+                  "text": "SDK TypeScript cần xác minh; annotation readOnly / destructive chỉ là gợi ý, Tool gateway dùng registry quyết định"
                 }
               ]
             },
@@ -7522,7 +7522,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P3 · K6 · MCP Python SDK",
+                  "text": "P3 · K6 · MCP; SDK chưa chọn",
                   "marks": [
                     {
                       "type": "italic"
@@ -14167,7 +14167,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "≥3 use case; RAG có citation; persist / resume; xử lý context; LangGraph có bước duyệt"
+                  "text": "≥3 use case; RAG có citation; persist / resume; xử lý context; workflow có bước duyệt"
                 }
               ]
             },
@@ -14921,7 +14921,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Request là nguồn sự thật nghiệp vụ; checkpoint LangGraph giữ vị trí chạy"
+                  "text": "Request là nguồn sự thật nghiệp vụ; checkpoint Task giữ vị trí chạy"
                 }
               ]
             }
@@ -17691,7 +17691,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Core Python/LangGraph giữ quyền và lifecycle. Không claim mọi nghiệp vụ thành công 100%."
+                  "text": "Core TypeScript tự viết; Pi chỉ reference. Giữ quyền và lifecycle. Không claim mọi nghiệp vụ thành công 100%."
                 }
               ]
             }

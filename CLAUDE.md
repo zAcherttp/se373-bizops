@@ -3,10 +3,12 @@
 Course rules, team, and the school endpoint are in `~/dev/se373/CLAUDE.md`. Requirements and grading
 are in `docs/YEU-CAU.md`; research and design direction in `docs/NGHIEN-CUU.md`.
 
-- **Two codebases**, as the course asks: `agent/` (Python 3.12, uv, LangChain 1.x + LangGraph) and
-  `app/` (TypeScript, Vite, React, pnpm).
+- **Current scaffold:** `agent/` is Python 3.12/uv/LangChain/LangGraph; `app/` is TypeScript/Vite/React/pnpm.
+  Per the user's lecturer clarification (2026-10-17), Python and LangGraph are optional. The proposed
+  target is a TypeScript agent core authored by the team; Pi Durable is reference-only, not a runtime
+  dependency. This documentation change does not migrate the scaffold. See `docs/ARCHITECTURE.md`.
 - **Phase rule:** each phase may only use course knowledge taught by then. Before adding a capability
-  (RAG, LangGraph workflow, multi-agent, MCP), check which phase it belongs to in `docs/YEU-CAU.md`.
+  (RAG, durable workflow, multi-agent, MCP), check which phase it belongs to in `docs/YEU-CAU.md`.
   No `deepagents` in phase 1: it bundles subagents and a filesystem.
 - **Every use case needs three things to score:** a stable demo script, a rerunnable eval, and a
   viewable trace. Build them with the feature, not after.

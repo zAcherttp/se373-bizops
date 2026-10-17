@@ -14,6 +14,11 @@ chi tiền phải có người duyệt.
 - Quy trình làm việc nhóm (issue, PR, review): [docs/QUY-TRINH.md](docs/QUY-TRINH.md)
 - Bảng việc: [SE373 BizOps](https://github.com/users/zAcherttp/projects/2)
 
+Hướng đề xuất: agent core TypeScript do nhóm tự xây, tham khảo contract của Pi Durable, không dùng
+Pi Durable làm runtime dependency. Python/LangGraph không còn là ràng buộc theo cập nhật giảng viên
+do người dùng cung cấp (17/10/2026). Scaffold và lệnh chạy dưới đây vẫn là hiện trạng Python; chưa migrate.
+Xem [kiến trúc](docs/ARCHITECTURE.md#runtime-ownership-and-pi-durable) và [quy trình vấn đáp module](docs/QUY-TRINH.md#6-agent-lập-trình-claude-code-codex-cursor).
+
 ## Cấu trúc
 
 | Thư mục | Là gì |

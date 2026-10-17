@@ -53,12 +53,12 @@ Scheduler decides **when**; Dispatcher decides **where**; Worker **executes**; S
 - Use `executor` only as a generic deployment capability or existing contract field; name the executing actor Worker and its environment Workspace. This change does not rename YAML keys or existing public APIs.
 - Keep employee-facing wording simple: Request, Needs attention, Approval, Result. Technical entities remain in inspection views unless they help the employee act.
 
-## Pi Durable integration vocabulary
+## Pi Durable reference vocabulary
 
-If selected, preserve Pi's actual `Harness`, `Session`, `Submission` and `Task` APIs. A Pi Session is a storage/runtime scope, not our company boundary. A Pi Submission is admitted conversation input, not automatically a WorkRequest. Record the mapping in an adapter.
+When studying Pi, preserve its actual names: `Harness`, `Session`, `Submission` and `Task`. A Pi Session is a storage/runtime scope, not our company boundary. A Pi Submission is admitted conversation input, not automatically a WorkRequest. These describe the reference, not APIs we must implement.
 
-Pi's `run` (input-to-answer turns) is not automatically the application's `Run` attempt. Use explicit references/namespaces rather than pretending equivalent names guarantee equivalent lifecycle. If Pi owns executable Tasks, use its actual Task IDs instead of adding a second competing task scheduler. Business records may still reference those IDs.
+Pi's `run` (input-to-answer turns) is not automatically the application's `Run` attempt. Similar names do not guarantee equivalent lifecycles. Our authored core owns Task IDs, checkpoints and recovery; there is no Pi scheduler underneath it.
 
 ## Runtime selection is separate
 
-The user reported that the lecturer permits any language/framework, including no LangGraph requirement, and prefers a full-TypeScript direction. This renaming does not migrate the existing Python scaffold or select Cordis/Pi Durable/DSH. Older stack statements require a separate alignment change before implementation planning; do not interpret them as a newly confirmed course restriction. The language/runtime decision must preserve one execution owner and the security/recovery contracts.
+Per the user's lecturer clarification (2026-10-17), language/framework choice is open. The proposal targets a team-authored TypeScript agent and durability core, with Pi Durable for reference/testing only. Cordis remains a composition candidate; DSH is not selected as our runtime. Existing Python code is not migrated by this PR. Each module must be explainable as described in ARCHITECTURE.md; one execution owner and mandatory security/recovery contracts remain required.
