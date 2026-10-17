@@ -1,4 +1,5 @@
-import { executeAttempt } from "./execute-attempt.ts";
+import { Effect } from "effect";
+import { executeAttemptEffect } from "./execute-attempt.ts";
 import { decideFailure } from "./failure-policy.ts";
 import type { AttemptContext, Failure, RecoveryPolicy } from "./failure-policy.ts";
 
@@ -22,8 +23,8 @@ for (const { name, failure, recovery } of scenarios) {
     attemptId: base.attemptId, failure, decision: decideFailure(failure, { ...base, recovery }, now, 0.5) }));
 }
 
-// Exercise a genuinely hanging Promise. It returns an escalation without waiting forever.
-console.log(JSON.stringify({ scenario: "hanging-operation", ...await executeAttempt(
+// A native never-ending effect is interrupted by the attempt timeout.
+console.log(JSON.stringify({ scenario: "hanging-operation", ...await Effect.runPromise(executeAttemptEffect(
   { ...base, deadlineAt: Date.now() + 60_000, recovery: "human_resolution_required" },
-  () => new Promise(() => {}), { timeoutMs: 10 },
-) }));
+  Effect.never, { timeoutMs: 10 },
+)) }));
