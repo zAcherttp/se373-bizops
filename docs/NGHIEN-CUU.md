@@ -68,3 +68,7 @@ Khảo sát README/spec ở [commit 8efd314](https://github.com/earendil-works/p
 Mượn durable admission, committed progress, task ownership, wait không đồng nghĩa cancel, explicit replay policy và usage theo attempt. Nhóm đề xuất ba nhánh recovery: safe_to_repeat / reconcile_first / human_resolution_required. Call bên ngoài bị ngắt là unknown đến khi đối soát; không tự mua/gửi lại. Tool contract gắn quyền, approval, operation/receipt, recovery và metering; nested call vẫn qua gate, chi phí child không cộng hai lần.
 
 Giới hạn nguồn: package experimental, storage một process sở hữu và không có cross-process locking; cấu hình SQLite mặc định không bảo đảm không mất commit mới nhất khi host/power failure. Không coi guard extension tùy chọn là policy bắt buộc của sản phẩm.
+
+## 7. Workspace, thiết bị và notification (17/10/2026)
+
+Bộ đề xuất bổ sung ở [EXECUTION-DEPLOYMENT.md](EXECUTION-DEPLOYMENT.md): server giữ authority/lifecycle; workspace độc lập laptop; device mất kết nối chuyển wait có deadline, reconnect event và backoff không gọi model. Notification broker dùng blocker chung để dedup, ack, reminder và escalation đa kênh theo policy. VM chỉ là spike P3 giới hạn, không phải bằng chứng durable hoặc HA. Agent map tổ chức chỉ tạo cấu hình dự thảo có nguồn để người duyệt; strict on-prem phải giải quyết ngoại lệ chat/model ngoài mạng. Các thử nghiệm optional phải chứng minh lợi ích so với baseline và không làm trượt mandatory coverage.

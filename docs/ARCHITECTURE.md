@@ -4,7 +4,7 @@
 
 This proposal consolidates the brainstorming session, the supplied topic description, the teammate's workflow image, and research into Hermes and DeepSeek Harness/Cordis. It proposes the final system target and a phased delivery path. It does not claim that these capabilities are implemented.
 
-Rubric draft v3 and the always-on agents research are on the `14-transcript-research` branch (PR #15); this proposal now reflects both (§8, §9, §11). The editable board [SE373.tldr](SE373.tldr) shows this proposal on five pages: a one-screen overview, architecture, durable requests, skills and phases, and the feature map with roadmap. No company or use-case selection below is already agreed.
+Rubric draft v3 and the always-on agents research are on the `14-transcript-research` branch (PR #15); this proposal now reflects both (§8, §9, §11). The editable board [SE373.tldr](SE373.tldr) shows this proposal on six pages: a one-screen overview, architecture, durable requests, skills and phases, the feature map with roadmap, and workspace/notification deployment. No company or use-case selection below is already agreed.
 
 ## 1. Product and scope
 
@@ -39,6 +39,7 @@ No full ERP, real payroll/tax compliance, autonomous company management, untrust
 | Approved workflows first; bounded planning later | Makes important business processes explainable and replayable |
 | Authorization, money approval and state transitions enforced in code | Model output cannot establish authority or correctness |
 | Durable task admission, recovery and escalation | Accepted work must never disappear silently when a process stops |
+| Persistent workspace independent of employee device; brokered blocker notifications | Laptop availability does not define task lifetime; waiting and escalation are explicit |
 | Auditable usage and operating-cost ledger | Every execution attempt contributes to attributable, reconcilable cost |
 | Protected traces and rerunnable evals accompany every use case | Required evidence is built with the feature |
 
@@ -58,7 +59,8 @@ flowchart TD
     C --> I[Human questions and approvals]
     I --> C
     J[Scheduler / events] --> C
-    C --> K[Results and notifications]
+    C --> K[Results and notification broker]
+    C --> X[Managed workspace / optional device executor]
     C --> W[Durable queue, worker leases and recovery monitor]
     W --> C
     C --> V[Usage and cost ledger]
@@ -72,6 +74,7 @@ flowchart TD
     L -.-> I
     L -.-> J
     L -.-> K
+    L -.-> X
     M[Protected traces and evaluations] -.-> C
 ```
 
@@ -248,6 +251,16 @@ The request record is the business lifecycle authority; the queue carries dispat
 
 The team must select heartbeat, lease, scan, maximum-stall, waiting and delivery thresholds before acceptance tests. Define recovery objectives and backup/restore procedures, including reconciliation of external effects after restoration. A self-hosted recovery monitor cannot report a total host outage while down: use an external health check for operator alerts, then scan durable work on restart. Loss of durable storage requires the separately tested backup/restore path.
 
+### Workspace, device waits and notification escalation
+
+The deployment contract and team review bundle are in [EXECUTION-DEPLOYMENT.md](EXECUTION-DEPLOYMENT.md). Keep the server as lifecycle/authorization authority; an employee device is an optional executor. A persistent workspace is independent of the browser; one managed VM is a bounded P3 experiment, not a VM fleet commitment.
+
+Device loss uses persisted `blocked` state with `waiting_reason=device_offline`, owner, checkpoint, next action and deadline. Release workers; use authenticated reconnect events with timer backoff/jitter as a fallback, never LLM polling. Reassign only when code, data and authorization permit; reconcile uncertain actions and fence stale attempts.
+
+A durable notification broker links all channels to one blocker. Distinguish sent/delivered, acknowledged and resolved; use channel preference, privacy checks, reminders and escalation rather than broadcast. Acknowledgement suppresses acknowledgement reminders but does not resolve the underlying blocker. Channel failures never replay business actions.
+
+No-silent-abandonment is a measured lifecycle/recovery goal under an explicit fault model, not 100% business success or a claim of failure-free infrastructure. Waiting is not completion. Strict on-prem deployment requires internal inference/storage/telemetry and explicit handling of the course's external chat-channel requirement; never silently fail over to an external model or executor. Optional auto-mapping proposes evidence-backed configuration for review and cannot grant authority.
+
 ### Auditable usage and operating costs
 
 Provide a cost view per request, run attempt, department, company and billing period. Include failed attempts, retries, subagents, decision models, summarization, embedding/indexing, skill review and scheduled work. Keep authorization-aware access to cost metadata; even request descriptions or usage patterns may reveal confidential work.
@@ -374,6 +387,8 @@ For each use case, define expected tool effects, evidence, permitted readers, fa
 
 At minimum test unauthorized payroll retrieval, restricted-to-shared memory/skill contamination, document prompt injection, approval bypass and cross-user leakage. Also test revocation before resume/delivery, guessed resource IDs, group-chat exposure, duplicate execution and unknown remote outcomes. Inspect stored artifacts, not only final answers. Current scaffold traces record raw payloads and skill loading has no user-scope enforcement; these must be addressed before sensitive data.
 
+**Workspace/notification acceptance:** follow the fault scenarios and metrics in [EXECUTION-DEPLOYMENT.md](EXECUTION-DEPLOYMENT.md): browser/device loss, guest restart, reconnect/stale attempts, no-model polling, notification fallback/ack/resolution, deadline escalation, no unauthorized data transfer and full VM/local cost accounting. Lifecycle coverage is distinct from business success.
+
 **Tool-contract acceptance:** reject missing authorization and incompatible contracts; verify `safe_to_repeat`, `reconcile_first` and `human_resolution_required` behavior with synthetic connectors. Crash after an external effect but before receipt persistence must not create a second order. Test inconclusive lookup, revoked access during reconciliation, nested-call permission checks, parent/child cancellation and subscriber disconnect without task cancellation. Usage rollups count child attempts once and preserve unknown usage.
 
 **Recovery acceptance:** inject process termination after admission/before dispatch, during execution, after an external action/before its receipt is saved, while awaiting approval, and after completion/before notification. Also test duplicated ingress, stale workers, provider outage, storage outage, exhausted budgets and failed escalation delivery. Once dependencies recover, every accepted request must remain discoverable and become safely resumed, explicitly waiting with a deadline, or terminal with success/cancellation/failure evidence. Failures have assigned escalations; uncertain external effects are reconciled rather than blindly repeated. Verify actual business records for duplicate actions.
@@ -415,6 +430,7 @@ Repository links: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team w
 9. Record accepted decisions in Decision issues and ADRs, then create small implementation issues and task branches.
 10. Set recovery objectives, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring. Select the dispatch/checkpoint synchronization contract.
 11. Review the per-tool authorization/approval/recovery/metering contract and assign connector-specific reconciliation owners. Define the cost catalog, invoice import/reconciliation method, allocation and rounding policies, visibility permissions and budget limits. Set measurable calculator and recovery acceptance criteria before implementation.
+12. Review [EXECUTION-DEPLOYMENT.md](EXECUTION-DEPLOYMENT.md): approve workspace/notification boundaries, select one bounded P3 VM experiment, primary/fallback channels, blocker deadlines and strict on-prem exceptions. Do not add every optional experiment to the mandatory portfolio.
 
 Editable board: [SE373.tldr](SE373.tldr).
 
