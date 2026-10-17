@@ -6,7 +6,7 @@ import { executeAttemptEffect } from "../src/execute-attempt.ts";
 import type { Failure } from "../src/failure-policy.ts";
 import { context } from "./fixtures.ts";
 
-test("native API composes successful effects without OperationResult envelopes", async () => {
+test("native API composes successful effects without result envelopes", async () => {
   const out = await Effect.runPromise(executeAttemptEffect(context(), Effect.succeed("report"), { timeoutMs: 1000 }));
   assert.equal(out.status, "succeeded");
   if (out.status === "succeeded") assert.equal(out.value, "report");
