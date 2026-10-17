@@ -93,6 +93,15 @@
       }
     },
     {
+      "id": "page:workspace-notify-20261017",
+      "typeName": "page",
+      "name": "05 Workspace & Notify",
+      "index": "a8",
+      "meta": {
+        "proposal": "2026-10-17"
+      }
+    },
+    {
       "name": "phat",
       "color": "#F2555A",
       "imageUrl": "",
@@ -12085,7 +12094,7 @@
     },
     {
       "x": 1400,
-      "y": 260,
+      "y": 385,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12126,33 +12135,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Sales · Kế toán · CSKH"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Marketing · Nhân sự · Ops"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Chuyên môn ≠ quyền"
-                }
-              ]
             }
           ]
         }
@@ -12162,7 +12144,7 @@
     },
     {
       "x": 1140,
-      "y": 300,
+      "y": 420,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12203,15 +12185,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "coordinator"
-                }
-              ]
             }
           ]
         }
@@ -12221,7 +12194,7 @@
     },
     {
       "x": 30,
-      "y": 140,
+      "y": 180,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12262,15 +12235,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "principal · scope"
-                }
-              ]
             }
           ]
         }
@@ -12280,7 +12244,7 @@
     },
     {
       "x": 350,
-      "y": 10,
+      "y": 20,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12290,7 +12254,7 @@
       "parentId": "shape:ov-frame",
       "props": {
         "w": 400,
-        "h": 100,
+        "h": 110,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -12313,21 +12277,12 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Người phụ trách",
+                  "text": "Duyệt của người",
                   "marks": [
                     {
                       "type": "bold"
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Hỏi lại · duyệt chi tiền"
                 }
               ]
             }
@@ -12339,7 +12294,7 @@
     },
     {
       "x": 20,
-      "y": 1230,
+      "y": 1110,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12362,21 +12317,12 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Chi tiết: trang 01–05 · docs/ARCHITECTURE.md · docs/EXECUTION-DEPLOYMENT.md",
+                  "text": "Chi tiết: trang 01–05 · docs/ARCHITECTURE.md",
                   "marks": [
                     {
                       "type": "bold"
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Mục tiêu không mất request im lặng; không hứa 100% thành công nghiệp vụ."
                 }
               ]
             }
@@ -12398,8 +12344,8 @@
       "type": "frame",
       "props": {
         "w": 780,
-        "h": 880,
-        "name": "Lõi tin cậy · authority & lifecycle (P1 nền · P2 bền)",
+        "h": 690,
+        "name": "Lõi tin cậy",
         "color": "violet"
       },
       "parentId": "page:bizops-overview-00",
@@ -12408,7 +12354,7 @@
     },
     {
       "x": 20,
-      "y": 280,
+      "y": 230,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12449,15 +12395,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Web app · chat"
-                }
-              ]
             }
           ]
         }
@@ -12466,8 +12403,8 @@
       "typeName": "shape"
     },
     {
-      "x": 1780,
-      "y": 750,
+      "x": 1140,
+      "y": 800,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12477,7 +12414,7 @@
       "parentId": "page:bizops-overview-00",
       "props": {
         "w": 380,
-        "h": 210,
+        "h": 120,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -12500,7 +12437,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Kết quả + notification broker",
+                  "text": "Thông báo & escalate",
                   "marks": [
                     {
                       "type": "bold"
@@ -12514,34 +12451,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "App + kênh ưu tiên / fallback"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Một blocker, nhiều kênh"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Ack ≠ resolved; reminder"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Escalate khi quá hạn"
+                  "text": "nhiều kênh, có hạn chờ"
                 }
               ]
             }
@@ -12553,7 +12463,7 @@
     },
     {
       "x": 20,
-      "y": 470,
+      "y": 430,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12594,15 +12504,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "scheduler"
-                }
-              ]
             }
           ]
         }
@@ -12611,8 +12512,492 @@
       "typeName": "shape"
     },
     {
+      "x": 1050,
+      "y": 375.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-10",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 90,
+          "y": 100.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0010V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1340,
+      "y": 475.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-13",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 60,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0013V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1700,
+      "y": 475.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-16",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 80,
+          "y": -220.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0016V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1700,
+      "y": 475.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-19",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 80,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0019V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1700,
+      "y": 475.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-22",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 80,
+          "y": 220.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0022V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1050,
+      "y": 375.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-25",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 90,
+          "y": 485.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0025V",
+      "typeName": "shape"
+    },
+    {
+      "x": 850.0,
+      "y": 270,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-28",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0.0,
+          "y": 50
+        },
+        "arrowheadStart": "arrow",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0028V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1550.0,
+      "y": 565,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-31",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0.0,
+          "y": 75
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0031V",
+      "typeName": "shape"
+    },
+    {
+      "x": 260,
+      "y": 485.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-34",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 70,
+          "y": -110.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0034V",
+      "typeName": "shape"
+    },
+    {
+      "x": 260,
+      "y": 285.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-4",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 70,
+          "y": 90.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0004V",
+      "typeName": "shape"
+    },
+    {
+      "x": 570,
+      "y": 375.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-7",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 80,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0007V",
+      "typeName": "shape"
+    },
+    {
       "x": 20,
-      "y": 1090,
+      "y": 980,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12622,7 +13007,7 @@
       "parentId": "page:bizops-overview-00",
       "props": {
         "w": 2140,
-        "h": 100,
+        "h": 90,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -12645,21 +13030,12 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Policy kiểm ở mọi bước · delegation chỉ thu hẹp quyền",
+                  "text": "Policy kiểm ở mọi bước",
                   "marks": [
                     {
                       "type": "bold"
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Server giữ authority; executor có thể mất kết nối. Không chuyển dữ liệu trái scope."
                 }
               ]
             }
@@ -12671,7 +13047,7 @@
     },
     {
       "x": 1780,
-      "y": 330,
+      "y": 420,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12712,15 +13088,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "RAG / data theo scope"
-                }
-              ]
             }
           ]
         }
@@ -12730,7 +13097,7 @@
     },
     {
       "x": 350,
-      "y": 140,
+      "y": 180,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12740,7 +13107,7 @@
       "parentId": "shape:ov-frame",
       "props": {
         "w": 400,
-        "h": 180,
+        "h": 110,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -12771,33 +13138,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Persist trước ACK; checkpoint"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Chờ có deadline; owner rõ"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "P2: phục hồi / escalation"
-                }
-              ]
             }
           ]
         }
@@ -12807,7 +13147,7 @@
     },
     {
       "x": 1780,
-      "y": 500,
+      "y": 640,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12817,7 +13157,7 @@
       "parentId": "page:bizops-overview-00",
       "props": {
         "w": 380,
-        "h": 100,
+        "h": 110,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -12848,15 +13188,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Version · scope · rollback"
-                }
-              ]
             }
           ]
         }
@@ -12866,7 +13197,7 @@
     },
     {
       "x": 350,
-      "y": 430,
+      "y": 340,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12907,24 +13238,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Model + tool + VM + retries"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Estimate ≠ invoice-confirmed"
-                }
-              ]
             }
           ]
         }
@@ -12957,21 +13270,12 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Business Ops Agent · kiến trúc tổng quan (đề xuất)",
+                  "text": "Business Ops Agent",
                   "marks": [
                     {
                       "type": "bold"
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Cập nhật 17/10/2026 · workspace bền & notification · VM chỉ là thử nghiệm P3"
                 }
               ]
             }
@@ -12984,7 +13288,7 @@
     },
     {
       "x": 1780,
-      "y": 130,
+      "y": 200,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -12994,7 +13298,7 @@
       "parentId": "page:bizops-overview-00",
       "props": {
         "w": 380,
-        "h": 150,
+        "h": 110,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -13025,24 +13329,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Contract: quyền · approval"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "recovery · metering"
-                }
-              ]
             }
           ]
         }
@@ -13052,7 +13338,7 @@
     },
     {
       "x": 350,
-      "y": 590,
+      "y": 500,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -13062,7 +13348,7 @@
       "parentId": "shape:ov-frame",
       "props": {
         "w": 400,
-        "h": 120,
+        "h": 110,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -13085,7 +13371,59 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Audit · trace · eval",
+                  "text": "Trace & eval",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a53h6",
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 640,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "updated": "2026-10-17"
+      },
+      "id": "shape:ov-workspace",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 300,
+        "h": 120,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Workspace bền",
                   "marks": [
                     {
                       "type": "bold"
@@ -13099,23 +13437,14 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Ai làm thay ai, theo quyền nào"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Outcome có evidence"
+                  "text": "chạy tiếp khi máy tắt"
                 }
               ]
             }
           ]
         }
       },
-      "index": "a53h6",
+      "index": "a9V0003V",
       "typeName": "shape"
     },
     {
@@ -17294,6 +17623,1608 @@
       "typeName": "shape"
     },
     {
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-001",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 2400,
+        "h": 150,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "05 · WORKSPACE BỀN & THÁO NÚT THẮT",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "ĐỀ XUẤT · 17/10/2026 · Decision #18 / PR #17 · docs/EXECUTION-DEPLOYMENT.md"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Core Python/LangGraph giữ quyền và lifecycle. Không claim mọi nghiệp vụ thành công 100%."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00001V",
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 230,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-002",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 650,
+        "h": 210,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "green",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "THIẾT BỊ NHÂN VIÊN",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Browser worker: file chọn, parse, tính toán, preview"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "WASM/model nhỏ khi có benchmark; không credential chung"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Tab freeze/discard: không coi là VM luôn hoạt động"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Chỉ nguồn dữ liệu đã cấp phép; output chưa tự được tin cậy"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00002V",
+      "typeName": "shape"
+    },
+    {
+      "x": 850,
+      "y": 230,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-003",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 650,
+        "h": 210,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "violet",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "TRUSTED CORE / ORCHESTRATOR",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Identity • policy • approval • request bền"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Queue/lease/checkpoint • recovery • audit/cost"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Placement theo data/scope/runtime/budget"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Persist trước ACK; kết quả kiểm chứng trước completion"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00003V",
+      "typeName": "shape"
+    },
+    {
+      "x": 650,
+      "y": 335.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:workspace-notify-20261017-004",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "grey",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 200,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "sans",
+        "scale": 1
+      },
+      "parentId": "page:workspace-notify-20261017",
+      "index": "a1V00004V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1700,
+      "y": 230,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-007",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 700,
+        "h": 210,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "EXECUTOR / WORKSPACE",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Server worker mặc định; worker nội bộ gần nguồn dữ liệu"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Container hoặc VM là implementation của workspace"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "P3 spike: 1 VM Linux + image + volume bền + 1 workload"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Không VM fleet, không VM riêng cho từng employee"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00007V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1500,
+      "y": 335.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:workspace-notify-20261017-008",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "grey",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 200,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "sans",
+        "scale": 1
+      },
+      "parentId": "page:workspace-notify-20261017",
+      "index": "a1V00008V",
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 560,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-011",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 400,
+        "h": 200,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "orange",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "1 · DEVICE MẤT KẾT NỐI",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Lease hết hạn; ghi blocked"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "waiting_reason=device_offline"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Giữ owner, checkpoint, deadline"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00011V",
+      "typeName": "shape"
+    },
+    {
+      "x": 500,
+      "y": 560,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-012",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 400,
+        "h": 200,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "orange",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "2 · CHỌN RECOVERY",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Side effect unknown → reconcile"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fallback chỉ nếu data/scope cho phép"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Không gửi dữ liệu A sang máy B"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00012V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1000,
+      "y": 560,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-013",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 400,
+        "h": 200,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "orange",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "3 · WAIT + NOTIFY",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Release worker; blocker bền"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Reconnect event là đường chính"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Timer backoff/jitter, không LLM loop"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00013V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1500,
+      "y": 560,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-014",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 400,
+        "h": 200,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "orange",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "4 · RESUME CÓ KIỂM TRA",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Xác thực device/principal hiện tại"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Dedup reconnect; fence stale worker"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Kiểm version, quyền và receipt"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00014V",
+      "typeName": "shape"
+    },
+    {
+      "x": 2000,
+      "y": 560,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-015",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 400,
+        "h": 200,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "orange",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "5 · DEADLINE / ESCALATE",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Hết hạn → owner xử lý tiếp"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Waiting chưa phải thành công"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Không bỏ task / retry vô hạn"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00015V",
+      "typeName": "shape"
+    },
+    {
+      "x": 400,
+      "y": 660.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:workspace-notify-20261017-016",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "grey",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 100,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "sans",
+        "scale": 1
+      },
+      "parentId": "page:workspace-notify-20261017",
+      "index": "a1V00016V",
+      "typeName": "shape"
+    },
+    {
+      "x": 900,
+      "y": 660.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:workspace-notify-20261017-019",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "grey",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 100,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "sans",
+        "scale": 1
+      },
+      "parentId": "page:workspace-notify-20261017",
+      "index": "a1V00019V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1400,
+      "y": 660.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:workspace-notify-20261017-022",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "grey",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 100,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "sans",
+        "scale": 1
+      },
+      "parentId": "page:workspace-notify-20261017",
+      "index": "a1V00022V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1900,
+      "y": 660.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:workspace-notify-20261017-025",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "grey",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 100,
+          "y": 0.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "sans",
+        "scale": 1
+      },
+      "parentId": "page:workspace-notify-20261017",
+      "index": "a1V00025V",
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 880,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-028",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 740,
+        "h": 280,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "NOTIFICATION BROKER [P2]",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Một blocker_id, nhiều adapter/delivery attempt"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "App inbox + 1 channel trước; mở rộng theo nhu cầu"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Preference / severity / privacy / quiet hours / quota"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fallback theo stage, không broadcast mọi kênh"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "sent ≠ delivered ≠ acknowledged ≠ resolved"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Ack ở một kênh dừng ack-reminder; deadline vẫn giữ"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00028V",
+      "typeName": "shape"
+    },
+    {
+      "x": 830,
+      "y": 880,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-029",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 740,
+        "h": 280,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "red",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "SECURITY / AUTHORITY",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Mỗi callback xác thực; link không cấp quyền"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Sensitive result trong app; tin nhắc chỉ nêu trạng thái"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Recheck audience và quyền trước từng delivery"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Nested tool và VM đều qua mandatory gateway"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Policy cấm chuyển dữ liệu → chờ/escalate"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Strict on-prem: không tự cloud fallback"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00029V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1660,
+      "y": 880,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-030",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 740,
+        "h": 280,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "violet",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "VM SPIKE [P3, CÓ ĐIỀU KIỆN]",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Core/request DB ngoài guest; guest chết có recovery"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Image version, CPU/RAM/disk/time cap, egress policy"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Tách workspace/volume theo scope; cleanup/retention"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Không shell/GUI toàn quyền để vượt tool contract"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Host chung chết không phải HA; backup + external alert"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Không bắt buộc desktop streaming hoặc computer-use"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00030V",
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 1280,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-031",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 1140,
+        "h": 270,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "green",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "DEMO CUỐI KỲ",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Giao việc → workspace chạy → đóng laptop vẫn tiến triển"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Gặp bước cần local file → chờ + báo đúng người"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Reconnect → reauthorize/reconcile → tiếp tục cùng request"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Restart worker/guest: không mất việc, không lặp action"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Kênh A lỗi → B; ack và resolved là hai trạng thái"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Đo business success, lifecycle coverage và recovery riêng"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00031V",
+      "typeName": "shape"
+    },
+    {
+      "x": 1240,
+      "y": 1280,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-032",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 1160,
+        "h": 270,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "orange",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GIỚI HẠN SCOPE & CHI PHÍ",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "P1 giữ vertical slice; chưa hứa durable / VM"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "P2 durable wait + broker + server worker + reconnect"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "P3 một VM experiment; không làm platform hạ tầng"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Đo server CPU/RAM/traffic, tokens, local load, VM idle/startup/storage"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "So server-only baseline cùng quality; không mặc định offload rẻ hơn"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Hard failure phải có reason/evidence/owner/next action"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00032V",
+      "typeName": "shape"
+    },
+    {
+      "x": 0,
+      "y": 1660,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {
+        "proposal": "2026-10-17"
+      },
+      "id": "shape:workspace-notify-20261017-033",
+      "type": "geo",
+      "parentId": "page:workspace-notify-20261017",
+      "props": {
+        "w": 2400,
+        "h": 200,
+        "geo": "rectangle",
+        "dash": "solid",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "grey",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "s",
+        "font": "sans",
+        "align": "start",
+        "verticalAlign": "start",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "ADAPTIVE / TEAM DECISIONS",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Instance nội bộ riêng mỗi company; config/schema/version + reviewed connectors. Agent auto-map chỉ tạo proposal có nguồn, mâu thuẫn và câu hỏi; không tự cấp quyền."
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Chọn primary/fallback channel, deadline/quiet hours, một workload VM, host/resource cap, data-transfer policy và strict on-prem exceptions."
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Auto-map / visual matching / browser model là optional; không thêm tất cả thành mandatory use case. Sửa issue → review → ADR sau khi nhóm chốt."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a1V00033V",
+      "typeName": "shape"
+    },
+    {
       "meta": {},
       "id": "binding:-RLOF9usm3D2zqb95hMCW",
       "fromId": "shape:A_q1DaHUsazVOl-BdXEcp",
@@ -18626,6 +20557,402 @@
       "typeName": "binding"
     },
     {
+      "id": "binding:ov-new-edge-11",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-10",
+      "toId": "shape:ov-rb",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-12",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-10",
+      "toId": "shape:ov-dp",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-14",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-13",
+      "toId": "shape:ov-dp",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-15",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-13",
+      "toId": "shape:ov-agent",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-17",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-16",
+      "toId": "shape:ov-agent",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-18",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-16",
+      "toId": "shape:ov-tool",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-20",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-19",
+      "toId": "shape:ov-agent",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-21",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-19",
+      "toId": "shape:ov-rag",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-23",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-22",
+      "toId": "shape:ov-agent",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-24",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-22",
+      "toId": "shape:ov-skill",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-26",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-25",
+      "toId": "shape:ov-rb",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-27",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-25",
+      "toId": "shape:ov-kq",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-29",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-28",
+      "toId": "shape:ov-duyet",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 1
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-30",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-28",
+      "toId": "shape:ov-rb",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-32",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-31",
+      "toId": "shape:ov-agent",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 1
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-33",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-31",
+      "toId": "shape:ov-workspace",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-35",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-34",
+      "toId": "shape:ov-lich",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-36",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-34",
+      "toId": "shape:ov-dt",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-5",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-4",
+      "toId": "shape:ov-kenh",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-6",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-4",
+      "toId": "shape:ov-dt",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-8",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-7",
+      "toId": "shape:ov-dt",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-9",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-7",
+      "toId": "shape:ov-rb",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
       "meta": {},
       "id": "binding:s6vlLbQeNHKWUjA4aOHmM",
       "fromId": "shape:AeH8u06xbwk0wBxFjDLLg",
@@ -18806,341 +21133,6 @@
       "typeName": "binding"
     },
     {
-      "meta": {},
-      "id": "binding:zHJl0aXWj55K_HXw43jY-",
-      "fromId": "shape:ImIUNUfBpKEpjPRNeY-tq",
-      "toId": "shape:sd3",
-      "type": "arrow",
-      "props": {
-        "isPrecise": false,
-        "isExact": false,
-        "normalizedAnchor": {
-          "x": 0.5,
-          "y": 0.5
-        },
-        "snap": "none",
-        "terminal": "end"
-      },
-      "typeName": "binding"
-    },
-    {
-      "meta": {},
-      "id": "binding:zUcpTgWArlF_4lLDPQIM6",
-      "fromId": "shape:rl8V4VzWAClk9dwCxxryS",
-      "toId": "shape:wf3",
-      "type": "arrow",
-      "props": {
-        "isPrecise": false,
-        "isExact": false,
-        "normalizedAnchor": {
-          "x": 0.5,
-          "y": 0.5
-        },
-        "snap": "none",
-        "terminal": "start"
-      },
-      "typeName": "binding"
-    },
-    {
-      "id": "page:workspace-notify-20261017",
-      "typeName": "page",
-      "name": "05 Workspace & Notify",
-      "index": "a8",
-      "meta": {
-        "proposal": "2026-10-17"
-      }
-    },
-    {
-      "x": 0,
-      "y": 0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-001",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 2400,
-        "h": 150,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "blue",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "m",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "05 · WORKSPACE BỀN & THÁO NÚT THẮT",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "ĐỀ XUẤT · 17/10/2026 · Decision #18 / PR #17 · docs/EXECUTION-DEPLOYMENT.md"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Core Python/LangGraph giữ quyền và lifecycle. Không claim mọi nghiệp vụ thành công 100%."
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00001V",
-      "typeName": "shape"
-    },
-    {
-      "x": 0,
-      "y": 230,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-002",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 650,
-        "h": 210,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "green",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "THIẾT BỊ NHÂN VIÊN",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Browser worker: file chọn, parse, tính toán, preview"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "WASM/model nhỏ khi có benchmark; không credential chung"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Tab freeze/discard: không coi là VM luôn hoạt động"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Chỉ nguồn dữ liệu đã cấp phép; output chưa tự được tin cậy"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00002V",
-      "typeName": "shape"
-    },
-    {
-      "x": 850,
-      "y": 230,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-003",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 650,
-        "h": 210,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "violet",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "TRUSTED CORE / ORCHESTRATOR",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Identity • policy • approval • request bền"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Queue/lease/checkpoint • recovery • audit/cost"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Placement theo data/scope/runtime/budget"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Persist trước ACK; kết quả kiểm chứng trước completion"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00003V",
-      "typeName": "shape"
-    },
-    {
-      "x": 650,
-      "y": 335.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:workspace-notify-20261017-004",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "grey",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 200,
-          "y": 0.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "sans",
-        "scale": 1
-      },
-      "parentId": "page:workspace-notify-20261017",
-      "index": "a1V00004V",
-      "typeName": "shape"
-    },
-    {
       "id": "binding:workspace-notify-20261017-005",
       "typeName": "binding",
       "type": "arrow",
@@ -19175,138 +21167,6 @@
         "snap": "none"
       },
       "meta": {}
-    },
-    {
-      "x": 1700,
-      "y": 230,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-007",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 700,
-        "h": 210,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "blue",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "EXECUTOR / WORKSPACE",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Server worker mặc định; worker nội bộ gần nguồn dữ liệu"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Container hoặc VM là implementation của workspace"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "P3 spike: 1 VM Linux + image + volume bền + 1 workload"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Không VM fleet, không VM riêng cho từng employee"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00007V",
-      "typeName": "shape"
-    },
-    {
-      "x": 1500,
-      "y": 335.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:workspace-notify-20261017-008",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "grey",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 200,
-          "y": 0.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "sans",
-        "scale": 1
-      },
-      "parentId": "page:workspace-notify-20261017",
-      "index": "a1V00008V",
-      "typeName": "shape"
     },
     {
       "id": "binding:workspace-notify-20261017-009",
@@ -19345,445 +21205,6 @@
       "meta": {}
     },
     {
-      "x": 0,
-      "y": 560,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-011",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 400,
-        "h": 200,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "orange",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "1 · DEVICE MẤT KẾT NỐI",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Lease hết hạn; ghi blocked"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "waiting_reason=device_offline"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Giữ owner, checkpoint, deadline"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00011V",
-      "typeName": "shape"
-    },
-    {
-      "x": 500,
-      "y": 560,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-012",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 400,
-        "h": 200,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "orange",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "2 · CHỌN RECOVERY",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Side effect unknown → reconcile"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Fallback chỉ nếu data/scope cho phép"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Không gửi dữ liệu A sang máy B"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00012V",
-      "typeName": "shape"
-    },
-    {
-      "x": 1000,
-      "y": 560,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-013",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 400,
-        "h": 200,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "orange",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "3 · WAIT + NOTIFY",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Release worker; blocker bền"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Reconnect event là đường chính"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Timer backoff/jitter, không LLM loop"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00013V",
-      "typeName": "shape"
-    },
-    {
-      "x": 1500,
-      "y": 560,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-014",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 400,
-        "h": 200,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "orange",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "4 · RESUME CÓ KIỂM TRA",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Xác thực device/principal hiện tại"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Dedup reconnect; fence stale worker"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Kiểm version, quyền và receipt"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00014V",
-      "typeName": "shape"
-    },
-    {
-      "x": 2000,
-      "y": 560,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-015",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 400,
-        "h": 200,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "orange",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "5 · DEADLINE / ESCALATE",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Hết hạn → owner xử lý tiếp"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Waiting chưa phải thành công"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Không bỏ task / retry vô hạn"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00015V",
-      "typeName": "shape"
-    },
-    {
-      "x": 400,
-      "y": 660.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:workspace-notify-20261017-016",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "grey",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 100,
-          "y": 0.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "sans",
-        "scale": 1
-      },
-      "parentId": "page:workspace-notify-20261017",
-      "index": "a1V00016V",
-      "typeName": "shape"
-    },
-    {
       "id": "binding:workspace-notify-20261017-017",
       "typeName": "binding",
       "type": "arrow",
@@ -19818,50 +21239,6 @@
         "snap": "none"
       },
       "meta": {}
-    },
-    {
-      "x": 900,
-      "y": 660.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:workspace-notify-20261017-019",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "grey",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 100,
-          "y": 0.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "sans",
-        "scale": 1
-      },
-      "parentId": "page:workspace-notify-20261017",
-      "index": "a1V00019V",
-      "typeName": "shape"
     },
     {
       "id": "binding:workspace-notify-20261017-020",
@@ -19900,50 +21277,6 @@
       "meta": {}
     },
     {
-      "x": 1400,
-      "y": 660.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:workspace-notify-20261017-022",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "grey",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 100,
-          "y": 0.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "sans",
-        "scale": 1
-      },
-      "parentId": "page:workspace-notify-20261017",
-      "index": "a1V00022V",
-      "typeName": "shape"
-    },
-    {
       "id": "binding:workspace-notify-20261017-023",
       "typeName": "binding",
       "type": "arrow",
@@ -19978,50 +21311,6 @@
         "snap": "none"
       },
       "meta": {}
-    },
-    {
-      "x": 1900,
-      "y": 660.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:workspace-notify-20261017-025",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "grey",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 100,
-          "y": 0.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "sans",
-        "scale": 1
-      },
-      "parentId": "page:workspace-notify-20261017",
-      "index": "a1V00025V",
-      "typeName": "shape"
     },
     {
       "id": "binding:workspace-notify-20261017-026",
@@ -20060,1757 +21349,40 @@
       "meta": {}
     },
     {
-      "x": 0,
-      "y": 880,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-028",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 740,
-        "h": 280,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "blue",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "NOTIFICATION BROKER [P2]",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Một blocker_id, nhiều adapter/delivery attempt"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "App inbox + 1 channel trước; mở rộng theo nhu cầu"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Preference / severity / privacy / quiet hours / quota"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Fallback theo stage, không broadcast mọi kênh"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "sent ≠ delivered ≠ acknowledged ≠ resolved"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Ack ở một kênh dừng ack-reminder; deadline vẫn giữ"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00028V",
-      "typeName": "shape"
-    },
-    {
-      "x": 830,
-      "y": 880,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-029",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 740,
-        "h": 280,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "red",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "SECURITY / AUTHORITY",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Mỗi callback xác thực; link không cấp quyền"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Sensitive result trong app; tin nhắc chỉ nêu trạng thái"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Recheck audience và quyền trước từng delivery"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Nested tool và VM đều qua mandatory gateway"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Policy cấm chuyển dữ liệu → chờ/escalate"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Strict on-prem: không tự cloud fallback"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00029V",
-      "typeName": "shape"
-    },
-    {
-      "x": 1660,
-      "y": 880,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-030",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 740,
-        "h": 280,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "violet",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "VM SPIKE [P3, CÓ ĐIỀU KIỆN]",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Core/request DB ngoài guest; guest chết có recovery"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Image version, CPU/RAM/disk/time cap, egress policy"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Tách workspace/volume theo scope; cleanup/retention"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Không shell/GUI toàn quyền để vượt tool contract"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Host chung chết không phải HA; backup + external alert"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Không bắt buộc desktop streaming hoặc computer-use"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00030V",
-      "typeName": "shape"
-    },
-    {
-      "x": 0,
-      "y": 1280,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-031",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 1140,
-        "h": 270,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "green",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "DEMO CUỐI KỲ",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Giao việc → workspace chạy → đóng laptop vẫn tiến triển"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Gặp bước cần local file → chờ + báo đúng người"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Reconnect → reauthorize/reconcile → tiếp tục cùng request"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Restart worker/guest: không mất việc, không lặp action"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Kênh A lỗi → B; ack và resolved là hai trạng thái"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Đo business success, lifecycle coverage và recovery riêng"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00031V",
-      "typeName": "shape"
-    },
-    {
-      "x": 1240,
-      "y": 1280,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-032",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 1160,
-        "h": 270,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "orange",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "GIỚI HẠN SCOPE & CHI PHÍ",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "P1 giữ vertical slice; chưa hứa durable / VM"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "P2 durable wait + broker + server worker + reconnect"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "P3 một VM experiment; không làm platform hạ tầng"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Đo server CPU/RAM/traffic, tokens, local load, VM idle/startup/storage"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "So server-only baseline cùng quality; không mặc định offload rẻ hơn"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Hard failure phải có reason/evidence/owner/next action"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00032V",
-      "typeName": "shape"
-    },
-    {
-      "x": 0,
-      "y": 1660,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "proposal": "2026-10-17"
-      },
-      "id": "shape:workspace-notify-20261017-033",
-      "type": "geo",
-      "parentId": "page:workspace-notify-20261017",
-      "props": {
-        "w": 2400,
-        "h": 200,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "grey",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "s",
-        "font": "sans",
-        "align": "start",
-        "verticalAlign": "start",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "ADAPTIVE / TEAM DECISIONS",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Instance nội bộ riêng mỗi company; config/schema/version + reviewed connectors. Agent auto-map chỉ tạo proposal có nguồn, mâu thuẫn và câu hỏi; không tự cấp quyền."
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Chọn primary/fallback channel, deadline/quiet hours, một workload VM, host/resource cap, data-transfer policy và strict on-prem exceptions."
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Auto-map / visual matching / browser model là optional; không thêm tất cả thành mandatory use case. Sửa issue → review → ADR sau khi nhóm chốt."
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a1V00033V",
-      "typeName": "shape"
-    },
-    {
-      "x": 30,
-      "y": 360,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "updated": "2026-10-17"
-      },
-      "id": "shape:ov-recovery",
-      "type": "geo",
-      "parentId": "shape:ov-frame",
-      "props": {
-        "w": 240,
-        "h": 220,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "violet",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "m",
-        "font": "sans",
-        "align": "middle",
-        "verticalAlign": "middle",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Recovery monitor",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Lease · heartbeat"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Reconcile trước retry"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Không LLM polling"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Worker lỗi → có chủ"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a9V0001V",
-      "typeName": "shape"
-    },
-    {
-      "x": 30,
-      "y": 620,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "updated": "2026-10-17"
-      },
-      "id": "shape:ov-device-wait",
-      "type": "geo",
-      "parentId": "shape:ov-frame",
-      "props": {
-        "w": 240,
-        "h": 190,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "orange",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "m",
-        "font": "sans",
-        "align": "middle",
-        "verticalAlign": "middle",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Chờ thiết bị",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Persist reason/deadline"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Reconnect event"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Backoff + escalation"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a9V0002V",
-      "typeName": "shape"
-    },
-    {
-      "x": 1140,
-      "y": 690,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {
-        "updated": "2026-10-17"
-      },
-      "id": "shape:ov-workspace",
-      "type": "geo",
-      "parentId": "page:bizops-overview-00",
-      "props": {
-        "w": 560,
-        "h": 250,
-        "geo": "rectangle",
-        "dash": "solid",
-        "growY": 0,
-        "url": "",
-        "scale": 1,
-        "flipX": false,
-        "flipY": false,
-        "color": "blue",
-        "labelColor": "black",
-        "fill": "semi",
-        "size": "m",
-        "font": "sans",
-        "align": "middle",
-        "verticalAlign": "middle",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "NƠI THỰC THI · executor có thể thay",
-                  "marks": [
-                    {
-                      "type": "bold"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Server worker / workspace bền [P2]"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "1 VM Linux thử nghiệm [P3]"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Laptop/browser chỉ khi data cần"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Đóng tab không hủy task server"
-                }
-              ]
-            },
-            {
-              "type": "paragraph",
-              "content": [
-                {
-                  "type": "text",
-                  "text": "Thiết bị mất → chờ hoặc fallback hợp lệ"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "index": "a9V0003V",
-      "typeName": "shape"
-    },
-    {
-      "x": 260,
-      "y": 335.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
       "meta": {},
-      "id": "shape:ov-new-edge-4",
+      "id": "binding:zHJl0aXWj55K_HXw43jY-",
+      "fromId": "shape:ImIUNUfBpKEpjPRNeY-tq",
+      "toId": "shape:sd3",
       "type": "arrow",
       "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 70,
-          "y": 0.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0004V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-5",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-4",
-      "toId": "shape:ov-kenh",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
+        "isPrecise": false,
         "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-6",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-4",
-      "toId": "shape:ov-dt",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 570,
-      "y": 335.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-7",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 80,
-          "y": 35.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0007V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-8",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-7",
-      "toId": "shape:ov-dt",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-9",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-7",
-      "toId": "shape:ov-rb",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 1050,
-      "y": 370.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-10",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 90,
-          "y": -15.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0010V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-11",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-10",
-      "toId": "shape:ov-rb",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-12",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-10",
-      "toId": "shape:ov-dp",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 1340,
-      "y": 355.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-13",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 60,
-          "y": -5.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0013V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-14",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-13",
-      "toId": "shape:ov-dp",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-15",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-13",
-      "toId": "shape:ov-agent",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 1700,
-      "y": 350.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-16",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 80,
-          "y": -145.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0016V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-17",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-16",
-      "toId": "shape:ov-agent",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-18",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-16",
-      "toId": "shape:ov-tool",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 1700,
-      "y": 350.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-19",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 80,
-          "y": 35.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0019V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-20",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-19",
-      "toId": "shape:ov-agent",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-21",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-19",
-      "toId": "shape:ov-rag",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 1700,
-      "y": 350.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-22",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 80,
-          "y": 200.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0022V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-23",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-22",
-      "toId": "shape:ov-agent",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-24",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-22",
-      "toId": "shape:ov-skill",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 1700,
-      "y": 815.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-25",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 80,
-          "y": 40.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0025V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-26",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-25",
-      "toId": "shape:ov-workspace",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-27",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-25",
-      "toId": "shape:ov-kq",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0,
-          "y": 0.5
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 850.0,
-      "y": 250,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-28",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 0.0,
-          "y": 30
-        },
-        "arrowheadStart": "arrow",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0028V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-29",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-28",
-      "toId": "shape:ov-duyet",
-      "props": {
-        "terminal": "start",
         "normalizedAnchor": {
           "x": 0.5,
-          "y": 1
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-30",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-28",
-      "toId": "shape:ov-rb",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0.5,
-          "y": 0
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 1550.0,
-      "y": 440,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-31",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": -130.0,
-          "y": 250
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0031V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-32",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-31",
-      "toId": "shape:ov-agent",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 0.5,
-          "y": 1
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "id": "binding:ov-new-edge-33",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-31",
-      "toId": "shape:ov-workspace",
-      "props": {
-        "terminal": "end",
-        "normalizedAnchor": {
-          "x": 0.5,
-          "y": 0
-        },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
-      },
-      "meta": {}
-    },
-    {
-      "x": 260,
-      "y": 525.0,
-      "rotation": 0,
-      "isLocked": false,
-      "opacity": 1,
-      "meta": {},
-      "id": "shape:ov-new-edge-34",
-      "type": "arrow",
-      "props": {
-        "kind": "arc",
-        "elbowMidPoint": 0.5,
-        "dash": "solid",
-        "size": "s",
-        "fill": "none",
-        "color": "black",
-        "labelColor": "black",
-        "bend": 0,
-        "start": {
-          "x": 0,
-          "y": 0
-        },
-        "end": {
-          "x": 70,
-          "y": -190.0
-        },
-        "arrowheadStart": "none",
-        "arrowheadEnd": "arrow",
-        "richText": {
-          "type": "doc",
-          "content": [
-            {
-              "type": "paragraph"
-            }
-          ]
-        },
-        "labelPosition": 0.5,
-        "font": "draw",
-        "scale": 1
-      },
-      "parentId": "page:bizops-overview-00",
-      "index": "a9V0034V",
-      "typeName": "shape"
-    },
-    {
-      "id": "binding:ov-new-edge-35",
-      "typeName": "binding",
-      "type": "arrow",
-      "fromId": "shape:ov-new-edge-34",
-      "toId": "shape:ov-lich",
-      "props": {
-        "terminal": "start",
-        "normalizedAnchor": {
-          "x": 1,
           "y": 0.5
         },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
+        "snap": "none",
+        "terminal": "end"
       },
-      "meta": {}
+      "typeName": "binding"
     },
     {
-      "id": "binding:ov-new-edge-36",
-      "typeName": "binding",
+      "meta": {},
+      "id": "binding:zUcpTgWArlF_4lLDPQIM6",
+      "fromId": "shape:rl8V4VzWAClk9dwCxxryS",
+      "toId": "shape:wf3",
       "type": "arrow",
-      "fromId": "shape:ov-new-edge-34",
-      "toId": "shape:ov-dt",
       "props": {
-        "terminal": "end",
+        "isPrecise": false,
+        "isExact": false,
         "normalizedAnchor": {
-          "x": 0,
+          "x": 0.5,
           "y": 0.5
         },
-        "isExact": false,
-        "isPrecise": true,
-        "snap": "none"
+        "snap": "none",
+        "terminal": "start"
       },
-      "meta": {}
+      "typeName": "binding"
     }
   ]
 }
