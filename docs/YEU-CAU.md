@@ -50,16 +50,23 @@ trước lớp.
 
 | Mã | Mảng | Năng lực của đề tài phủ mảng này |
 |---|---|---|
-| K1 | Agent và Agent Skills | skill theo phòng ban; agent tự đề xuất skill mới, có duyệt |
-| K2 | Tool use / function calling | tool CRM, kế toán, lịch, gửi tin trên kênh chat |
+| K1 | Tích hợp model, structured output, agent loop, kiến trúc model + harness | agent điều phối và agent phòng ban; giao thức JSON cho model yếu |
+| K2 | Tool use và agent skills | tool CRM, kế toán, lịch, kênh chat; skill theo phòng ban, đề xuất skill có duyệt |
 | K3 | RAG | hỏi đáp quy trình nội bộ có trích dẫn |
-| K4 | Memory và context | nhớ công ty qua nhiều phiên; nén context |
-| K5 | Workflow orchestration | workflow LangGraph có bước duyệt chi tiền; báo cáo theo lịch |
-| K6 | Multi-agent / MCP | agent điều phối giao việc hoặc tích hợp MCP |
-| K7 | Evaluation | eval chạy lại được, so sánh regression |
-| K8 | Verification, security, observability | phân quyền theo phòng ban, kiểm thử an toàn, eval, trace |
+| K4 | Memory, state, context | nhớ công ty qua nhiều phiên; nén context |
+| K5 | Workflow orchestration, human-in-the-loop | workflow LangGraph có bước duyệt chi tiền; báo cáo theo lịch |
+| K6 | Multi-agent hoặc MCP | agent điều phối giao việc hoặc tích hợp MCP |
+| K7 | Verification và evaluation | eval chạy lại được, so sánh regression |
+| K8 | Security, governance, observability | phân quyền theo phòng ban, kiểm thử an toàn, eval, trace |
 
-Mapping K6/K7 được sửa theo bản tóm tắt rubric v3 do người dùng cung cấp; file desktop chưa được chuyển nên còn phải đối chiếu nguyên văn. Để lập kế hoạch cuối kỳ: ≥2 reusable skills, workflow ≥3 node, ≥5 eval/use case + 5 attack case và 2 regression run. Đây là thông tin chờ kiểm tra nguồn, không thay điều kiện Phase 1 ≥10 eval.
+Tên các mảng theo **bản nháp rubric v3** (06/10/2026, trên branch của PR #15; chưa rõ đã là bản chính thức). Theo bản nháp này:
+
+- Mỗi use case viết đủ 6 mục: mô tả; 1–3 mảng K chính; yêu cầu kỹ thuật; 3–6 tiêu chí chấp nhận có ngưỡng; ≥ 5 eval case, có ≥ 1 case biên hoặc lỗi; trace của ≥ 1 lần chạy thành công.
+- Mỗi use case chấm 3 tiêu chí × 0,5: chức năng (đạt tiêu chí chấp nhận, demo ổn định), thiết kế harness (mức của các mảng K chính), kiểm chứng (eval có case biên, số liệu, trace, phân tích case hỏng, regression).
+- Yêu cầu nền chung: workflow ≥ 3 node có điều kiện dừng; sơ đồ `agent = model + harness` chỉ rõ ≥ 4 lớp harness kèm bảng failure mode; ≥ 1 công cụ ngoài và ≥ 2 skill dùng lại được có contract đầy đủ; trace mọi lần chạy; eval chạy bằng một lệnh, tối thiểu 5 case × số use case + 5 case tấn công (5 use case = 30 case), regression ≥ 2 lần; README, `.env.example`, báo cáo, video, bảng phân công use case, mục minh bạch dùng AI.
+- Tool hoặc skill chạy lệnh nguy hiểm mà không có approval gate thì điểm thiết kế harness của use case đó bằng 0.
+
+Điều kiện Phase 1 (≥ 10 eval) vẫn theo slide.
 
 ## 5. Use case (gợi ý, chờ nhóm chọn)
 

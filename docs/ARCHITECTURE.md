@@ -4,7 +4,7 @@
 
 This proposal consolidates the brainstorming session, the supplied topic description, the teammate's workflow image, and research into Hermes and DeepSeek Harness/Cordis. It proposes the final system target and a phased delivery path. It does not claim that these capabilities are implemented.
 
-The desktop rubric draft and research changes on `14-transcript-research` have not been transferred to this cloud checkout. The editable board [SE373.tldr](SE373.tldr) shows this proposal on five pages: a one-screen overview, architecture, durable requests, skills and phases, and the feature map with roadmap. No company or use-case selection below is already agreed.
+Rubric draft v3 and the always-on agents research are on the `14-transcript-research` branch (PR #15); this proposal now reflects both (§8, §9, §11). The editable board [SE373.tldr](SE373.tldr) shows this proposal on five pages: a one-screen overview, architecture, durable requests, skills and phases, and the feature map with roadmap. No company or use-case selection below is already agreed.
 
 ## 1. Product and scope
 
@@ -348,7 +348,7 @@ Initially propose instruction changes using existing tools. New executable tools
 
 Five workflows must collectively exercise all six required departments; six specialists do not require six use cases or separate deployments. Select concrete departmental contributions after choosing the company. Assign real owners only after team agreement.
 
-Each person owns the business scenario, data, tools, app flow, demo, evals and traces for one outcome. In Phase 1 everyone contributes to the first vertical slice. Also name a maintainer and reviewer for each shared runtime/interface; ownership does not allow divergent identity or tool contracts.
+Each person owns the business scenario, data, tools, app flow, demo, evals and traces for one outcome, and writes it in the rubric's six-part form: description; 1–3 primary K areas; technical requirements; 3–6 measurable acceptance criteria; ≥5 eval cases including ≥1 edge or failure case; a trace of ≥1 successful run. The rubric draft expects the course to publish 8–11 candidate use cases per topic; if that list arrives, map slots A–E onto it rather than inventing parallel ones. In Phase 1 everyone contributes to the first vertical slice. Also name a maintainer and reviewer for each shared runtime/interface; ownership does not allow divergent identity or tool contracts.
 
 Optional visual matching belongs inside a Sales/Support workflow if approved: image/text candidates → attribute/compatibility checks → catalog identity evidence → current stock/date availability and pricing → customer confirmation. Similar appearance never proves exact identity. It must not displace required topic coverage.
 
@@ -366,7 +366,7 @@ Do not introduce later-course features through a bundled framework in Phase 1. A
 
 In Phase 1 define request/run/usage IDs, capture available model usage with pricing-based estimates, and surface timeout/error outcomes. Full durable recovery and the final always-on claim wait for Phase 2 persistence and its acceptance evidence; avoid implying the Phase 1 process already survives crashes.
 
-For final planning, provisionally include ≥2 reusable skills, a ≥3-node workflow, ≥5 evals per use case plus 5 attack cases, and two regression runs. These came from the user's untransferred rubric summary. Correct mapping is K6 = multi-agent/MCP and K7 = evaluation; exact remaining K wording and rubric details need source reconciliation. Do not silently treat the existing K7=MCP table as current.
+**Course rubric draft v3 (2026-10-06; official status unconfirmed):** each use case scores function, harness design and verification at 0.5 each. System-wide: a ≥3-node workflow with stop conditions; an `agent = model + harness` diagram naming ≥4 harness layers plus a failure-mode table; ≥1 external tool and ≥2 reusable skills with full contracts; traces for every run; one-command evals with at least 5 cases per use case plus 5 attack cases (30 for five use cases) and ≥2 regression runs; README, `.env.example`, report, video, use-case ownership table and AI-use disclosure. A tool or skill that runs a dangerous action without an approval gate zeroes that use case's harness score. K areas: K1 model integration/structured output/agent loop/architecture, K2 tools and skills, K3 RAG, K4 memory/state/context, K5 workflow and human-in-the-loop, K6 multi-agent or MCP, K7 verification and evaluation, K8 security/governance/observability; each missing area costs 0.5. Phase 1 still requires ≥10 evals.
 
 ## 10. Verification and scale
 
@@ -396,6 +396,7 @@ Primary references inspected during this session (Pi Durable added 2026-10-17):
 - [Hermes durable task collaboration, pinned source](https://github.com/NousResearch/hermes-agent/blob/dfa79389773271ee78c41a7af340848948d461ee/website/docs/user-guide/features/kanban.md)
 - [DeepSeek Harness architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
 
+- Always-on agents lecture notes (PR #15, `docs/research/always-on-agents.md`): event wake-up with stable IDs, server-owned state, durable resume, on-demand tool detail, isolated helpers, untrusted input never becomes authority, compaction loss, failures turned into evals. These support §5 and §10; they are an AI-assisted summary pending review.
 - [Pi Durable README, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md)
 - [Pi Durable normative specification, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md)
 
@@ -410,7 +411,7 @@ Repository links: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team w
 5. Select the messaging channel and the Phase 1 vertical slice with observable completion conditions.
 6. Choose identity, storage/checkpointer, background execution and retrieval implementations at the phase where needed. LangGraph checkpointing and business request state must not become conflicting sources of truth; define their IDs and synchronization contract.
 7. Decide provider data handling, disclosure policy and retention before introducing confidential information.
-8. Reconcile the rubric draft after transfer. Review `SE373.tldr` alongside this proposal; the board shows the proposal, not accepted decisions.
+8. Ask the lecturer whether rubric draft v3 is final and whether it may be public (it currently sits on a branch of this public repo). Review `SE373.tldr` alongside this proposal; the board shows the proposal, not accepted decisions. Draw the rubric's `agent = model + harness` diagram (≥4 layers) and failure-mode table for the report from the overview page.
 9. Record accepted decisions in Decision issues and ADRs, then create small implementation issues and task branches.
 10. Set recovery objectives, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring. Select the dispatch/checkpoint synchronization contract.
 11. Review the per-tool authorization/approval/recovery/metering contract and assign connector-specific reconciliation owners. Define the cost catalog, invoice import/reconciliation method, allocation and rounding policies, visibility permissions and budget limits. Set measurable calculator and recovery acceptance criteria before implementation.

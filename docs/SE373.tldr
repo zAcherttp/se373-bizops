@@ -4620,10 +4620,10 @@
       "parentId": "shape:lane3",
       "props": {
         "w": 304,
-        "h": 120,
+        "h": 160,
         "geo": "rectangle",
         "dash": "solid",
-        "growY": 1.6,
+        "growY": 0,
         "url": "",
         "scale": 0.8,
         "flipX": false,
@@ -4666,7 +4666,12 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P2 · Pi Durable reference; Python/LangGraph"
+                  "text": "P2 · Pi Durable reference; Python/LangGraph",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ]
                 }
               ]
             }
@@ -4678,7 +4683,7 @@
     },
     {
       "x": 14,
-      "y": 835.0000000000001,
+      "y": 875.0000000000001,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -4751,7 +4756,7 @@
     },
     {
       "x": 14,
-      "y": 983.0000000000001,
+      "y": 1023.0000000000001,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -4824,7 +4829,7 @@
     },
     {
       "x": 14,
-      "y": 1181,
+      "y": 1221,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -7389,7 +7394,7 @@
       "parentId": "shape:lane8",
       "props": {
         "w": 304,
-        "h": 120,
+        "h": 140.8,
         "geo": "rectangle",
         "dash": "solid",
         "growY": 0,
@@ -7435,7 +7440,12 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "P1 khai báo · P2 recovery · ARCHITECTURE §4"
+                  "text": "P1 khai báo · P2 recovery · ARCHITECTURE §4",
+                  "marks": [
+                    {
+                      "type": "italic"
+                    }
+                  ]
                 }
               ]
             }
@@ -7447,7 +7457,7 @@
     },
     {
       "x": 14,
-      "y": 715.4,
+      "y": 736.2,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -7520,7 +7530,7 @@
     },
     {
       "x": 14,
-      "y": 864.2,
+      "y": 885,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -7593,7 +7603,7 @@
     },
     {
       "x": 14,
-      "y": 1012.2,
+      "y": 1033,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -9103,7 +9113,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "10 · Đối chiếu rubric [Nhóm]",
+                  "text": "10 · Rubric nháp v3 [Hỏi thầy]",
                   "marks": [
                     {
                       "type": "bold"
@@ -9117,7 +9127,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Khi chuyển file rubric draft: mapping K1–K8, ≥2 skill, workflow ≥3 node, ≥5 eval + 5 attack, 2 regression"
+                  "text": "Đã là bản chính thức chưa? Được để công khai trong repo không? Danh sách 8–11 use case của đề tài khi nào có?"
                 }
               ]
             }
@@ -10725,7 +10735,7 @@
     },
     {
       "x": 14,
-      "y": 1131,
+      "y": 1171,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -11375,7 +11385,7 @@
     },
     {
       "x": 14,
-      "y": 665.4,
+      "y": 686.2,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -13190,7 +13200,7 @@
     },
     {
       "x": 1440,
-      "y": 150,
+      "y": 114,
       "rotation": 0,
       "isLocked": false,
       "opacity": 1,
@@ -13200,7 +13210,7 @@
       "parentId": "page:bizops-overview-00",
       "props": {
         "w": 220,
-        "h": 80,
+        "h": 152,
         "geo": "rectangle",
         "dash": "draw",
         "growY": 0,
@@ -13229,6 +13239,15 @@
                       "type": "bold"
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "contract: quyền · duyệt · recovery · chi phí"
                 }
               ]
             }
@@ -14727,10 +14746,10 @@
       "parentId": "page:bizops-review-20261015-078",
       "props": {
         "w": 2440,
-        "h": 102,
+        "h": 104,
         "geo": "rectangle",
         "dash": "solid",
-        "growY": 2,
+        "growY": 0,
         "url": "",
         "scale": 1,
         "flipX": false,
@@ -14750,7 +14769,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Mapping K (đã sửa) và kế hoạch cuối kỳ, chờ đối chiếu rubric nguyên văn",
+                  "text": "Mapping K và yêu cầu cuối kỳ · theo rubric nháp v3",
                   "marks": [
                     {
                       "type": "bold"
@@ -14764,7 +14783,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "K1 Agent & Skills · K2 Tool use · K3 RAG · K4 Memory & context · K5 Workflow · K6 Multi-agent / MCP · K7 Evaluation · K8 Verification, security, observability. Thiếu một mảng: -0,5"
+                  "text": "K1 Model, agent loop, kiến trúc · K2 Tool & skill · K3 RAG · K4 Memory, state, context · K5 Workflow + duyệt · K6 Multi-agent / MCP · K7 Kiểm chứng & eval · K8 Bảo mật, governance, quan sát. Thiếu một mảng: −0,5"
                 }
               ]
             },
@@ -14773,7 +14792,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Dự kiến cuối kỳ: ≥2 skill dùng lại, workflow ≥3 node, ≥5 eval / use case + 5 attack case, 2 regression run; P1 vẫn cần ≥10 eval"
+                  "text": "Cuối kỳ: ≥2 skill có contract, workflow ≥3 node, sơ đồ model + harness ≥4 lớp + bảng failure mode, 5 eval × UC + 5 tấn công, regression ≥2 lần; mỗi UC 6 mục; P1 vẫn ≥10 eval"
                 }
               ]
             }
