@@ -354,7 +354,7 @@ Repository links: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team w
 5. Select the messaging channel and the Phase 1 vertical slice with observable completion conditions.
 6. Choose identity, storage/checkpointer, background execution and retrieval implementations at the phase where needed. LangGraph checkpointing and business request state must not become conflicting sources of truth; define their IDs and synchronization contract.
 7. Decide provider data handling, disclosure policy and retention before introducing confidential information.
-8. Reconcile the rubric draft after transfer. Review the updated `SE373.tldr` alongside this proposal; the three original pages remain reference material, not accepted decisions.
+8. Reconcile the rubric draft after transfer. Review `SE373.tldr` alongside this proposal; the board shows the proposal, not accepted decisions.
 9. Record accepted decisions in Decision issues and ADRs, then create small implementation issues and task branches.
 10. Set recovery objectives, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring. Select the dispatch/checkpoint synchronization contract.
 11. Define the cost catalog, invoice import/reconciliation method, allocation and rounding policies, visibility permissions and budget limits. Set measurable calculator and recovery acceptance criteria before implementation.
