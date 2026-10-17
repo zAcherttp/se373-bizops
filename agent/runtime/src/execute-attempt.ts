@@ -1,14 +1,9 @@
-import { Cause, Clock, Effect, Exit, Option, Random } from "effect";
+import { Cause, Clock, Effect, Exit, Option, Random, Result } from "effect";
+import { isAttemptTimeout, isOperationResult } from "./contracts.ts";
 import { decideFailure, validateContext } from "./failure-policy.ts";
-import type { AttemptContext, Failure, FailureDecision } from "./failure-policy.ts";
-
-export type OperationResult<T> = { ok: true; value: T } | { ok: false; failure: Failure };
-export type AttemptOutcome<T> = {
-  requestId: string;
-  operationId: string;
-  attemptId: string;
-} & ({ status: "succeeded"; value: T }
-  | { status: "not_succeeded"; failure: Pick<Failure, "kind" | "effect">; decision: FailureDecision });
+import type { AttemptContext, Failure } from "./failure-policy.ts";
+import type { AttemptOutcome } from "./contracts.ts";
+export type { AttemptOutcome } from "./contracts.ts";
 
 export interface AttemptOptions {
   timeoutMs: number;
@@ -21,7 +16,7 @@ const timeout: Failure = { kind: "timeout", effect: "unknown" };
 
 function prepare(context: AttemptContext, timeoutMs: number, now: number): PreparedAttempt {
   validateContext(context, now);
-  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 2_147_483_647) {
+  if (!isAttemptTimeout(timeoutMs)) {
     throw new TypeError("Invalid attempt timeout");
   }
   return { context: { ...context }, expiresAt: Math.min(context.deadlineAt, now + timeoutMs) };
@@ -92,21 +87,17 @@ export function executeAttemptEffect<T, R>(
 
 /** Bridge for existing Promise adapters. Effect creates and cleans up their AbortSignal. */
 export function fromPromiseOperation<T>(
-  operation: (signal: AbortSignal) => Promise<OperationResult<T>>,
+  operation: (signal: AbortSignal) => Promise<Result.Result<T, Failure>>,
 ): Effect.Effect<T, Failure> {
   return Effect.tryPromise({ try: operation, catch: () => internalError }).pipe(
-    Effect.flatMap((result) => {
-      if (result?.ok === true && Object.hasOwn(result, "value")) return Effect.succeed(result.value);
-      if (result?.ok === false) return Effect.fail(result.failure);
-      return Effect.fail(internalError);
-    }),
+    Effect.flatMap((result) => isOperationResult(result) ? Effect.fromResult(result) : Effect.fail(internalError)),
   );
 }
 
-/** Promise boundary: preserve the existing API and record supervised cancellation as an outcome. */
+/** Promise boundary: supervise a Result-returning adapter and materialize cancellation. */
 export async function executeAttempt<T>(
   context: AttemptContext,
-  operation: (signal: AbortSignal) => Promise<OperationResult<T>>,
+  operation: (signal: AbortSignal) => Promise<Result.Result<T, Failure>>,
   options: AttemptOptions,
 ): Promise<AttemptOutcome<T>> {
   const attempt = prepare(context, options.timeoutMs, Date.now());

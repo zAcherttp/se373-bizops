@@ -44,9 +44,53 @@ const program = Effect.gen(function* () {
 });
 ```
 
-`fromPromiseOperation` adapts the existing `(signal) => Promise<OperationResult<T>>` contract into
-an effect. `executeAttempt` preserves the Promise-facing API for existing callers and tests.
+`fromPromiseOperation` adapts `(signal) => Promise<Result.Result<T, Failure>>` into an effect via
+`Effect.fromResult`. Use Effect's `Result.succeed(value)` / `Result.fail(failure)` constructors;
+the bespoke `{ ok, value/failure }` envelope has been removed. `executeAttempt` remains the
+Promise-facing entry point, with its adapter contract migrated to built-in Result.
 New Effect callers should use `executeAttemptEffect` directly instead of nesting `runPromise` calls.
+
+## Schemas and built-in types
+
+`src/contracts.ts` defines failure kinds, recovery policies, failure records, attempt context,
+failure decisions and `AttemptOutcome(successSchema)` with Effect Schema. Their TypeScript types
+come from the schemas' `Type`; enum lists and handwritten field validators are not maintained twice.
+Schema checks enforce valid identifiers, safe integer bounds, jitter, timeout and backoff constraints.
+Plain internal option records holding an AbortSignal stay ordinary TypeScript types: they are not
+serialized data contracts.
+
+Schema checks establish data shape; they do not grant authorization, establish idempotency or prove
+that an operation never started. The pure policy still determines whether retry/wait/escalation is
+allowed. `Schema.TaggedError` is available for schema-backed exception classes, but our failures are
+plain domain records already validated by Schema; adding classes would not add behavior here.
+
+The Promise bridge validates the built-in Result and its failure record with
+`Schema.Result(Schema.Unknown, Failure)`. Its success payload is deliberately opaque: this is a
+typed in-process adapter, not an unknown JSON ingress. A connector must decode its actual success
+schema before returning `Result.succeed`. For example, a catalog connector would validate SKU,
+availability and price fields, rather than cast the response to a TypeScript type.
+
+For an external Result representation, use `Schema.toCodecJson(Schema.Result(valueSchema, Failure))`
+and `Schema.decodeUnknownEffect`. This uses Effect's Success/Failure representation and built-in
+codec. Use `AttemptOutcome(valueSchema)` when validating a materialized attempt outcome. These
+schemas are available for boundaries; the current package has no HTTP ingress or persisted store.
+Schema parse issues can contain input values, so the executor sanitizes thrown parser errors before
+returning an employee-facing failure outcome.
+
+| Need | Effect v4 facility | Usage here |
+|---|---|---|
+| Running an operation | `Effect<A, E, R>` | Native API; expected failures use the error channel |
+| Completed success/failure data | `Result`, `Effect.fromResult` | Promise adapter, replacing a custom union |
+| Boundary types and validation | `Schema.Struct`, `Schema.Union`, `Schema.Result` | Contracts and derived TypeScript types |
+| Full termination information | `Exit`, `Cause` | Distinguish typed failure, defect and interruption |
+| Timing, randomness and resources | `Clock`, `Random`, timeout and scoped finalizers | Executor and virtual-clock tests |
+| Recurrence, deployment configuration, secrets | `Schedule`, `Config`, `Redacted` | Available; not additional implementations in this slice |
+
+`Schedule` can drive recurrence when a scheduler is introduced, while our business policy must still
+veto unsafe retries. The installed v4 package also exports `effect/workflow` and `effect/sql`; those
+are candidates for the Phase 2 persistence evaluation, not crash-recovery guarantees supplied by
+this in-memory executor. Effect supplies mechanisms; company policy and business correctness still
+require explicit rules, adapters and verification.
 
 Effect owns timeout fibers, interruption and operation finalizers. `Effect.tryPromise` supplies the
 operation's abort signal. The Promise boundary passes the external signal directly to
@@ -68,6 +112,7 @@ business retry eligibility remains in the pure policy, preventing accidental pay
 
 | Module | Inputs → outputs | State/dependencies | Failure behavior |
 |---|---|---|---|
+| `src/contracts.ts` | Runtime schemas → derived types, guards and payload-specific outcome schemas | Effect Schema; no I/O or authority grants | Rejects malformed shape/bounds; boundary decoders strip unrelated fields by default |
 | `src/failure-policy.ts` | Trusted failure classification, attempt/owner/budget policy, time and jitter → retry, wait, escalation or cancellation | Pure function; no I/O, database, model or retained state | Invalid inputs throw before dispatch; uncertain effects take precedence over expiry/cancellation; no implicit retries |
 | `src/execute-attempt.ts` | Context, already-gated Effect and timeout → correlated success or failure decision; Promise compatibility wrapper | One in-memory attempt; Effect Clock/Random, timeout, interruption and scoped cleanup; pure failure policy | Separates expected failures, defects and interruption; rejects late success; preserves uncertain effects |
 

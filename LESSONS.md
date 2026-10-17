@@ -5,3 +5,4 @@
 [recovery] Cancellation and timeout do not prove that an external effect stopped; preserve uncertainty and reconcile before replay.
 [effect] Use typed failures and scoped interruption for execution mechanics; keep business replay policy explicit and preserve finalizer defects.
 [dependencies] Check registry release tags and installed package APIs before choosing a framework major version.
+[contracts] Derive boundary types from Effect Schema and reuse Result; runtime shape validation never substitutes for business authorization.
