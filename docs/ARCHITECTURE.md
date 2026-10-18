@@ -23,7 +23,7 @@ Inputs: the brainstorming session, the topic description, the teammate's workflo
 **Positioning (team lead, 2026-10-18; to confirm, §12):** a self-hosted, channel-agnostic core whose bot and department agents join the company's existing chat. Vietnamese SMEs chat *and* assign work in Zalo/WhatsApp groups; chat is not a work manager, so tasks drift within days and people re-read long threads. The promise: **a message that is work never gets lost.** Employees keep responsibility, judgment and approval authority; the system turns messages into tracked work, prepares proposals, executes permitted actions, follows up and escalates.
 
 - **Channel-agnostic core.** We do not build a chat platform. A bot joins the chat the company already uses (Zalo, Slack, WhatsApp, Teams) through channel adapters; other systems integrate through our MCP server (`create_task`, `get_status`, `approve`, `search`). The value is message → tracked work, with agents as teammates in the room.
-- **Web console, not a chat app,** for what chat does badly: work item list and status, approval screens, trace viewer, admin/setup wizard, eval dashboard.
+- **Web console, not a chat app,** for what chat does badly: work item list and status, approval screens, trace viewer, admin/setup wizard, eval dashboard; agent progress streams to it over AG-UI events.
 - **Proactive teammates, not file-reading wrappers:** they watch, ask when data is missing, draft work for approval (§5).
 - **Self-hosted** by each business with our consultants; not open source, not SaaS.
 
@@ -412,6 +412,22 @@ References (Pi Durable and workspace sources added 2026-10-17; none is a benchma
 - [WebAssembly security](https://webassembly.org/docs/security/), [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api), [ONNX Runtime Web](https://onnxruntime.ai/docs/tutorials/web/)
 - Always-on agents lecture notes (PR #15, `docs/research/always-on-agents.md`) support §5 and §10. AI-assisted summary pending review: event wake-up with stable IDs, server-owned state, durable resume, untrusted input never becomes authority, failures turned into evals.
 - Dot experience (user-supplied transcript): persistent identity, event automation, investigation before the user opens the app. No recovery guarantee; not evidence of OpenAI's implementation.
+
+### Protocols adopted
+
+Adopt existing open protocols early; build no new one.
+
+| Need | Protocol | Use |
+|---|---|---|
+| Tools in, integrations out | [MCP](https://modelcontextprotocol.io/specification/2026-07-28) (Agentic AI Foundation) | Tool connectors; our MCP server (P3, K6) |
+| Packaged agent skills | Agent Skills (`SKILL.md`) | Skill registry format (K2) |
+| Agent progress to the UI | [AG-UI](https://docs.ag-ui.com/) | Web console streams tool calls, state and approvals over SSE |
+| Delegated access | OAuth 2.1 (MCP authorization) | MCP server and connectors act for an identified principal (K8) |
+| Spending consent | [AP2](https://github.com/google-agentic-commerce/AP2) mandates, ACP | Reference only: approval binds exact action, amount and expiry |
+| Agent-to-agent across companies | [A2A](https://a2a-protocol.org/) | Not needed: department agents share one core. Future direction (customer ↔ supplier agents) |
+| Agent identity on public websites | Web Bot Auth (IETF draft) | Not needed: agents do not browse external sites |
+
+Chat platforms (Zalo, Slack, WhatsApp) have no common protocol; channel adapters stay thin and ours.
 
 Repository: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team workflow](QUY-TRINH.md), [ADR process](decisions/README.md). This proposal overrides neither accepted ADRs nor course rules.
 
