@@ -77,7 +77,7 @@ theo dõi. Chi tiết ở [ARCHITECTURE.md §8](ARCHITECTURE.md#8-five-use-cases
 |---|---|---|---|
 | A | Tin nhắn → việc được theo dõi: giao việc trong luồng chat sẵn có, tách người phụ trách/hạn, nhắc việc, leo thang, trả lời trạng thái, bản tóm tắt mỗi sáng | K1, K2, K4, K5, K7 | 1 (adapter hoặc console) → 2 (nhắc việc, tóm tắt) |
 | B | Hỏi quy trình nội bộ, trả lời có trích dẫn, nhớ theo phạm vi | K3, K4, K8 | 2 |
-| C | Đề nghị chi tiền duyệt ngay trong luồng chat: kiểm tra, chuyển theo ma trận duyệt, resume, ghi sổ | K5, K8 | 2 |
+| C | Đề nghị chi tiền duyệt ngay trong luồng chat, hai bước: duyệt ý định (mua gì, trần ngân sách) rồi duyệt lệnh chi cụ thể; kiểm tra, chuyển theo ma trận duyệt, resume, ghi sổ | K5, K8 | 2 |
 | D | Chủ động theo dõi vận hành và follow-up liên phòng ban (gồm báo cáo Sales và nháp Marketing dùng số liệu Sales) | K4, K6, K7 | 3 |
 | E | Agent phòng ban tự cải thiện: quy trình lặp lại → đề xuất skill, eval, duyệt; ngưỡng cảnh báo chỉnh theo phản hồi | K2, K7, K8 | 3 |
 

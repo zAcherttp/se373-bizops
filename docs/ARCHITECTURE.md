@@ -359,13 +359,15 @@ flowchart LR
 |---|---|---|---|
 | A | Message → tracked work: assign in the existing chat thread → work item; owner/deadline extracted, reminders, escalation, status answers, daily digest | P1 (adapter or console) → P2 (reminders, digest) | K1 K2 K4 K5 K7 |
 | B | Internal procedure Q&A with citations and scoped recall | P2 | K3 K4 K8 |
-| C | Spending request approved in-thread: checked, routed by approval matrix, resumed, recorded | P2 | K5 K8 |
+| C | Spending request approved in-thread in two steps: intent (what, budget ceiling) then the concrete order (supplier, amount); checked, routed by approval matrix, resumed, recorded | P2 | K5 K8 |
 | D | Proactive operations watch and cross-department follow-up (includes Sales briefing and Marketing drafts using Sales data) | P3 | K4 K6 K7 |
 | E | Self-improving department agent: repeated procedure → proposed skill, eval, approval; feedback-tuned alerts | P3 | K2 K7 K8 |
 
 **Coverage:** the union is K1–K8. Departments: Accounting (C, D), Operations and Sales (D), Marketing (D drafts), Support (B, D), HR (A, B); E applies to any. Six specialists need neither six use cases nor six deployments; owners follow team agreement.
 
-**Eval ideas:** A — 30 Vietnamese assignment messages (abbreviations, no diacritics, missing deadline) measuring owner/deadline extraction accuracy, plus zero overdue items without a reminder. D — 10 seeded anomalies measuring recall, precision and whether the agent asks at the right time.
+**Two-step spending approval (C), after AP2 mandates:** an approved intent ("200 boxes of paper, ≤ 5,000,000 VND, by Friday") lets the agent gather quotes and draft the order inside that envelope; the concrete order (supplier, items, amount) needs its own approval, bound to the approved intent by ID. An order outside the envelope (over budget, other item, expired intent) is rejected in code, not by the model. Each step follows the approval matrix and separation of duties.
+
+**Eval ideas:** A — 30 Vietnamese assignment messages (abbreviations, no diacritics, missing deadline) measuring owner/deadline extraction accuracy, plus zero overdue items without a reminder. C — orders inside and outside the approved envelope; zero out-of-envelope orders executed. D — 10 seeded anomalies measuring recall, precision and whether the agent asks at the right time.
 
 Each person owns one outcome's scenario, data, tools, app flow, demo, evals and traces, written in the rubric's six-part form: description; 1–3 primary K areas; technical requirements; 3–6 measurable acceptance criteria; ≥5 eval cases including ≥1 edge or failure case; a trace of ≥1 successful run. If the course publishes its expected 8–11 candidate use cases per topic, map slots A–E onto them. In Phase 1 everyone builds the first vertical slice. Each shared runtime/interface gets a maintainer and reviewer; no divergent identity or tool contracts.
 
