@@ -12143,6 +12143,65 @@
       "typeName": "shape"
     },
     {
+      "x": 20,
+      "y": 70,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-chat",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 240,
+        "h": 130,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Chat sẵn có của công ty",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Zalo · Slack · WhatsApp"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a2mk3",
+      "typeName": "shape"
+    },
+    {
       "x": 1140,
       "y": 420,
       "rotation": 0,
@@ -12387,7 +12446,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Kênh vào",
+                  "text": "Adapter kênh",
                   "marks": [
                     {
                       "type": "bold"
@@ -12509,6 +12568,65 @@
         }
       },
       "index": "a34Mr",
+      "typeName": "shape"
+    },
+    {
+      "x": 20,
+      "y": 600,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-mcp",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 240,
+        "h": 110,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "MCP",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "tích hợp công cụ khác"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a2mk4",
       "typeName": "shape"
     },
     {
@@ -12908,6 +13026,138 @@
       "typeName": "shape"
     },
     {
+      "x": 140,
+      "y": 200.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-37",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 0,
+          "y": 30.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0037V",
+      "typeName": "shape"
+    },
+    {
+      "x": 260,
+      "y": 655.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-38",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 70,
+          "y": -280.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0038V",
+      "typeName": "shape"
+    },
+    {
+      "x": 260,
+      "y": 815.0,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-new-edge-39",
+      "type": "arrow",
+      "props": {
+        "kind": "arc",
+        "elbowMidPoint": 0.5,
+        "dash": "solid",
+        "size": "s",
+        "fill": "none",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 70,
+          "y": -440.0
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph"
+            }
+          ]
+        },
+        "labelPosition": 0.5,
+        "font": "draw",
+        "scale": 1
+      },
+      "parentId": "page:bizops-overview-00",
+      "index": "a9V0039V",
+      "typeName": "shape"
+    },
+    {
       "x": 260,
       "y": 285.0,
       "rotation": 0,
@@ -13279,7 +13529,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Business Ops Agent",
+                  "text": "Business Ops Agent · bot làm việc trong chat công ty",
                   "marks": [
                     {
                       "type": "bold"
@@ -13393,6 +13643,65 @@
         }
       },
       "index": "a53h6",
+      "typeName": "shape"
+    },
+    {
+      "x": 20,
+      "y": 760,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:ov-web",
+      "type": "geo",
+      "parentId": "page:bizops-overview-00",
+      "props": {
+        "w": 240,
+        "h": 110,
+        "geo": "rectangle",
+        "dash": "draw",
+        "growY": 0,
+        "url": "",
+        "scale": 1,
+        "flipX": false,
+        "flipY": false,
+        "color": "blue",
+        "labelColor": "black",
+        "fill": "semi",
+        "size": "m",
+        "font": "sans",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "richText": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Web console",
+                  "marks": [
+                    {
+                      "type": "bold"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "việc · duyệt · trace"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "index": "a2mk5",
       "typeName": "shape"
     },
     {
@@ -13731,7 +14040,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "A · Operational briefing",
+                  "text": "A · Tin nhắn → việc không trôi",
                   "marks": [
                     {
                       "type": "bold"
@@ -13745,7 +14054,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "On-demand ở P1, lên lịch sau (P2). Tool, skill báo cáo, giao qua chat · K1 K2 K5"
+                  "text": "Giao việc ngay trong chat sẵn có, tách người + hạn, nhắc, escalate, bản tin · P1→P2 · K1 K2 K4 K5 K7"
                 }
               ]
             }
@@ -13849,7 +14158,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "C · Đề nghị chi tiền",
+                  "text": "C · Duyệt chi tiền trong thread",
                   "marks": [
                     {
                       "type": "bold"
@@ -13863,7 +14172,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Kiểm, duyệt, resume, ghi sổ (xem trang 02) · P2 · K5 K8"
+                  "text": "Kiểm, ma trận duyệt, resume, ghi sổ (xem trang 02) · P2 · K5 K8"
                 }
               ]
             }
@@ -13908,7 +14217,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "D · Ngoại lệ liên phòng ban",
+                  "text": "D · Giám sát chủ động liên phòng",
                   "marks": [
                     {
                       "type": "bold"
@@ -13922,7 +14231,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Coordinator + chuyên viên, handoff có giới hạn, giải quyết hoặc escalate · P3 · K6"
+                  "text": "Phát hiện bất thường, hỏi người, Sales/Marketing phối hợp · P3 · K4 K6 K7"
                 }
               ]
             }
@@ -13967,7 +14276,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "E · Skill đề xuất rồi dùng lại",
+                  "text": "E · Agent tự cải thiện",
                   "marks": [
                     {
                       "type": "bold"
@@ -13981,7 +14290,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Đề xuất, eval, duyệt trước khi dùng · P3 · K1 K8"
+                  "text": "Đề xuất skill, eval, duyệt; phản hồi chỉnh ngưỡng · P3 · K2 K7 K8"
                 }
               ]
             }
@@ -20881,6 +21190,114 @@
         "terminal": "end",
         "normalizedAnchor": {
           "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-37-end",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-37",
+      "toId": "shape:ov-kenh",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 0
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-37-start",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-37",
+      "toId": "shape:ov-chat",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 0.5,
+          "y": 1
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-38-end",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-38",
+      "toId": "shape:ov-dt",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-38-start",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-38",
+      "toId": "shape:ov-mcp",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-39-end",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-39",
+      "toId": "shape:ov-dt",
+      "props": {
+        "terminal": "end",
+        "normalizedAnchor": {
+          "x": 0,
+          "y": 0.5
+        },
+        "isExact": false,
+        "isPrecise": true,
+        "snap": "none"
+      },
+      "meta": {}
+    },
+    {
+      "id": "binding:ov-new-edge-39-start",
+      "typeName": "binding",
+      "type": "arrow",
+      "fromId": "shape:ov-new-edge-39",
+      "toId": "shape:ov-web",
+      "props": {
+        "terminal": "start",
+        "normalizedAnchor": {
+          "x": 1,
           "y": 0.5
         },
         "isExact": false,

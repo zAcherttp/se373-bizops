@@ -68,16 +68,21 @@ Tên các mảng theo **bản nháp rubric v3** (06/10/2026, trên branch của 
 
 Điều kiện Phase 1 (≥ 10 eval) vẫn theo slide.
 
-## 5. Use case (gợi ý, chờ nhóm chọn)
+## 5. Use case (đề xuất A–E, chờ nhóm chốt)
+
+Theo định vị mới (18/10/2026): bot vào kênh chat sẵn có của công ty, tin nhắn giao việc thành việc được
+theo dõi. Chi tiết ở [ARCHITECTURE.md §8](ARCHITECTURE.md#8-five-use-cases-and-team-ownership).
 
 | # | Use case | Mảng chính | Phase sớm nhất |
 |---|---|---|---|
-| 1 | Hỏi quy trình nội bộ, trả lời có trích dẫn | K3, K2 | 2 (RAG) |
-| 2 | Đề nghị chi tiền: kiểm hạn mức, trình duyệt, ghi sổ | K5, K8 | 2 (workflow + duyệt) |
-| 3 | Báo cáo doanh số tuần tự gửi lên kênh chat theo lịch | K1, K2, K5 | 1 |
-| 4 | Một yêu cầu liên phòng ban, điều phối chia việc rồi tổng hợp | K6 | 3 |
-| 5 | Agent nhận ra việc lặp lại, đề xuất skill mới, người duyệt rồi mới dùng | K1, K8 | 3 |
-| 6 | Nhớ thông tin công ty và sở thích người dùng qua nhiều phiên | K4 | 2 |
+| A | Tin nhắn → việc được theo dõi: giao việc trong luồng chat sẵn có, tách người phụ trách/hạn, nhắc việc, leo thang, trả lời trạng thái, bản tóm tắt mỗi sáng | K1, K2, K4, K5, K7 | 1 (adapter hoặc console) → 2 (nhắc việc, tóm tắt) |
+| B | Hỏi quy trình nội bộ, trả lời có trích dẫn, nhớ theo phạm vi | K3, K4, K8 | 2 |
+| C | Đề nghị chi tiền duyệt ngay trong luồng chat: kiểm tra, chuyển theo ma trận duyệt, resume, ghi sổ | K5, K8 | 2 |
+| D | Chủ động theo dõi vận hành và follow-up liên phòng ban (gồm báo cáo Sales và nháp Marketing dùng số liệu Sales) | K4, K6, K7 | 3 |
+| E | Agent phòng ban tự cải thiện: quy trình lặp lại → đề xuất skill, eval, duyệt; ngưỡng cảnh báo chỉnh theo phản hồi | K2, K7, K8 | 3 |
+
+Năm use case phủ đủ K1–K8 và sáu phòng ban (Kế toán: C, D; Vận hành, Sales: D; Marketing: D; CSKH: B, D;
+Nhân sự: A, B).
 
 ## 6. Ràng buộc kỹ thuật đã biết
 

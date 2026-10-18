@@ -1,10 +1,17 @@
 # Business Ops Agent
 
 Đồ án cuối kỳ SE373 (Kỹ thuật xây dựng hệ thống Agentic AI, UIT, HK1 2026–27), đề tài #7.
-Trợ lý vận hành cho một doanh nghiệp hư cấu: một agent điều phối và các agent phòng ban (Sales,
-Marketing, Nhân sự, Kế toán, CSKH, Vận hành), giao việc qua kênh chat, hỏi đáp quy trình có trích
-dẫn, báo cáo theo lịch, nhớ qua nhiều phiên, tự đề xuất skill có duyệt, phân quyền theo phòng ban,
-chi tiền phải có người duyệt.
+Doanh nghiệp vừa và nhỏ ở Việt Nam vừa chat vừa giao việc trong nhóm Zalo/WhatsApp, nên việc trôi
+sau một hai ngày và mọi người phải đọc lại cả luồng tin. Sản phẩm là một core tự host, không phụ thuộc
+kênh: bot cùng các agent phòng ban (Sales, Marketing, Nhân sự, Kế toán, CSKH, Vận hành) và một agent
+điều phối vào thẳng kênh chat công ty đang dùng (Zalo, Slack, WhatsApp, Teams) qua channel adapter,
+hoặc tích hợp qua MCP server. Lời hứa: tin nhắn nào là việc thì không bị mất. Tin giao việc thành work
+item có người phụ trách, hạn, nhắc việc và leo thang; duyệt ngay trong luồng chat; agent chủ động theo
+dõi số liệu, hỏi khi thiếu dữ liệu và soạn nháp chờ người duyệt. Web app không phải app chat mà là
+console: danh sách việc, màn hình duyệt, xem trace, cài đặt, dashboard eval. Doanh nghiệp tự host trên
+hạ tầng của mình cùng đội tư vấn; công ty demo là hư cấu. Vẫn giữ các yêu cầu đề tài: hỏi đáp quy trình
+có trích dẫn, báo cáo theo lịch, nhớ qua nhiều phiên, skill đề xuất phải được duyệt, phân quyền theo
+phòng ban, chi tiền phải có người duyệt.
 
 - Yêu cầu, lộ trình, cách chấm: [docs/YEU-CAU.md](docs/YEU-CAU.md)
 - Đề xuất kiến trúc và kế hoạch phase (gồm workspace bền, device recovery, notification): [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)

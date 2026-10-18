@@ -1,6 +1,6 @@
 # SE373 Business Ops Agent · team architecture proposal
 
-**Status:** proposal for team review, not an accepted ADR. **Tracking:** [#16](https://github.com/zAcherttp/se373-bizops/issues/16); workspace/notification additions per [Decision #18](https://github.com/zAcherttp/se373-bizops/issues/18) in [PR #17](https://github.com/zAcherttp/se373-bizops/pull/17). **Date:** 2026-10-15. **Updated:** 2026-10-17.
+**Status:** proposal for team review, not an accepted ADR. **Tracking:** [#16](https://github.com/zAcherttp/se373-bizops/issues/16); workspace/notification additions per [Decision #18](https://github.com/zAcherttp/se373-bizops/issues/18) in [PR #17](https://github.com/zAcherttp/se373-bizops/pull/17). **Date:** 2026-10-15. **Updated:** 2026-10-18 (product repositioning).
 
 Inputs: the brainstorming session, the topic description, the teammate's workflow image, and research into Hermes, DeepSeek Harness/Cordis and Pi Durable. Rubric draft v3 and the always-on agents research (branch `14-transcript-research`, PR #15) shape §8, §9 and §11. The board [SE373.tldr](SE373.tldr) shows it on six pages: overview, architecture, durable requests, skills and phases, feature map with roadmap, workspace/notification deployment.
 
@@ -20,23 +20,33 @@ Inputs: the brainstorming session, the topic description, the teammate's workflo
 
 ## 1. Product and scope
 
-An internal operations coworker. Employees keep responsibility, judgment and approval authority; the system retrieves evidence, prepares proposals, executes permitted actions, tracks progress and escalates exceptions.
+**Positioning (team lead, 2026-10-18; to confirm, §12):** a self-hosted, channel-agnostic core whose bot and department agents join the company's existing chat. Vietnamese SMEs chat *and* assign work in Zalo/WhatsApp groups; chat is not a work manager, so tasks drift within days and people re-read long threads. The promise: **a message that is work never gets lost.** Employees keep responsibility, judgment and approval authority; the system turns messages into tracked work, prepares proposals, executes permitted actions, follows up and escalates.
 
-The demo company is fictional. Configuration sets departments, roles, policies, capabilities and connector bindings; a second small configuration can show a workflow adapted without rewriting (new processes or systems may still need code). A 500-person company is a target scenario, not 500 concurrent users; capacity claims need a stated workload and measurements.
+- **Channel-agnostic core.** We do not build a chat platform. A bot joins the chat the company already uses (Zalo, Slack, WhatsApp, Teams) through channel adapters; other systems integrate through our MCP server (`create_task`, `get_status`, `approve`, `search`). The value is message → tracked work, with agents as teammates in the room.
+- **Web console, not a chat app,** for what chat does badly: work item list and status, approval screens, trace viewer, admin/setup wizard, eval dashboard.
+- **Proactive teammates, not file-reading wrappers:** they watch, ask when data is missing, draft work for approval (§5).
+- **Self-hosted** by each business with our consultants; not open source, not SaaS.
 
-**Required coverage:**
+| What falls between departments | What the system does |
+|---|---|
+| Stockouts noticed late; overdue invoices and SLAs | Code detectors watch, route to the owner, follow up |
+| Informal approvals ("ok anh duyệt") in chat | In-thread approval bound to exact action, recorded |
+| Knowledge leaves with people | Cited procedures and scoped memory with source and expiry |
+| Data must stay on-prem | Self-hosted bundle, optional local model |
 
-- Coordinator plus Sales, Marketing, HR, Accounting, Customer Support and Operations specialists.
-- Delegation via Telegram, Slack or Discord besides the React app.
-- Cited procedure Q&A, scheduled reports, company memory across sessions.
-- Proposed skills activated only after human approval.
-- Department/resource permissions; human approval before spending.
+Measures: time-to-detect, % caught before the customer notices, hours saved, % of alerts rated useful.
 
-**Excluded initially:** full ERP, real payroll/tax compliance, autonomous company management, untrusted plugin marketplace, unrestricted shell, adapting to arbitrary companies. Visual product matching and decision models are optional experiments once mandatory workflows have a delivery path.
+The demo company is fictional; the target segment is SME distribution, retail and services, not every industry. A 500-person company is a target scenario, not 500 concurrent users; capacity claims need a stated workload and measurements.
+
+**Required coverage:** coordinator plus Sales, Marketing, HR, Accounting, Customer Support and Operations specialists; delegation through the company's chat; cited procedure Q&A, scheduled reports, company memory across sessions; proposed skills activated only after human approval; department/resource permissions; human approval before spending.
+
+**Excluded initially:** our own chat platform, full ERP, real payroll/tax compliance, autonomous company management, untrusted plugin marketplace, unrestricted shell, voice/video calls, native mobile apps, full Kanban/Jira, more than one external channel adapter before P3. Visual product matching and decision models are optional experiments once mandatory workflows have a delivery path.
 
 ## 2. Proposed decisions
 
 - Proposed target: team-authored TypeScript agent core; React/TypeScript/Vite app. Per the user's lecturer clarification (2026-10-17), Python and LangGraph are optional. The existing Python scaffold remains until a separate implementation change; phase gates still apply.
+- Channel-agnostic, business-model-agnostic core: chat adapters, MCP server, web console; industries as configuration packs.
+- Work messages become tracked work items; proactive agents within an attention budget.
 - One shared service, isolated identity and context per request.
 - Durable requests separate from chats and run attempts.
 - Small trusted core, pluggable business capabilities.
@@ -56,7 +66,7 @@ Canonical terminology: [NAMING.md](NAMING.md). Request Runtime owns lifecycle; S
 
 ```mermaid
 flowchart TD
-    A[React app / messaging channel] --> B[Identity and request API]
+    A[Existing chat via adapters / web console / MCP server] --> B[Unified messages, identity and request API]
     B --> C[Request Runtime]
     C --> D[Coordinator]
     D --> E[Department specialists]
@@ -92,12 +102,15 @@ Dashed links are mandatory controls; traces cover the whole path. Scheduler, Dis
 
 These are logical boundaries in one TypeScript application, not microservices. Add a background worker when durable execution needs it; nothing distributed without measured need.
 
+**Unified message model.** Adapters normalize sender, room, thread, mentions and files into one shape, so policy, audit and work tracking are identical on every channel. Bots see only messages addressed to them or @mentioning them. Adapters use official APIs only: Zalo OA / Zalo Bot, ZNS for customer notices (group support needs a spike); no unofficial personal-account libraries such as zlapi (ToS, ban and privacy risk).
+
 ## 4. Composition inspired by Cordis
 
 Use Cordis's service contracts, dependency declaration, lifecycle cleanup and configuration-driven composition as a reference. Cordis itself remains a candidate composition dependency to evaluate, not a selected runtime. Start with startup registration; do not build a plugin platform. Composition never owns a second task scheduler or bypasses mandatory policy.
 
 - **Trusted core:** plugins cannot disable identity, authorization, approval, request lifecycle or audit. Unresolved policy denies.
-- **Extension points:** department packages (tools, skills, request types, workflows) and connectors (catalog, inventory, CRM, accounting). Also channel adapters (app plus one messaging platform), retrieval/storage adapters and model adapters (existing profiles, optional measured classifiers).
+- **Extension points:** department packages (tools, skills, request types, workflows), connectors (catalog, inventory, CRM, accounting), channel adapters, industry packs, retrieval/storage adapters and model adapters (existing profiles, optional measured classifiers).
+- **Business-model agnostic:** the core never names industry terms. It knows generic entities: party, item/service, order, invoice, work item, employee, approval. An **industry pack** is configuration: mapping to the customer's data, departments/roles, approval matrix, watchlists and thresholds, skills, connectors. New processes or systems may still need code. Proof: the main fictional company plus a second small company in another industry on the same core.
 - **Manifest:** ID/version, dependencies, capabilities, requested permissions, config schema, supported phase. Registration rejects missing dependencies, duplicate capability IDs and unsupported phases. Only authorized configuration grants permissions.
 - **Lifecycle:** reviewed, pinned packages loaded at startup; no hot reload. Disabling one stops admissions and drains, cancels or migrates active requests, keeping history; never resume on an incompatible workflow or skill version. Untrusted extensions would need separate execution, restricted credentials and a threat assessment.
 
@@ -211,6 +224,25 @@ flowchart TD
 - Cancellation cannot undo committed effects; show the real outcome and any authorized compensation.
 - Completion, business rejection, execution failure and notification failure are distinct outcomes.
 
+### Message to work
+
+When a message assigns work, the bot posts a **work item card** in the thread (owner, deadline, status), linked to a WorkRequest and listed in the console. Missing fields get a question, not a guess. Persisted timers remind and escalate through the Delivery Service; each person gets a morning digest (my work, waiting on others, due soon). "What's the status of X?" is answered from system state, not the thread. In-thread approvals, bound to the exact action, replace "ok anh duyệt".
+
+### Proactive watch
+
+Signals (schedules and change events) feed cheap, continuous **code detectors**; the LLM only investigates anomalies. Each finding gets an action tier: inform, ask, draft for approval, or act automatically only for configured low-risk actions. Findings go to the owner or the digest under an **attention budget** (proposed ≤3 proactive messages per person per day), with "useful / not" feedback. Per-department watchlists come from the industry pack:
+
+| Department | Example detectors |
+|---|---|
+| Sales | Sales vs same period, large customers gone quiet, unusual orders |
+| Operations | Stock below safety level, late suppliers, slow-moving stock |
+| Accounting | Invoices due, three-way mismatch, budget overrun |
+| Support | SLA at risk, complaint clusters |
+
+Marketing uses the official Meta Graph API (Pages, Instagram Graph, Messenger/Instagram messaging in the 24-hour window, Marketing API) on a development-mode test Page; drafts need approval. No personal-account automation or CAPTCHA/bot-detection evasion: when a site needs a human step, the agent pauses and hands over (noVNC workspace takeover).
+
+**Self-improvement under control:** feedback tunes thresholds, ranking and recipients within configured bounds; answers become scoped memory with source and expiry (§6). Repeated corrections become skill proposals (§7); misses and false alarms become eval cases (§10). Agents never raise their own permissions or edit policy.
+
 ### Durable execution: no silent abandonment
 
 Every accepted request has a persisted owner, state, last progress time and next action: executing, waiting with reason and deadline, or terminal with evidence. Failure creates an assigned escalation; success creates a notification intent; cancellation is its own outcome. After a crash, the system finds interrupted work and resumes safely or escalates visibly. Workers run bounded attempts; durable state carries tasks across waits and restarts.
@@ -240,11 +272,11 @@ Dispatcher selects an eligible Worker using capability, data location, permissio
 
 **Device loss:** lease expiry sets `blocked` with `waiting_reason=device_offline`, device, owner, checkpoint, next action and deadline. Reconcile in-flight operations. Reassign only to a compatible executor allowed the data (same operation ID, new attempt ID); never copy employee A's data to machine B. Never poll with the model. An authenticated, deduplicated reconnect event resumes after rechecking device, principal, request, permissions and checkpoint version. A fallback timer uses capped, jittered backoff within the deadline, reset on progress. At the deadline escalate to the configured owner; late results from the old device are rejected or reconciled. Scheduler fires persisted timers/events, not polling crons. Waiting on a reply, an approval or a device are separate reasons with their own owners and policies.
 
-**Delivery Service:** channels are adapters of the Delivery Service, starting with the app inbox plus the course channel; an adapter is not permission to send or export data. Request Runtime owns each `Blocker`: ID, WorkRequest, type, responder, action, severity, deadline, audience and resolution state. Delivery Service records queued/sent/delivered status separately for each delivery attempt and forwards authenticated acknowledgements/resolution inputs to Request Runtime; absent read receipts mean unknown, not unread. Each delivery has its own ID, receipt and dedup key (blocker, recipient, channel, reminder stage); resends create no business work. Channels follow preference, urgency and permission, stepping through fallbacks and reminders, never broadcasting; quiet hours, cooldown, quota and deadlines are configured, and only defined urgent cases bypass quiet hours. Callbacks are authenticated, links grant nothing, approval stays in the workflow. Broad messages carry generic status ("Request R is waiting for a file on your device"), never payroll, documents or sensitive links. Recipient and audience are checked per delivery, and jobs never borrow a revoked creator's credentials.
+**Delivery Service:** channel adapters (§3) deliver through the Delivery Service, starting with the console inbox and the first chat adapter; an adapter is not permission to send or export data. Request Runtime owns each `Blocker`: ID, WorkRequest, type, responder, action, severity, deadline, audience and resolution state. Delivery Service records queued/sent/delivered status separately for each delivery attempt and forwards authenticated acknowledgements/resolution inputs to Request Runtime; absent read receipts mean unknown, not unread. Each delivery has its own ID, receipt and dedup key (blocker, recipient, channel, reminder stage); resends create no business work. Channels follow preference, urgency and permission, stepping through fallbacks and reminders, never broadcasting; quiet hours, cooldown, quota and deadlines are configured, and only defined urgent cases bypass quiet hours. Callbacks are authenticated, links grant nothing, approval stays in the workflow. Broad messages carry generic status ("Request R is waiting for a file on your device"), never payroll, documents or sensitive links. Recipient and audience are checked per delivery, and jobs never borrow a revoked creator's credentials.
 
-**Workspace:** an authorized entity (ID, owner/scope, image/tool version, volume/artifact references); a conversation ID never grants filesystem access. The **P3 spike** is one internal Linux VM with a prepared image, TypeScript worker, persistent volume and one workload. It starts after core persistence works, with the request store outside the guest; no VM platform, fleet, or VM per employee or specialist. Before sensitive data: CPU/RAM/disk/time quotas, egress allowlist, short-lived credentials or gateway, image patching. Also per-scope workspaces, retention-based sanitizing, no secrets in snapshots, and health/start/stop/drain with artifacts saved before deprovisioning. Snapshots neither back up business state nor roll back external effects. Structured tools only: no gateway-bypassing shell or GUI, no untrusted code; desktop streaming or computer use only if a use case needs it. A dead guest goes to the Supervisor; a shared-host outage needs the external alert and backup/restore, which is not high availability.
+**Workspace:** an authorized entity (ID, owner/scope, image/tool version, volume/artifact references); a conversation ID never grants filesystem access. Providers sit behind one interface (create/exec/snapshot/destroy): `docker` (default, course demo), `proxmox` (template plus linked clones via the REST API/proxmoxer, scoped API token, noVNC takeover, snapshots, per-department VLAN/firewall egress allowlist; optional P3 spike) and `none`. The **P3 spike** is one internal Linux VM with a prepared image, TypeScript worker, persistent volume and one workload. It starts after core persistence works, with the request store outside the guest; no VM platform, fleet, or VM per employee or specialist. Before sensitive data: CPU/RAM/disk/time quotas, egress allowlist, short-lived credentials or gateway, image patching. Also per-scope workspaces, retention-based sanitizing, no secrets in snapshots, and health/start/stop/drain with artifacts saved before deprovisioning. Snapshots neither back up business state nor roll back external effects. Structured tools only: no gateway-bypassing shell or GUI, no untrusted code; desktop streaming or computer use only if a use case needs it. A dead guest goes to the Supervisor; a shared-host outage needs the external alert and backup/restore, which is not high availability.
 
-**Deployment:** one instance per company on its infrastructure, shared code, versioned and reviewed organization/policy/workflow/connector configuration; no multi-tenant SaaS. **Strict on-prem** means internal inference, storage, telemetry and processing with no cloud fallback. External chat channels and model APIs are declared exceptions; ask the lecturer if this conflicts with the chat requirement. Missing internal capacity means wait or escalate, never silent egress. Optional **auto-mapping:** employee CSV and permitted SOPs → sourced draft organization/authority → gaps → ask the owner → diff, validation, dry-run → human activation. Authority is never inferred from titles, access history or model confidence. Browser offloading, local models, auto-mapping and visual matching are candidate experiments: pick one once mandatory coverage and P1/P2 are on track.
+**Deployment:** one instance per company on its infrastructure, shared code, versioned and reviewed organization/policy/workflow/connector configuration; no multi-tenant SaaS. **Strict on-prem** means internal inference, storage, telemetry and processing with no cloud fallback. External chat channels and model APIs are declared exceptions; ask the lecturer if this conflicts with the chat requirement. Missing internal capacity means wait or escalate, never silent egress. **Installer:** a Docker Compose bundle (app, api, worker, postgres+pgvector, optional local model, workspace-runner); `install.sh` checks prerequisites, generates secrets, runs migrations and creates the first admin; the console's setup wizard configures model/endpoint, LDAP/SSO or employee import, departments/permissions, approval matrix, connectors and workspace provider; a smoke eval runs on the customer's data; backup and upgrade use versioned images. Optional **auto-mapping:** employee CSV and permitted SOPs → sourced draft organization/authority → gaps → ask the owner → diff, validation, dry-run → human activation. Authority is never inferred from titles, access history or model confidence. Browser offloading, local models, auto-mapping and visual matching are candidate experiments: pick one once mandatory coverage and P1/P2 are on track.
 
 ### Usage Ledger and Cost Accounting
 
@@ -323,31 +355,33 @@ flowchart LR
 
 **Proposed portfolio for discussion, not a final selection:**
 
-| Owner slot | Outcome | Earliest phase | Required capabilities covered |
+| Owner slot | Outcome | Earliest phase | K areas |
 |---|---|---|---|
-| A | Operational briefing, on demand first, scheduled later | 1 for on-demand slice | Tool use, reusable skill, reporting, schedule, chat delivery |
-| B | Internal procedure assistance with citations and scoped recall | 2 | RAG, persistent company context, memory, permissions |
-| C | Spending request checked, approved/rejected, resumed and recorded | 2 | Versioned workflow, human approval, persistence, accounting |
-| D | Cross-department service/fulfillment exception resolved or escalated | 3 | Coordinator, department specialists, bounded handoffs |
-| E | Repeated procedure proposed as a skill, evaluated and approved before reuse | 3 | Skill evolution, review, regression, scoped publication |
+| A | Message → tracked work: assign in the existing chat thread → work item; owner/deadline extracted, reminders, escalation, status answers, daily digest | P1 (adapter or console) → P2 (reminders, digest) | K1 K2 K4 K5 K7 |
+| B | Internal procedure Q&A with citations and scoped recall | P2 | K3 K4 K8 |
+| C | Spending request approved in-thread: checked, routed by approval matrix, resumed, recorded | P2 | K5 K8 |
+| D | Proactive operations watch and cross-department follow-up (includes Sales briefing and Marketing drafts using Sales data) | P3 | K4 K6 K7 |
+| E | Self-improving department agent: repeated procedure → proposed skill, eval, approval; feedback-tuned alerts | P3 | K2 K7 K8 |
 
-Together the five must exercise all six departments; six specialists need neither six use cases nor six deployments. Pick departmental contributions after the company and owners after team agreement.
+**Coverage:** the union is K1–K8. Departments: Accounting (C, D), Operations and Sales (D), Marketing (D drafts), Support (B, D), HR (A, B); E applies to any. Six specialists need neither six use cases nor six deployments; owners follow team agreement.
+
+**Eval ideas:** A — 30 Vietnamese assignment messages (abbreviations, no diacritics, missing deadline) measuring owner/deadline extraction accuracy, plus zero overdue items without a reminder. D — 10 seeded anomalies measuring recall, precision and whether the agent asks at the right time.
 
 Each person owns one outcome's scenario, data, tools, app flow, demo, evals and traces, written in the rubric's six-part form: description; 1–3 primary K areas; technical requirements; 3–6 measurable acceptance criteria; ≥5 eval cases including ≥1 edge or failure case; a trace of ≥1 successful run. If the course publishes its expected 8–11 candidate use cases per topic, map slots A–E onto them. In Phase 1 everyone builds the first vertical slice. Each shared runtime/interface gets a maintainer and reviewer; no divergent identity or tool contracts.
 
-Optional visual matching, if approved, sits inside a Sales/Support workflow: image/text candidates → attribute/compatibility checks → catalog identity evidence → current stock, availability and pricing → customer confirmation. Similar appearance never proves identity, and it never displaces required coverage.
+Optional visual matching, if approved, sits inside a Sales/Support workflow: candidates → attribute checks → catalog identity evidence → stock and price → customer confirmation. Similar appearance never proves identity.
 
 ## 9. Phase plan and acceptance
 
 | Gate | Deliverable | Demonstration |
 |---|---|---|
-| Phase 1 · Oct 27 | One app-to-agent use case, ≥2 tools, 1 skill, step logs, ≥10 evals; synthetic data, basic identity boundaries; tool contracts, request/run/usage IDs, visible errors | Submit a request, inspect evidence, see correct success and controlled failure |
-| Phase 2 · Nov 10 | ≥3 use cases, cited RAG, scoped persistence/resume, context handling, human approval in a persisted workflow; durable admission, worker recovery, cost-ledger persistence; durable blockers, Delivery Service with app + one channel, reconnect/backoff, server worker | Kill/restart a running or waiting workflow; resume or escalate visibly without duplicate action; show attempt costs |
-| Phase 3 · Dec 6 | ≥5 use cases, multi-agent/MCP, security, complete evals/traces, final deliverables; recovery fault tests, full operating-cost view; one VM/workspace spike if feasible, placement and cost comparison | Cross-department workflow, safe denial, approved skill reuse, outage recovery, reconciled costs, regression results, final demo |
+| Phase 1 · Oct 27 | One chat adapter (chosen by quick spike) or web console input for the first slice, plus the message → work card (A); ≥2 tools, 1 skill, step logs, ≥10 evals; synthetic data, basic identity boundaries; tool contracts, request/run/usage IDs, visible errors | Assign work in a thread, see the card with owner/deadline, inspect the trace, see a controlled failure |
+| Phase 2 · Nov 10 | ≥3 use cases (A complete, B, C): adapter live; reminders/escalation/digest, in-thread approval (console as fallback) in a persisted workflow (LangGraph, or the authored core per §2), memory per thread, cited RAG, scoped persistence/resume, context handling; durable admission, worker recovery, cost-ledger persistence; durable blockers, Delivery Service, reconnect/backoff, server worker | Kill/restart a running or waiting workflow; resume or escalate visibly without duplicate action; show attempt costs |
+| Phase 3 · Dec 6 | ≥5 use cases (D, E): MCP server, optional second adapter, proactive watch, self-improvement, installer demo on a clean VM; multi-agent, security, complete evals/traces, final deliverables; recovery fault tests, full operating-cost view; one VM/workspace spike if feasible, placement and cost comparison | Cross-department follow-up, safe denial, approved skill reuse, outage recovery, reconciled costs, regression results, final demo |
 
 Phase 1 has no bundled framework, VM, multi-agent or distributed runtime; a modular tool/skill registry is fine. No recoverability claim before Phase 2 fault tests. No VM fleet, marketplace, full desktop streaming or compute swarm in Phase 3.
 
-**Phase 1 candidate:** an on-demand operational briefing with two domain tools and one reporting skill; weekly sales reporting is an option, not agreed. Records are read-only and synthetic, usage uses pricing-based estimates, and scheduling waits for its gate. Do not imply Phase 1 survives crashes.
+**Phase 1 slice:** use case A through one chat adapter (or console input if the spike fails): the agent replies in thread, extracts owner and deadline with two tools and one skill, and asks when a field is missing. Records are synthetic, usage uses pricing-based estimates, and reminders wait for P2. Do not imply Phase 1 survives crashes.
 
 **Final demo:** delegate → workspace runs → laptop closes, work continues → a local file is needed: wait and notify → user reconnects → recheck permissions, reconcile → result with evidence. Restart a worker/guest at a declared point to show no lost request and no duplicate action; live variants stay within tested scope.
 
@@ -367,7 +401,7 @@ Each use case defines expected effects, evidence, permitted readers, failure beh
 
 ## 11. Relationship to existing proposals and references
 
-The teammate's flow (clarification, single/multiple specialist routing, parallel dependent work, approval, validation) stays as a detailed execution example. We extend it with durability, repeated authorization, safe side effects and scoped learning. Unknown requests never auto-create skills, and generalist fallback never widens privileges. Hermes informs gateway separation, progressive skills, bounded delegation, durable Kanban collaboration and scheduled delivery; Cordis informs composition, dependencies and lifecycle. Neither is our runtime or a proven security boundary.
+The teammate's flow (clarification, specialist routing, parallel work, approval, validation) stays as an execution example, extended with durability, repeated authorization, safe side effects and scoped learning. Unknown requests never auto-create skills, and generalist fallback never widens privileges. Hermes informs gateway separation, progressive skills, bounded delegation, durable Kanban collaboration and scheduled delivery; Cordis informs composition, dependencies and lifecycle. Neither is our runtime or a proven security boundary.
 
 References (Pi Durable and workspace sources added 2026-10-17; none is a benchmark or a chosen runtime):
 
@@ -376,8 +410,8 @@ References (Pi Durable and workspace sources added 2026-10-17; none is a benchma
 - [DeepSeek Harness architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
 - [Pi Durable README, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md) and [normative specification, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md)
 - [WebAssembly security](https://webassembly.org/docs/security/), [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api), [ONNX Runtime Web](https://onnxruntime.ai/docs/tutorials/web/)
-- Always-on agents lecture notes (PR #15, `docs/research/always-on-agents.md`) support §5 and §10. They are an AI-assisted summary pending review, covering event wake-up with stable IDs, server-owned state, durable resume, on-demand tool detail, isolated helpers, untrusted input never becomes authority, compaction loss, failures turned into evals.
-- Dot experience (user-supplied transcript): persistent identity, event automation, investigation before the user opens the app, one thread across devices. It covers no crash recovery or completion guarantee and is not evidence of OpenAI's implementation.
+- Always-on agents lecture notes (PR #15, `docs/research/always-on-agents.md`) support §5 and §10. AI-assisted summary pending review: event wake-up with stable IDs, server-owned state, durable resume, untrusted input never becomes authority, failures turned into evals.
+- Dot experience (user-supplied transcript): persistent identity, event automation, investigation before the user opens the app. No recovery guarantee; not evidence of OpenAI's implementation.
 
 Repository: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team workflow](QUY-TRINH.md), [ADR process](decisions/README.md). This proposal overrides neither accepted ADRs nor course rules.
 
@@ -385,15 +419,16 @@ Repository: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team workflo
 
 1. Accept/amend scope, shared-service isolation and component boundaries.
 2. Accept/amend trusted-core/plugin contracts; hot reload and untrusted plugins stay out.
-3. Choose the fictional company; validate core workflows with people who know the work.
-4. Select five use cases, owners and reviewers; confirm every topic obligation and all six departments.
-5. Select the primary messaging channel and fallback, and the Phase 1 slice with observable completion conditions.
+3. Confirm the 2026-10-18 repositioning (§1). Choose the target segment, the fictional company and the second company's industry; validate core workflows with people who know the work.
+4. Confirm use cases A–E, owners and reviewers; check every topic obligation and all six departments.
+5. Pick the P1 chat adapter after a quick spike: Zalo OA/Bot if groups work, otherwise Slack or a Telegram-style bot API; confirm the Phase 1 slice's observable completion conditions.
 6. Choose identity, storage/checkpointer, background execution and retrieval at the phase that needs them, with an ID/synchronization contract so checkpoints and request state never conflict.
 7. Decide provider data handling, disclosure and retention before confidential data.
-8. Ask the lecturer whether rubric draft v3 is final and may be public (it sits on a branch of this public repo). Review [SE373.tldr](SE373.tldr) alongside this proposal (it shows proposals, not decisions); draw the `agent = model + harness` diagram (≥4 layers) and failure-mode table from its overview page.
+8. Ask the lecturer whether rubric draft v3 is final and may be public (it sits on a branch of this public repo). Review [SE373.tldr](SE373.tldr) (proposals, not decisions); draw the `agent = model + harness` diagram (≥4 layers) and failure-mode table from its overview page.
 9. Record accepted decisions as Decision issues and ADRs, then open small issues and task branches.
 10. Set recovery objectives and thresholds, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring.
 11. Review the tool contract and assign connector reconciliation owners. Define cost catalog, invoice reconciliation, allocation and rounding, visibility and budget limits, and measurable cost-accounting/recovery acceptance criteria before implementation.
 12. Workspaces and notifications: approve Worker/Delivery Service boundaries and set blocker owners, deadlines and quiet hours. Pick the P3 spike's workload, VM host and resource cap. Decide strict on-prem or declared exceptions, data-transfer and executor-fallback policy, and semester-feasible scope. Optional experiments stay out of the mandatory portfolio.
+13. Proactive work: set the attention budget, digest timing and feedback loop; register a Meta app in development mode with a test Page for marketing drafts.
 
 After agreement the board shows (1) architecture and trust boundaries, (2) request lifecycle with one concrete workflow, (3) skill lifecycle, annotating phase gates and separating implemented from future capabilities.
