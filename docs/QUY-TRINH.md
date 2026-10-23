@@ -86,8 +86,11 @@ xong thì ghi một file vào [`docs/decisions/`](decisions/README.md). Ba tuầ
 ## 6. Agent lập trình (Claude Code, Codex, Cursor...)
 
 Dùng agent thoải mái, với ba giới hạn: agent **không push lên `main`, không merge, không approve**.
-Agent làm trên branch của task, mở PR rồi dừng. Người mở PR chịu trách nhiệm hiểu và giải thích được
-mọi dòng trong đó: điểm cá nhân nhân với hệ số vấn đáp.
+Agent làm trên branch của task, mở PR rồi dừng. Theo cập nhật của giảng viên do người dùng cung cấp
+(17/10/2026), mức yêu cầu là hiểu code ở cấp module, thay cho yêu cầu ban đầu giải thích mọi dòng.
+Người mở PR phải giải thích được module làm gì, input/output, state, dependency, quyền và cách xử lý
+lỗi/phục hồi; đi qua được một luồng bình thường và một luồng lỗi. Không đưa code do AI tạo vào chỉ vì
+test xanh nếu chưa hiểu hành vi. Điểm cá nhân vẫn gắn với vấn đáp.
 
 ## 7. Repo này công khai
 
