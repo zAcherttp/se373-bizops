@@ -37,9 +37,10 @@ Quy tắc nhỏ:
 
 ## 2. Branch và pull request
 
-`main` được khoá bằng ruleset: không push thẳng, không force push. Một PR chỉ merge được khi có
-**1 approve** từ người khác, **3 check CI xanh** (quét secret, Agent, App) và branch **mới nhất so
-với `main`**. Repo chỉ cho **Squash and merge**; branch tự xoá sau khi merge.
+`main` được khoá bằng ruleset: không push thẳng, không force push. Một PR merge được khi có
+**3 check CI xanh** (quét secret, Agent, App) và branch **mới nhất so với `main`**. Ruleset không bắt
+buộc approve (từ 23/10/2026), nhưng nhóm vẫn review chéo trước khi merge.
+Repo chỉ cho **Squash and merge**; branch tự xoá sau khi merge.
 
 ```bash
 git switch main && git pull                    # bắt đầu từ main mới nhất
@@ -54,7 +55,7 @@ gh pr create --fill                            # mô tả PR theo mẫu, có dò
 2. Mô tả PR: làm gì, vì sao, kiểm tra thế nào, `Closes #<số issue>` để issue tự đóng khi merge.
 3. Chọn **một người review** trong mục Reviewers. Còn nháp thì mở dạng **Draft**.
 4. GitHub báo branch cũ hơn `main` thì bấm **Update branch** rồi đợi CI chạy lại.
-5. Có approve và CI xanh thì **tác giả** bấm **Squash and merge**. Tiêu đề PR thành tiêu đề commit trên `main`, nên viết nó rõ ràng.
+5. Đã có người review và CI xanh thì **tác giả** bấm **Squash and merge**. Tiêu đề PR thành tiêu đề commit trên `main`, nên viết nó rõ ràng.
 
 Commit và tiêu đề PR: câu mệnh lệnh ngắn nói việc đã làm ("Add approval matrix table"), không
 viết "update" hay "fix bug". Tên trong code bằng tiếng Anh; docs và comment viết tiếng Việt được.
@@ -69,7 +70,7 @@ Mỗi bạn vừa mở PR vừa review PR của bạn khác. Khi review:
 - Để lại ít nhất một comment, rồi chọn **Approve** hoặc **Request changes**.
 - Không hiểu thì nói không hiểu. Đó là dấu hiệu code cần rõ hơn, không phải bạn kém.
 
-Có commit mới sau khi approve thì approve cũ tự mất, và người review xem lại phần mới.
+Có commit mới sau khi review thì người review xem lại phần mới.
 
 ## 4. Khi bị kẹt
 
@@ -86,8 +87,11 @@ xong thì ghi một file vào [`docs/decisions/`](decisions/README.md). Ba tuầ
 ## 6. Agent lập trình (Claude Code, Codex, Cursor...)
 
 Dùng agent thoải mái, với ba giới hạn: agent **không push lên `main`, không merge, không approve**.
-Agent làm trên branch của task, mở PR rồi dừng. Người mở PR chịu trách nhiệm hiểu và giải thích được
-mọi dòng trong đó: điểm cá nhân nhân với hệ số vấn đáp.
+Agent làm trên branch của task, mở PR rồi dừng. Theo cập nhật của giảng viên do người dùng cung cấp
+(17/10/2026), mức yêu cầu là hiểu code ở cấp module, thay cho yêu cầu ban đầu giải thích mọi dòng.
+Người mở PR phải giải thích được module làm gì, input/output, state, dependency, quyền và cách xử lý
+lỗi/phục hồi; đi qua được một luồng bình thường và một luồng lỗi. Không đưa code do AI tạo vào chỉ vì
+test xanh nếu chưa hiểu hành vi. Điểm cá nhân vẫn gắn với vấn đáp.
 
 ## 7. Repo này công khai
 
