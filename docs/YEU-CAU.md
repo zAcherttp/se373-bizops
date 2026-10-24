@@ -1,7 +1,7 @@
 # Yêu cầu đồ án · Business Ops Agent
 
-Tổng hợp từ slide giới thiệu đồ án (07/10/2026) và mô tả đề tài #7. Danh sách use case chính thức
-chưa được đánh số trong mô tả đề tài đã cung cấp; mục 5 là gợi ý, không phải danh sách đã chốt. Xem [ARCHITECTURE.md](ARCHITECTURE.md) cho đề xuất hệ thống và phase plan.
+Tổng hợp từ slide giới thiệu đồ án (07/10/2026) và mô tả đề tài #7. Use case theo danh
+sách chính thức của Đề 07 (mục 5, [ADR 001](decisions/001-use-case-theo-de.md)). Kiến trúc và phase plan ở [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## 1. Đề tài
 
@@ -68,21 +68,20 @@ Tên các mảng theo **bản nháp rubric v3** (06/10/2026, trên branch của 
 
 Điều kiện Phase 1 (≥ 10 eval) vẫn theo slide.
 
-## 5. Use case (đề xuất A–E, chờ nhóm chốt)
+## 5. Use case (theo Đề 07, chốt 24/10/2026)
 
-Theo định vị mới (18/10/2026): bot vào kênh chat sẵn có của công ty, tin nhắn giao việc thành việc được
-theo dõi. Chi tiết ở [ARCHITECTURE.md §8](ARCHITECTURE.md#8-five-use-cases-and-team-ownership).
+Chi tiết module, dữ liệu và eval của từng UC ở [ARCHITECTURE.md §1.1 và §6](ARCHITECTURE.md#11-use-case-đã-chọn).
 
-| # | Use case | Mảng chính | Phase sớm nhất |
+| UC | Tên (theo Đề) | Mảng chính | Phase |
 |---|---|---|---|
-| A | Tin nhắn → việc được theo dõi: giao việc trong luồng chat sẵn có, tách người phụ trách/hạn, nhắc việc, leo thang, trả lời trạng thái, bản tóm tắt mỗi sáng | K1, K2, K4, K5, K7 | 1 (adapter hoặc console) → 2 (nhắc việc, tóm tắt) |
-| B | Hỏi quy trình nội bộ, trả lời có trích dẫn, nhớ theo phạm vi | K3, K4, K8 | 2 |
-| C | Đề nghị chi tiền duyệt ngay trong luồng chat, hai bước: duyệt ý định (mua gì, trần ngân sách) rồi duyệt lệnh chi cụ thể; kiểm tra, chuyển theo ma trận duyệt, resume, ghi sổ | K5, K8 | 2 |
-| D | Chủ động theo dõi vận hành và follow-up liên phòng ban (gồm báo cáo Sales và nháp Marketing dùng số liệu Sales) | K4, K6, K7 | 3 |
-| E | Agent phòng ban tự cải thiện: quy trình lặp lại → đề xuất skill, eval, duyệt; ngưỡng cảnh báo chỉnh theo phản hồi | K2, K7, K8 | 3 |
+| UC-01 | Orchestrator định tuyến và tách việc liên phòng ban | K1, K5, K6 | 1 → 3 |
+| UC-02 | Hỏi đáp SOP và quy định nội bộ có trích dẫn | K3 | 2 |
+| UC-09 | Phân quyền theo phòng ban, chống giả mạo và audit log | K6, K8 | 2 → 3 |
+| UC-06 | Báo cáo định kỳ theo lịch, tổng hợp nhiều phòng ban | K4, K5, K7 | 3 |
+| UC-08 | Tự đề xuất skill mới từ tác vụ lặp lại, có người duyệt | K2, K7, K8 | 3 |
+| *UC-03* | *HR: xử lý đơn nghỉ phép và rà soát chấm công (dự phòng)* | *K2, K5* | *3* |
 
-Năm use case phủ đủ K1–K8 và sáu phòng ban (Kế toán: C, D; Vận hành, Sales: D; Marketing: D; CSKH: B, D;
-Nhân sự: A, B).
+Năm UC chính phủ đủ K1–K8. Trọng tâm là kiểm soát và độ tin cậy ([ADR 004](decisions/004-trong-tam-kiem-soat.md)).
 
 ## 6. Ràng buộc kỹ thuật đã biết
 
@@ -93,13 +92,13 @@ Nhân sự: A, B).
 
 ## 7. Đã chốt và còn mở
 
-- **Nhóm 5 người là bắt buộc.** Hiện có 3, đang tìm thêm 2 (10/10).
-- **Stack tự chọn:** theo cập nhật giảng viên do người dùng cung cấp (17/10/2026), Python và
-  LangGraph không bắt buộc. Scaffold hiện tại dùng Python/LangChain/LangGraph; hướng đề xuất mới là
-  core TypeScript tự xây, Pi Durable chỉ làm reference. Phase gates và năng lực workflow/HITL vẫn giữ.
+- **Nhóm 5 người là bắt buộc.** Đã đủ 5 người (14/10).
+- **Stack:** giảng viên cho tự chọn (17/10/2026); nhóm chốt Python 3.12 + uv + LangChain 1.x +
+  LangGraph cho agent core, Next.js cho app ([ADR 003](decisions/003-python-langgraph.md), 24/10/2026).
+  `agent/runtime/` (TypeScript) chỉ để tham khảo. Phase gates và năng lực workflow/HITL vẫn giữ.
 - **Vấn đáp:** cập nhật trên cho phép giải thích code ở cấp module thay cho mọi dòng: phải hiểu
   trách nhiệm, input/output, state, dependency và hành vi khi lỗi. Đây là thông tin người dùng báo lại,
   chưa phải bản rubric chính thức thay thế.
 - **Model:** baseline có tool calling native (Claude Haiku 5.5 hoặc DeepSeek V4); model của trường
   là profile model yếu để chứng minh harness.
-- **Còn mở:** công ty, năm use case và owner. Giảng viên cho phép đề xuất use case; vẫn phải phủ các năng lực của đề tài. Portfolio đề xuất ở [ARCHITECTURE.md](ARCHITECTURE.md), chưa được nhóm thông qua.
+- **Use case:** đã chốt theo Đề 07 (mục 5). **Còn mở:** người sở hữu từng UC; công ty đề xuất ở [ARCHITECTURE.md §8](ARCHITECTURE.md#8-dữ-liệu).

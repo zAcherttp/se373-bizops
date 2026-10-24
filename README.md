@@ -1,38 +1,34 @@
 # Business Ops Agent
 
 Đồ án cuối kỳ SE373 (Kỹ thuật xây dựng hệ thống Agentic AI, UIT, HK1 2026–27), đề tài #7.
-Doanh nghiệp vừa và nhỏ ở Việt Nam vừa chat vừa giao việc trong nhóm Zalo/WhatsApp, nên việc trôi
-sau một hai ngày và mọi người phải đọc lại cả luồng tin. Sản phẩm là một core tự host, không phụ thuộc
-kênh: bot cùng các agent phòng ban (Sales, Marketing, Nhân sự, Kế toán, CSKH, Vận hành) và một agent
-điều phối vào thẳng kênh chat công ty đang dùng (Zalo, Slack, WhatsApp, Teams) qua channel adapter,
-hoặc tích hợp qua MCP server. Lời hứa: tin nhắn nào là việc thì không bị mất. Tin giao việc thành work
-item có người phụ trách, hạn, nhắc việc và leo thang; duyệt ngay trong luồng chat; agent chủ động theo
-dõi số liệu, hỏi khi thiếu dữ liệu và soạn nháp chờ người duyệt. Web app không phải app chat mà là
-console: danh sách việc, màn hình duyệt, xem trace, cài đặt, dashboard eval. Doanh nghiệp tự host trên
-hạ tầng của mình cùng đội tư vấn; công ty demo là hư cấu. Vẫn giữ các yêu cầu đề tài: hỏi đáp quy trình
-có trích dẫn, báo cáo theo lịch, nhớ qua nhiều phiên, skill đề xuất phải được duyệt, phân quyền theo
-phòng ban, chi tiền phải có người duyệt.
+Hệ thống gồm một orchestrator và sáu agent phòng ban (Sales, Marketing, Nhân sự, Kế toán, CSKH,
+Vận hành) cho một doanh nghiệp hư cấu (chuỗi cà phê), làm năm use case theo danh sách chính thức của
+Đề 07: UC-01 định tuyến và tách việc liên phòng ban, UC-02 hỏi đáp quy định có trích dẫn, UC-09 phân
+quyền và audit log, UC-06 báo cáo định kỳ, UC-08 tự đề xuất skill có người duyệt (UC-03 dự phòng).
+Người dùng giao việc qua room web, Discord hoặc Slack. Trọng tâm là kiểm soát và độ tin cậy: quyền ép
+bằng code, cổng duyệt trước hành động, resume sau restart không tạo bản ghi trùng, kiểm chứng bằng luật,
+trạng thái kết thúc tường minh. Không có tool chi tiền thật: lệnh chi chỉ là bản ghi chờ duyệt.
 
 - Yêu cầu, lộ trình, cách chấm: [docs/YEU-CAU.md](docs/YEU-CAU.md)
-- Đề xuất kiến trúc và kế hoạch phase (gồm workspace bền, device recovery, notification): [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Kiến trúc, use case và kế hoạch phase: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Quyết định của nhóm (ADR): [docs/decisions/](docs/decisions/README.md)
 - Bảng kiến trúc tldraw: [docs/SE373.tldr](docs/SE373.tldr)
 - Thuật ngữ kiến trúc: [docs/NAMING.md](docs/NAMING.md)
 - Nghiên cứu nền và hướng thiết kế: [docs/NGHIEN-CUU.md](docs/NGHIEN-CUU.md)
 - Quy trình làm việc nhóm (issue, PR, review): [docs/QUY-TRINH.md](docs/QUY-TRINH.md)
 - Bảng việc: [SE373 BizOps](https://github.com/users/zAcherttp/projects/2)
 
-Hướng đề xuất: agent core TypeScript do nhóm tự xây, tham khảo contract của Pi Durable, không dùng
-Pi Durable làm runtime dependency. Python/LangGraph không còn là ràng buộc theo cập nhật giảng viên
-do người dùng cung cấp (17/10/2026). Scaffold và lệnh chạy dưới đây vẫn là hiện trạng Python; chưa migrate.
-Xem [kiến trúc](docs/ARCHITECTURE.md#runtime-ownership-and-pi-durable) và [quy trình vấn đáp module](docs/QUY-TRINH.md#6-agent-lập-trình-claude-code-codex-cursor).
+Stack: agent core Python 3.12 + uv + LangChain 1.x + LangGraph; app Next.js (bootstrap hiện tại là
+Vite, sẽ migrate). `agent/runtime/` (TypeScript) chỉ để tham khảo. Xem [kiến trúc §13](docs/ARCHITECTURE.md#13-quyết-định-công-nghệ)
+và [quy trình vấn đáp module](docs/QUY-TRINH.md#6-agent-lập-trình-claude-code-codex-cursor).
 
 ## Cấu trúc
 
 | Thư mục | Là gì |
 |---|---|
 | `agent/` | codebase agent: Python 3.12, uv, LangChain 1.x, LangGraph |
-| `agent/runtime/` | TypeScript failure-policy + bounded single-attempt executor; offline demo/tests, chưa nối app |
-| `app/` | codebase ứng dụng: TypeScript, Vite, React |
+| `agent/runtime/` | chỉ tham khảo: TypeScript failure-policy + bounded single-attempt executor (PR #20), không phải runtime |
+| `app/` | codebase ứng dụng: TypeScript, React; hiện là Vite, mục tiêu Next.js |
 | `company/` | dữ liệu doanh nghiệp hư cấu (chưa chốt ngành) |
 | `docs/` | yêu cầu, nghiên cứu, thiết kế |
 

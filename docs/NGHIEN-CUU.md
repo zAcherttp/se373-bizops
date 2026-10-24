@@ -1,6 +1,6 @@
 # Nghiên cứu nền · Business Ops Agent
 
-Tổng hợp ban đầu ngày 10/10/2026; đồng bộ hướng thiết kế ngày 15/10/2026 theo [đề xuất kiến trúc](ARCHITECTURE.md), issue [#16](https://github.com/zAcherttp/se373-bizops/issues/16). Tài liệu này là nghiên cứu, không phải ADR. Các nhận định về sản phẩm/model và giá cần xác minh lại trước khi triển khai; không dùng bảng so sánh cũ làm bằng chứng một framework thiếu năng lực.
+Tổng hợp ban đầu ngày 10/10/2026; đồng bộ hướng thiết kế ngày 15/10/2026 theo đề xuất kiến trúc lúc đó (issue [#16](https://github.com/zAcherttp/se373-bizops/issues/16)). Kiến trúc hiện hành ở [ARCHITECTURE.md](ARCHITECTURE.md) (24/10/2026); chỗ nào khác thì ARCHITECTURE.md thắng. Tài liệu này là nghiên cứu, không phải ADR. Các nhận định về sản phẩm/model và giá cần xác minh lại trước khi triển khai; không dùng bảng so sánh cũ làm bằng chứng một framework thiếu năng lực.
 
 ## 1. Các hệ thống tham khảo
 
@@ -63,7 +63,7 @@ retry, giới hạn chặt hơn, nén context sớm hơn. Bộ eval là pytest c
 
 ## 6. Pi Durable: execution contract (17/10/2026)
 
-Khảo sát README/spec ở [commit 8efd314](https://github.com/earendil-works/pi/tree/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable), chưa chạy benchmark. Pi Durable chỉ làm reference và testbed so sánh tùy chọn, không phải runtime dependency. Nhóm tự viết durability core TypeScript có giới hạn, không clone toàn bộ Pi hay thêm scheduler thứ hai. Xem contract chi tiết trong [ARCHITECTURE.md](ARCHITECTURE.md).
+Khảo sát README/spec ở [commit 8efd314](https://github.com/earendil-works/pi/tree/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable), chưa chạy benchmark. Pi Durable chỉ làm reference và testbed so sánh tùy chọn, không phải runtime dependency. Core agent là Python + LangGraph ([ADR 003](decisions/003-python-langgraph.md)); tool contract và recovery category ở [ARCHITECTURE.md §4.6](ARCHITECTURE.md#46-tool-gateway--mcp-servers-l4).
 
 Mượn durable admission, committed progress, task ownership, wait không đồng nghĩa cancel, explicit replay policy và usage theo attempt. Nhóm đề xuất ba nhánh recovery: safe_to_repeat / reconcile_first / human_resolution_required. Call bên ngoài bị ngắt là unknown đến khi đối soát; không tự mua/gửi lại. Tool contract gắn quyền, approval, operation/receipt, recovery và metering; nested call vẫn qua gate, chi phí child không cộng hai lần.
 
@@ -71,7 +71,7 @@ Giới hạn nguồn: package experimental, storage một process sở hữu và
 
 ## 7. Workspace, thiết bị và notification (17/10/2026)
 
-Phần workspace/notification trong [ARCHITECTURE.md §5](ARCHITECTURE.md#workspaces-devices-notifications-and-deployment): server giữ authority/lifecycle; workspace độc lập laptop; device mất kết nối chuyển wait có deadline, reconnect event và backoff không gọi model. Delivery Service dùng blocker chung để dedup, ack, reminder và escalation đa kênh theo policy. VM chỉ là spike P3 giới hạn, không phải bằng chứng durable hoặc HA. Agent map tổ chức chỉ tạo cấu hình dự thảo có nguồn để người duyệt; strict on-prem phải giải quyết ngoại lệ chat/model ngoài mạng. Các thử nghiệm optional phải chứng minh lợi ích so với baseline và không làm trượt mandatory coverage.
+Ghi chú lịch sử từ đề xuất 18/10 (đã để sau, xem [ARCHITECTURE.md §1.3](ARCHITECTURE.md#13-ngoài-phạm-vi)): server giữ authority/lifecycle; workspace độc lập laptop; device mất kết nối chuyển wait có deadline, reconnect event và backoff không gọi model. Delivery Service dùng blocker chung để dedup, ack, reminder và escalation đa kênh theo policy. VM chỉ là spike P3 giới hạn, không phải bằng chứng durable hoặc HA. Agent map tổ chức chỉ tạo cấu hình dự thảo có nguồn để người duyệt; strict on-prem phải giải quyết ngoại lệ chat/model ngoài mạng. Các thử nghiệm optional phải chứng minh lợi ích so với baseline và không làm trượt mandatory coverage.
 
 ## Thuật ngữ hiện hành
 

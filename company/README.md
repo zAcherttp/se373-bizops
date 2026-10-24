@@ -14,7 +14,7 @@ tiền cần duyệt.
 
 ## Cấu hình theo đề xuất kiến trúc
 
-Theo [ARCHITECTURE.md](../docs/ARCHITECTURE.md), dữ liệu dưới đây là kế hoạch, chưa triển khai. Một công ty chính và cấu hình công ty nhỏ thứ hai có thể chứng minh cùng workflow thích nghi được; ngành và use case vẫn chờ nhóm chốt.
+Dữ liệu dưới đây là kế hoạch, chưa triển khai. [ARCHITECTURE.md §8](../docs/ARCHITECTURE.md#8-dữ-liệu) đề xuất *Công ty TNHH Cà phê Gỗ Mộc*; use case theo Đề 07 ([ADR 001](../docs/decisions/001-use-case-theo-de.md)).
 
 - `company.yaml`: capability/package được bật, version và connector binding; cấu hình có schema, người quản lý và version.
 - `permissions.yaml`: role, quan hệ nhân viên-record, action/resource scope và quyền duyệt; không chỉ phòng ban × tool. Agent không tự sửa policy.
