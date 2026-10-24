@@ -1,7 +1,9 @@
 # TypeScript failure-handling core
 
+> **Chỉ để tham khảo (2026-10-24, [ADR 003](../../docs/decisions/003-python-langgraph.md)):** agent core là Python + LangGraph trong `agent/`; package này không phải runtime.
+
 First implementation slice for [task #19](https://github.com/zAcherttp/se373-bizops/issues/19),
-based on the [architecture proposal](../../docs/ARCHITECTURE.md). Pi Durable is reference-only;
+based on the 2026-10-18 architecture proposal (now folded into [ARCHITECTURE.md](../../docs/ARCHITECTURE.md)). Pi Durable is reference-only;
 this package uses Effect for in-process execution, with no Pi, Cordis, LangGraph or model runtime dependency. Node 24 executes erasable
 TypeScript directly; `tsc` checks it separately. The existing Python scaffold is still the app's
 agent baseline; this package is not wired into its invocation or an employee-facing API yet.

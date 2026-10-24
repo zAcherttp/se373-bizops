@@ -1,457 +1,572 @@
-# SE373 Business Ops Agent · team architecture proposal
+# SE373 · Business Ops Agent · Kiến trúc hệ thống
 
-**Status:** proposal for team review, not an accepted ADR. **Tracking:** [#16](https://github.com/zAcherttp/se373-bizops/issues/16); workspace/notification additions per [Decision #18](https://github.com/zAcherttp/se373-bizops/issues/18) in [PR #17](https://github.com/zAcherttp/se373-bizops/pull/17). **Date:** 2026-10-15. **Updated:** 2026-10-18 (product repositioning).
+**Trạng thái:** tài liệu kiến trúc duy nhất của nhóm (2026-10-24, [ADR 002](decisions/002-mot-tai-lieu-kien-truc.md)). Các mục ghi "Còn mở" chưa chốt.
+**Căn cứ:**
+- Rubric đánh giá đồ án cuối kỳ v3 (2026-10-06)
+- *SE373 — Đề tài 07: Business Ops Agent — Yêu cầu chi tiết* v1 (gọi tắt là **"Đề"**)
+- Team architecture proposal (2026-10-18), đã gộp các phần còn dùng vào tài liệu này
 
-Inputs: the brainstorming session, the topic description, the teammate's workflow image, and research into Hermes, DeepSeek Harness/Cordis and Pi Durable. Rubric draft v3 and the always-on agents research (branch `14-transcript-research`, PR #15) shape §8, §9 and §11. The board [SE373.tldr](SE373.tldr) shows it on six pages: overview, architecture, durable requests, skills and phases, feature map with roadmap, workspace/notification deployment.
+Chỗ nào tài liệu này khác Đề hoặc rubric thì **rubric > Đề > tài liệu này**.
 
-**Defaults for every section:**
+**Nguyên tắc chung cho mọi mục:**
+- Quyền, phê duyệt, chuyển trạng thái và mọi ràng buộc liên quan tiền **được ép bằng code**. Output của model không bao giờ tạo ra quyền, phê duyệt hay sự đúng đắn.
+- **Hệ thống trước, use case sau.** Harness dùng chung không có code riêng cho UC nào. Mỗi UC chỉ thêm *cấu hình agent, skill, tool, dữ liệu, eval*.
+- Mỗi module phải giải thích được ở mức module (theo yêu cầu vấn đáp): mục đích, input/output, state lưu, phụ thuộc, ranh giới quyền, hành vi khi lỗi; kèm 1 case bình thường và 1 case lỗi có trace.
 
-- Nothing here is implemented or agreed, including company and use cases. YAML and workflow examples are illustrative, not connector guarantees.
-- Authorization, approval, money controls and state transitions are enforced in code. Model output never establishes authority, approval or correctness.
-- Initial plugins are trusted, reviewed code. An in-process plugin is not a sandbox; neither is a VM.
-- Capabilities arrive only at their course gate (§9); diagrams show the final target.
-- "No silent abandonment" is a measured lifecycle goal under a declared fault model, not 100% business success or failure-free infrastructure. Waiting is not completion.
-- Metrics are reported separately:
-  - business success, with evidence;
-  - lifecycle coverage: valid state, owner, next action;
-  - recovery per fault scenario: detection and recovery time, duplicates;
-  - blocker resolution: wait time, reminders, ack/resolve rate, delivery failures, unowned escalations;
-  - cost/load (CPU/RAM/traffic, tokens, device use, VM idle/startup/storage) versus a server-only baseline on the same workload and quality bar.
+---
 
-## 1. Product and scope
+## 1. Phạm vi
 
-**Positioning (team lead, 2026-10-18; to confirm, §12):** a self-hosted, channel-agnostic core whose bot and department agents join the company's existing chat. Vietnamese SMEs chat *and* assign work in Zalo/WhatsApp groups; chat is not a work manager, so tasks drift within days and people re-read long threads. The promise: **a message that is work never gets lost.** Employees keep responsibility, judgment and approval authority; the system turns messages into tracked work, prepares proposals, executes permitted actions, follows up and escalates.
+### 1.1 Use case đã chọn
 
-- **Channel-agnostic core.** We do not build a chat platform. A bot joins the chat the company already uses (Zalo, Slack, WhatsApp, Teams) through channel adapters; other systems integrate through our MCP server (`create_task`, `get_status`, `approve`, `search`). The value is message → tracked work, with agents as teammates in the room.
-- **Web console, not a chat app,** for what chat does badly: work item list and status, approval screens, trace viewer, admin/setup wizard, eval dashboard; agent progress streams to it over AG-UI events.
-- **Proactive teammates, not file-reading wrappers:** they watch, ask when data is missing, draft work for approval (§5).
-- **Self-hosted** by each business with our consultants; not open source, not SaaS.
+| UC | Tên (theo Đề) | K chính | Phase | Người sở hữu |
+|---|---|---|---|---|
+| **UC-01** | Orchestrator định tuyến và tách việc liên phòng ban | K1 K5 K6 | P1 → P3 | Cả nhóm ở P1, sau đó: … |
+| **UC-02** | Hỏi đáp SOP và quy định nội bộ có trích dẫn | K3 | P2 | … |
+| **UC-09** | Phân quyền theo phòng ban, chống giả mạo và audit log | K6 K8 | P2 → P3 | Fi |
+| **UC-06** | Báo cáo định kỳ theo lịch, tổng hợp nhiều phòng ban | K4 K5 K7 | P3 | … |
+| **UC-08** | Tự đề xuất skill mới từ tác vụ lặp lại, có người duyệt | K2 K7 K8 | P3 | … |
+| *UC-03* | *HR: xử lý đơn nghỉ phép và rà soát chấm công (dự phòng)* | *K2 K5* | *P3* | … |
 
-| What falls between departments | What the system does |
+**Phủ K1–K8:**
+
+| K | UC phủ |
 |---|---|
-| Stockouts noticed late; overdue invoices and SLAs | Code detectors watch, route to the owner, follow up |
-| Informal approvals ("ok anh duyệt") in chat | In-thread approval bound to exact action, recorded |
-| Knowledge leaves with people | Cited procedures and scoped memory with source and expiry |
-| Data must stay on-prem | Self-hosted bundle, optional local model |
+| K1 Model, structured output, agent loop | 01 |
+| K2 Tool use & skills | 08, *03* |
+| K3 RAG | 02 |
+| K4 Memory, state, context | 06 |
+| K5 Workflow & HITL | 01, 06, *03* |
+| K6 Multi-agent / MCP | 01, 09 |
+| K7 Verification & eval | 06, 08 |
+| K8 Security & observability | 08, 09 |
 
-Measures: time-to-detect, % caught before the customer notices, hours saved, % of alerts rated useful.
+Đủ 8 mảng. K1, K3, K4 mỗi mảng chỉ có 1 UC phủ, nên UC-01, UC-02, UC-06 phải làm chắc.
 
-The demo company is fictional; the target segment is SME distribution, retail and services, not every industry. A 500-person company is a target scenario, not 500 concurrent users; capacity claims need a stated workload and measurements.
+### 1.2 Ràng buộc bắt buộc của Đề → hệ quả thiết kế
 
-**Required coverage:** coordinator plus Sales, Marketing, HR, Accounting, Customer Support and Operations specialists; delegation through the company's chat; cited procedure Q&A, scheduled reports, company memory across sessions; proposed skills activated only after human approval; department/resource permissions; human approval before spending.
-
-**Excluded initially:** our own chat platform, full ERP, real payroll/tax compliance, autonomous company management, untrusted plugin marketplace, unrestricted shell, voice/video calls, native mobile apps, full Kanban/Jira, more than one external channel adapter before P3. Visual product matching and decision models are optional experiments once mandatory workflows have a delivery path.
-
-## 2. Proposed decisions
-
-- Proposed target: team-authored TypeScript agent core; React/TypeScript/Vite app. Per the user's lecturer clarification (2026-10-17), Python and LangGraph are optional. The existing Python scaffold remains until a separate implementation change; phase gates still apply.
-- Channel-agnostic, business-model-agnostic core: chat adapters, MCP server, web console; industries as configuration packs.
-- Work messages become tracked work items; proactive agents within an attention budget.
-- One shared service, isolated identity and context per request.
-- Durable requests separate from chats and run attempts.
-- Small trusted core, pluggable business capabilities.
-- Narrow typed tools, progressive skill loading.
-- Per-tool authorization, approval, recovery and metering contract.
-- Approved workflows first, bounded planning later.
-- Durable admission, recovery and escalation.
-- Workspace independent of the employee device; brokered blocker notifications.
-- Auditable usage and operating-cost ledger.
-- Protected traces and rerunnable evals per use case.
-
-Accepted decisions follow Decision issue → ADR → PR → human review.
-
-## 3. System structure
-
-Canonical terminology: [NAMING.md](NAMING.md). Request Runtime owns lifecycle; Scheduler decides when, Dispatcher decides where, Worker executes, Supervisor detects stalled execution, and Coordinator performs reasoning. These are logical roles, not additional microservices. Runtime selection is separate from this naming change.
-
-```mermaid
-flowchart TD
-    A[Existing chat via adapters / web console / MCP server] --> B[Unified messages, identity and request API]
-    B --> C[Request Runtime]
-    C --> D[Coordinator]
-    D --> E[Department specialists]
-    E --> F[Tool Gateway]
-    E --> G[Scoped knowledge and memory]
-    E --> H[Approved skill registry]
-    C --> I[Human questions and approvals]
-    I --> C
-    J[Scheduler / events] --> C
-    C --> K[Delivery Service: blockers, ack, escalation]
-    K --> A
-    C --> Z[Dispatcher: placement]
-    Z --> X[Workers and Workspaces]
-    C --> W[Supervisor: recovery and escalation]
-    W --> C
-    C --> V[Usage Ledger and Cost Accounting]
-    L[Authorization and information-flow policy] -.-> B
-    L -.-> C
-    L -.-> D
-    L -.-> E
-    L -.-> F
-    L -.-> G
-    L -.-> H
-    L -.-> I
-    L -.-> J
-    L -.-> K
-    L -.-> X
-    L -.-> Z
-    M[Protected traces and evaluations] -.-> C
-```
-
-Dashed links are mandatory controls; traces cover the whole path. Scheduler, Dispatcher, Supervisor, Delivery Service and Workers are detailed in §5. The ExecutionContext carries identity/authority; it is distinct from model context. Audit Ledger records authority/actions; Usage Ledger records consumption; Cost Accounting calculates and reconciles charges.
-
-These are logical boundaries in one TypeScript application, not microservices. Add a background worker when durable execution needs it; nothing distributed without measured need.
-
-**Unified message model.** Adapters normalize sender, room, thread, mentions and files into one shape, so policy, audit and work tracking are identical on every channel. Bots see only messages addressed to them or @mentioning them. Adapters use official APIs only: Zalo OA / Zalo Bot, ZNS for customer notices (group support needs a spike); no unofficial personal-account libraries such as zlapi (ToS, ban and privacy risk).
-
-## 4. Composition inspired by Cordis
-
-Use Cordis's service contracts, dependency declaration, lifecycle cleanup and configuration-driven composition as a reference. Cordis itself remains a candidate composition dependency to evaluate, not a selected runtime. Start with startup registration; do not build a plugin platform. Composition never owns a second task scheduler or bypasses mandatory policy.
-
-- **Trusted core:** plugins cannot disable identity, authorization, approval, request lifecycle or audit. Unresolved policy denies.
-- **Extension points:** department packages (tools, skills, request types, workflows), connectors (catalog, inventory, CRM, accounting), channel adapters, industry packs, retrieval/storage adapters and model adapters (existing profiles, optional measured classifiers).
-- **Business-model agnostic:** the core never names industry terms. It knows generic entities: party, item/service, order, invoice, work item, employee, approval. An **industry pack** is configuration: mapping to the customer's data, departments/roles, approval matrix, watchlists and thresholds, skills, connectors. New processes or systems may still need code. Proof: the main fictional company plus a second small company in another industry on the same core.
-- **Manifest:** ID/version, dependencies, capabilities, requested permissions, config schema, supported phase. Registration rejects missing dependencies, duplicate capability IDs and unsupported phases. Only authorized configuration grants permissions.
-- **Lifecycle:** reviewed, pinned packages loaded at startup; no hot reload. Disabling one stops admissions and drains, cancels or migrates active requests, keeping history; never resume on an incompatible workflow or skill version. Untrusted extensions would need separate execution, restricted credentials and a threat assessment.
-
-### Business tool execution contract
-
-The Tool Gateway validates each versioned contract at registration and enforces it on model, nested, specialist and recovery calls. Filtered discovery is not the permission boundary. Missing policy denies; missing recovery metadata forbids replay.
-
-| Field | Meaning |
+| Ràng buộc (Đề §1.5, §1.4) | Hệ quả trong kiến trúc |
 |---|---|
-| Identity and schemas | Stable ID, input/output schemas, contract version, compatible workflow versions |
-| Authorization | Action/resource permissions; server-provided principal, record/field constraints; output classification |
-| Approval | Whether approval is required; binding of exact arguments/version to the approval record |
-| Recovery | Replay category, idempotency, lookup/reconciliation, escalation path |
-| Limits | Timeout, bounded retries, concurrency, cancellation; committed effects may need compensation |
-| Placement | Allowed locations, local input, fallback, data residency/transfer, runtime/image version, deadline, resources, output verification |
-| Evidence | Intent, operation ID, receipt, observed state, policy/approval references |
-| Metering | Usage units/source, charge-event ID, pricing reference, unknown-usage handling |
+| Cấm dùng sản phẩm agent có sẵn (Hermes, OpenClaw, Manus, AutoGPT, CrewAI Studio…) dưới mọi hình thức | Agent do nhóm tự xây trên LangGraph, là framework Đề cho phép (§13). Hermes chỉ được **tham khảo kiến trúc**, phải ghi nguồn (§14) |
+| Chỉ dữ liệu hư cấu, chỉ tài khoản thử nghiệm | `data/` sinh bằng script; token để trong `.env`, có `.env.example` |
+| **Không có giao dịch tài chính thật** | **Không tồn tại tool chi tiền.** Chỉ có `create_payment_request` tạo bản ghi `pending_approval`; duyệt chỉ đổi trạng thái bản ghi |
+| Email chỉ gửi trong nhóm | `mail-mcp` chỉ có `create_draft`, không có `send` ra ngoài allowlist |
+| Python (khuyến nghị) hoặc TypeScript; LangGraph khuyến nghị hoặc framework tương đương có giải thích | Đã chốt Python + LangGraph (§13). Các module dưới đây mô tả theo trách nhiệm; §13 ghi cách ánh xạ sang LangGraph |
 
-Connectors declare idempotency/lookup only after their backend passes the tests.
+### 1.3 Ngoài phạm vi
+
+Nền tảng chat đa năng thay thế Slack/Discord (room web chỉ phục vụ làm việc với đội agent) · kết nối phần mềm kế toán/ngân hàng thật · marketplace plugin · shell tự do cho agent · nhiều hơn 1 kênh chat ngoài trước P3 · VM/workspace fleet · UC không thuộc danh sách của Đề.
+
+Để sau, từ định vị cũ (18/10): slot UC tự đặt A–E, theo dõi chủ động như một UC, workspace Proxmox và bộ cài on-prem, gói cấu hình theo ngành (business pack).
+
+Hai ý của proposal cũ **vẫn giữ nhưng làm thành tính năng phần mềm (Phần I), không làm UC**:
+- **"Việc không trôi":** work item card, nhắc việc, bản tin.
+- **"Duyệt ngay trong thread":** nút Duyệt/Từ chối trong chat. Đây là giao diện của Approval Service (§4.8), dùng chung cho UC-03, UC-06, UC-08.
+
+### 1.4 Trọng tâm: kiểm soát và độ tin cậy
+
+Chiều sâu của đồ án nằm ở **kiểm soát và độ tin cậy**, không ở số tính năng ([ADR 004](decisions/004-trong-tam-kiem-soat.md)):
+- Quyền ép bằng code (§4.7), không dựa vào prompt.
+- Cổng duyệt đứng **trước** hành động (§4.8).
+- Tắt máy rồi bật lại vẫn resume, không tạo bản ghi trùng (§4.2, §4.6).
+- Kiểm chứng bằng luật (validator, đối chiếu dữ liệu nguồn), không dùng LLM làm giám khảo.
+- Trạng thái kết thúc tường minh: **xong** · **chờ duyệt** · **bị từ chối / hết hạn** · **lỗi cần người xử lý**.
+
+**Mạch demo xuyên suốt:** quán hết hàng → skill `stock-reorder-request` → `create_payment_request` (`pending_approval`) → duyệt → tắt/bật server → resume, không có lệnh chi trùng.
+
+---
+
+## 2. Kiến trúc `agent = model + harness` (HR-03)
+
+![Kiến trúc agent = model + harness](diagrams/architecture-harness.svg)
+
+---
+
+## 3. Cấu trúc thành phần
+
+![Cấu trúc thành phần](diagrams/component-structure.svg)
+
+**Nét đứt** là kiểm soát bắt buộc, tức policy được kiểm ở **mọi tầng** (Đề UC-09: *"kiểm tra quyền ở cả hai tầng"*). Đây là các **ranh giới logic trong một ứng dụng**, không phải microservice.
+
+---
+
+## 4. Các module
+
+### 4.0 Kênh giao tiếp & unified message model (L1)
+
+Người dùng **tự chọn kênh**: room trên web, Discord hoặc Slack. Mọi kênh đi qua **cùng một gateway**, nên policy, audit và trace giống nhau trên mọi kênh.
+
+| Kênh | Vai trò | Người dùng làm được | Thấy được |
+|---|---|---|---|
+| **Room web** | **Kênh chính** | Chat với hệ thống, @mention agent, duyệt, xem lịch sử | **Toàn bộ quá trình:** orchestrator giao việc cho ai, agent hỏi agent, từng tool call, skill, kiểm quyền, token, chi phí (§4.14) |
+| **Discord** | Kênh phụ (P2) | Giao việc, nhận kết quả, bấm Duyệt/Từ chối, nhận báo cáo định kỳ | Kết quả cuối, yêu cầu duyệt, **link mở room** để xem trace |
+| **Slack** | Kênh phụ (P3, tuỳ chọn) | Như Discord | Như Discord |
+
+**Channel adapter** chỉ làm 2 việc: chuẩn hoá tin vào thành `UnifiedMessage`, và gửi tin ra theo định dạng của kênh. Adapter **không** quyết định quyền và không được tự gửi dữ liệu.
 
 ```yaml
-name: create_purchase_order
-contract_version: 1
-required_permission: purchasing.create
-approval_required: true
-recovery:
-  replay: reconcile_first
-  idempotency_supported: true
-  lookup_by_operation_id: true
-execution:
-  allowed_locations: [server, employee_device]
-  requires_local_input: false
-  fallback: server
+# UnifiedMessage
+message_id: msg_8812            # dùng để chống xử lý trùng
+channel: discord                # web | discord | slack
+external_user_id: "4471..."     # gateway ánh xạ sang user_id
+room_id: room_ops_binhthanh     # mỗi kênh/thread ngoài ↔ 1 room web
+thread_id: thr_23
+text: "Quán Bình Thạnh hết sữa tươi, đặt 50 hộp và báo kế toán"
+mentions: [agent:ops]
+attachments: []
 ```
 
-Recovery categories:
+- **Một yêu cầu = một room/thread.** Yêu cầu gửi từ Discord vẫn có room tương ứng trên web; bot trả về link room.
+- Bot chỉ xử lý tin **gửi cho bot hoặc @mention bot**.
+- **Nhóm chat nhiều người:** kết quả nhạy cảm (ví dụ lương) không đăng vào nhóm, chỉ gửi riêng cho người có quyền; nhóm chỉ nhận thông báo chung.
+- Callback của nút Duyệt trên Discord/Slack phải **xác thực người bấm** qua gateway; link trong tin nhắn không tự cấp quyền.
 
-- **`safe_to_repeat`:** repeating causes no extra harm. Reads may qualify, but answers change: reuse the committed result when the workflow needs the original. Reads still cost and need current authorization.
-- **`reconcile_first`:** the effect may exist. Look up by operation ID, persist the receipt, retry only once safe. Prefer backend idempotency; an inconclusive lookup does not prove absence.
-- **`human_resolution_required`:** no reliable lookup/idempotency, or ambiguity remains. Block and escalate; never blindly repeat.
+### 4.1 Gateway & Identity (L1)
 
-An interrupted call is **unknown** until reconciled: a crash after purchase submission but before the receipt is saved means lookup, not a second order. Reauthorize before reconciling or acting; if authority was revoked, escalate to an authorized owner. Receipts and cost events are durable. Retries share the operation ID with new attempt/usage IDs. Children record their own usage and parents reference it without double charging. Unknown usage stays pending, never zero; never repeat a paid call to learn its usage.
+| Mục | Nội dung |
+|---|---|
+| Mục đích | Biến `UnifiedMessage` từ mọi kênh thành `ExecutionContext` đã xác thực |
+| Input | `UnifiedMessage` (Discord/Slack user ID) hoặc phiên đăng nhập room web |
+| Output | `ExecutionContext{user_id, department, role, channel, run_id}` |
+| Ranh giới quyền | Danh tính **chỉ** lấy từ bảng ánh xạ tài khoản chat → nhân viên. Nội dung tin nhắn ("Anh là giám đốc Khoa đây") **không bao giờ** nâng quyền |
+| Lỗi | Tài khoản chưa đăng ký → từ chối và ghi audit; không tạo request |
+| UC | Mọi UC; kiểm chứng ở UC-09 |
 
-### Runtime ownership and Pi Durable
+### 4.2 Request Runtime (L2)
 
-Pi Durable is an architecture reference and optional isolated comparison testbed, **not a production runtime dependency**. The team authors a small TypeScript durability core. The request store owns the visible lifecycle, Scheduler/Dispatcher/Supervisor handle eligibility, placement and recovery, persisted Task checkpoints record workflow position, and business systems own actual effects, linked by request/run/operation IDs and transactional or replayable transitions. Persist before reporting accepted/completed; streamed text is provisional. A subscriber disconnecting cancels nothing (cancellation is an authenticated command); parent/child ownership leaves no orphaned work. Human waits release workers; process recovery is not rollback of business effects.
+![Vòng đời Request Runtime](diagrams/request-runtime-lifecycle.svg)
 
-We read the pinned Pi Durable [README](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md) and [spec](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md) (no benchmark): it is experimental single-process TypeScript without our leases, HA, backups or mandatory policy. Borrow its admission, committed progress, task ownership and explicit recovery contracts; do not reproduce its entire engine or claim its implementation supplies our guarantees. Any future proposal to adopt its runtime must explicitly revise this reference-only direction through team review.
+**Không bỏ rơi request.** Mỗi request đã nhận luôn có người sở hữu, trạng thái, thời điểm tiến triển gần nhất và bước tiếp theo, ở đúng một trong ba dạng:
+- **Đang chạy:** có checkpoint sau mỗi bước và mỗi biên nhận tool.
+- **Đang chờ:** có lý do (chờ thông tin, chờ duyệt), người cần trả lời và **hạn**. Chờ là trạng thái lưu bền, không phải lời gọi model đang treo. Quá hạn thì leo thang tới người sở hữu.
+- **Kết thúc kèm bằng chứng:** xong · bị từ chối / hết hạn · lỗi cần người xử lý · đã huỷ.
 
-### Module ownership and explainability
+Lưu request **trước** khi báo đã nhận; chống nhận trùng theo `message_id`. Gửi thông báo lỗi thì chỉ gửi lại, không chạy lại workflow. Khi khởi động, Runtime quét request đang dở để resume hoặc leo thang.
 
-Implementation starter: [agent/runtime](../agent/runtime/README.md) contains a pure TypeScript failure policy
-and Effect-based single-attempt executor with typed failures, interruption and scoped resource cleanup.
-Effect is an in-process execution dependency; Pi Durable remains reference-only. It is not yet connected to the app,
-durable storage, approvals or delivery. The architecture below remains the proposed target.
+### 4.3 Orchestrator (L3) · UC-01
 
-The user reports that the lecturer now expects understanding at module level, rather than explaining every line. For each authored module, its owner must explain its purpose, inputs/outputs, persisted state, dependencies, authorization boundary and failure/recovery behavior, then walk through one normal case and one failure case using a trace or focused test. Library use is allowed; explain the contracts and limits we rely on rather than rewriting databases or model SDKs. AI-generated code requires the same understanding.
+| Mục | Nội dung |
+|---|---|
+| Mục đích | Phân loại, định tuyến, tách việc liên phòng ban, gom kết quả |
+| Output | `OpsRequest` theo đúng schema của Đề: `intent, departments[], subtasks[{id, department, action, depends_on, inputs}], urgency, missing_info[], route ∈ {single, multi, ask_user, reject}` |
+| Tool | **Không có tool ghi vào hệ thống nghiệp vụ.** Chỉ có `delegate`, `ask_user`, `send_chat_message`, `schedule_job` |
+| Validation | Output sai schema → đưa lỗi lại cho model sửa, tối đa 2 lần → quá thì báo lỗi rõ ràng. Kiểm `depends_on` không tạo vòng |
+| Thực thi | **Executor là agent cha** (LLM, không có tool ghi): mọi kết quả việc con đều **quay về Executor**; Executor phân tích kết quả, viết chỉ dẫn và đầu vào cho việc sau (dữ liệu truyền qua tham chiếu) rồi mới giao tiếp. Code vẫn ép thứ tự: việc độc lập chạy song song, một việc chỉ được giao khi mọi `depends_on` đã xong |
+| Lỗi | Một việc con lỗi → ghi lỗi, các việc độc lập vẫn chạy; Executor được **replan tối đa 1 lần** (plan mới cũng qua kiểm schema và kiểm vòng); câu trả lời cuối nêu rõ phần đã xong và phần lỗi |
+| Trace | Coordination trace: việc con nào giao cho agent nào, input, output, thời gian |
 
-Keep the authored durability core bounded: admission and atomic state transitions; Task checkpoints and ownership; scheduling and stall recovery; persisted waits/approvals; and operation receipts/reconciliation through Tool Gateway. Add one piece at the allowed phase and prove it with interruption/recovery scenarios before extending it. This is a teaching and ownership boundary, not a request to implement the full Pi runtime.
+**Executor bị giới hạn bằng code:** chỉ có `delegate`, không có tool ghi; chỉ giao việc con có trong plan (hoặc plan đã replan); `max_steps` và budget token riêng; mỗi lần `delegate` đều qua policy (§4.7).
 
-### Suggested eventual layout
+**Phân loại 2 lớp** (để tiết kiệm chi phí): lớp 1 là embedding / classifier so với mô tả phòng ban; khi độ tin cậy thấp hoặc là yêu cầu liên phòng ban thì sang lớp 2 là LLM sinh `OpsRequest`. Hai cách được so sánh trong eval (§11).
 
-Target TypeScript layout; this is not the existing Python scaffold or a migration in this PR.
+### 4.4 Agent phòng ban (L3)
 
-```text
-agent/src/
-  core/                 # model adapters, JSON tool protocol, skills, traces
-  runtime/              # identity context, policy enforcement, requests, approvals
-  extensions/           # contracts, registry, dependency/phase validation
-  departments/          # six specialist packages, introduced at permitted gates
-  workflows/            # versioned business workflows, phase 2 onward
-  connectors/           # typed authoritative business-system adapters
-  knowledge/            # scoped RAG and memory, phase 2 onward
-  channels/             # API and selected messaging adapter
-  evaluation/           # datasets, outcome checks, regression reports
-app/                    # employee request and approval experience
-company/                # fictional data, organization and policy configuration
+Sáu agent: `sales · marketing · hr · finance · cs · ops` (dùng đúng enum của Đề). Mỗi agent **chỉ khác nhau ở cấu hình**, cùng chạy trên một agent loop.
+
+```yaml
+# agents/finance/agent.yaml
+name: finance
+department: finance
+model_profile: small
+max_steps: 8
+prompt: agents/finance/prompt.md
+tools: [kb_search, get_po, get_receipt, find_invoice, get_payables,
+        create_payment_request, ask_agent]
+approval_required: []           # create_payment_request chỉ tạo bản ghi pending_approval;
+                                # duyệt áp lên bản ghi lệnh chi, không áp lên lời gọi tool (§4.8)
+can_consult:
+  - agent: ops
+    allowed_tools: [get_stock, get_stock_requests]
+skills: []                      # chỉ skill đã duyệt trong registry
+output_schema: FinanceResult
 ```
 
-A navigation aid, not a request for empty folders.
+**Agent loop chung** (K1): mục tiêu → gọi model → nếu có tool call thì qua Tool Gateway → quan sát kết quả → lặp. Dừng khi có output hợp schema, hoặc khi chạm `max_steps` / budget. Output sai schema → tự sửa ≤ 2 lần.
 
-## 5. Requests, execution and human control
+Mức độ làm sâu: `hr`, `finance`, `ops`, `sales` phục vụ trực tiếp các UC đã chọn; `marketing`, `cs` ở mức đủ để định tuyến và trả lời trong UC-01 / UC-02.
 
-A `WorkRequest` (employee-facing Request) holds requester, company, owner/department, goal, completion conditions, resource references, policy provenance, workflow/skill versions and attempts; runs record tool operations, budget use, checkpoints and evidence. One `Conversation` can hold several WorkRequests, and each event must resolve to the right request and participants.
+### 4.5 Giao tiếp giữa các agent (L3) · UC-01, UC-09
 
-**States:** submitted → queued → running → completed, plus awaiting information, awaiting approval, blocked, failed, cancelled. Waits are persisted, never open model calls. Human takeover pauses automation until an authorized resume.
+| | `delegate` | `ask_agent` (tham vấn) |
+|---|---|---|
+| Ai gọi | Chỉ Executor (agent cha của orchestrator) | Agent phòng ban, theo `can_consult` |
+| Ý nghĩa | Giao việc con | Hỏi một câu để lấy thông tin |
+| Agent nhận | Chạy đủ loop | Chạy loop ngắn, **chỉ tool đọc**, không nhớ gì sau khi trả lời |
+| Kết quả | Về Executor để phân tích và giao việc sau | Thành tool result cho agent hỏi, **đánh dấu là dữ liệu, không phải chỉ dẫn** |
 
-```mermaid
-flowchart TD
-    A[Employee request / authorized scheduled event] --> B[Establish identity, scope and request]
-    B --> C[Load authorized context and skill metadata]
-    C --> D{Interpret request}
-    D -->|Unclear| E[Persist question; await employee]
-    E --> C
-    D -->|Unsupported| F[Explain limitation or hand off]
-    D -->|Supported| G[Select approved workflow / bounded plan]
-    G --> H[Prepare next operation]
-    H --> I{Gated action?}
-    I -->|Yes| J[Persist exact proposal; await authorized approval]
-    J -->|Approved| K[Recheck access, approval and business state]
-    J -->|Denied / expired| L[Record decision; revise or stop]
-    I -->|No| K
-    K --> M[Execute permitted operation safely]
-    M --> N{More steps?}
-    N -->|Yes| H
-    N -->|No| O[Verify outcome and evidence]
-    L --> O
-    O --> P[Persist scoped result and status]
-    P --> Q[Check destination access; notify]
-    P -.-> R[Optional separate skill proposal]
-```
+**Luật (ép bằng code):**
+1. Mọi lời gọi mang `ExecutionContext` của **người dùng gốc**. Quyền chỉ được thu hẹp khi đi qua agent khác, không bao giờ mở rộng.
+2. Kiểm quyền 2 tầng: (a) policy cho phép *agent A hỏi agent B*; (b) mọi tool B gọi đều kiểm theo quyền người dùng gốc.
+3. Độ sâu tối đa 1: agent được hỏi không được hỏi tiếp, nên không có vòng.
+4. Giới hạn số lần hỏi mỗi việc con và có timeout.
+5. Mỗi lời hỏi và quyết định cho phép/từ chối đều ghi audit và trace (`consult_ask`, `consult_answer`).
 
-- Denial or expiry is an outcome, not a reason to retry until approved.
-- Spending approval binds action/version, amount/currency, requester, approver and expiry; material changes need fresh approval.
-- Retry only transient failures within an attempt/time/cost budget; policy denial never triggers a model fallback.
-- Cancellation cannot undo committed effects; show the real outcome and any authorized compensation.
-- Completion, business rejection, execution failure and notification failure are distinct outcomes.
+Ví dụ trong Đề: *"Quán Bình Thạnh hết sữa tươi, đặt thêm 50 hộp và báo kế toán chuẩn bị thanh toán"* → việc con `ops: create_stock_request` → việc con `finance: create_payment_request`. Trong lúc làm, `finance` hỏi `ops` về nhà cung cấp và số lượng đã đặt.
 
-### Message to work
+Ví dụ bị chặn: nhân viên Kho → nhờ agent `sales` → `sales` hỏi agent `hr` về lương → policy chặn ở tầng (a) hoặc (b) → câu từ chối không lộ số liệu.
 
-When a message assigns work, the bot posts a **work item card** in the thread (owner, deadline, status), linked to a WorkRequest and listed in the console. Missing fields get a question, not a guess. Persisted timers remind and escalate through the Delivery Service; each person gets a morning digest (my work, waiting on others, due soon). "What's the status of X?" is answered from system state, not the thread. In-thread approvals, bound to the exact action, replace "ok anh duyệt".
+### 4.6 Tool Gateway & MCP servers (L4)
 
-### Proactive watch
+Mọi tool đều đăng ký kèm contract. Tool Gateway kiểm contract khi đăng ký và **ép** contract ở mọi lời gọi (từ model, từ agent được hỏi, khi recovery). **Thiếu policy thì từ chối.**
 
-Signals (schedules and change events) feed cheap, continuous **code detectors**; the LLM only investigates anomalies. Each finding gets an action tier: inform, ask, draft for approval, or act automatically only for configured low-risk actions. Findings go to the owner or the digest under an **attention budget** (proposed ≤3 proactive messages per person per day), with "useful / not" feedback. Per-department watchlists come from the industry pack:
-
-| Department | Example detectors |
+| Trường contract | Ý nghĩa |
 |---|---|
-| Sales | Sales vs same period, large customers gone quiet, unusual orders |
-| Operations | Stock below safety level, late suppliers, slow-moving stock |
-| Accounting | Invoices due, three-way mismatch, budget overrun |
-| Support | SLA at risk, complaint clusters |
+| Định danh & schema | ID, version, input/output schema |
+| Quyền | Hành động/tài nguyên cần có; ràng buộc dòng/cột theo người dùng gốc |
+| Phê duyệt | Có cần duyệt không; bản ghi duyệt gắn với **đúng tham số** của lời gọi |
+| Recovery | `safe_to_repeat` · `reconcile_first` (tra theo operation ID trước khi làm lại) · `human_resolution_required` |
+| Giới hạn | Timeout, số lần retry có backoff |
+| Bằng chứng | operation ID, kết quả trả về, tham chiếu policy/duyệt |
+| Đo dùng | Đơn vị tính, nguồn số liệu, cách xử lý khi không biết lượng dùng (§4.13) |
 
-Marketing uses the official Meta Graph API (Pages, Instagram Graph, Messenger/Instagram messaging in the 24-hour window, Marketing API) on a development-mode test Page; drafts need approval. No personal-account automation or CAPTCHA/bot-detection evasion: when a site needs a human step, the agent pauses and hands over (noVNC workspace takeover).
+**Recovery category** (thiếu thông tin recovery thì không được chạy lại):
+- **`safe_to_repeat`:** lặp lại không gây hại thêm (thường là tool đọc); vẫn kiểm quyền lại.
+- **`reconcile_first`:** hiệu lực có thể đã xảy ra. Tra theo operation ID, lưu biên nhận, chỉ thử lại khi chắc chắn chưa có.
+- **`human_resolution_required`:** không tra được hoặc vẫn mơ hồ. Chặn và chuyển người xử lý; không lặp mù.
 
-**Self-improvement under control:** feedback tunes thresholds, ranking and recipients within configured bounds; answers become scoped memory with source and expiry (§6). Repeated corrections become skill proposals (§7); misses and false alarms become eval cases (§10). Agents never raise their own permissions or edit policy.
+**Lời gọi bị ngắt giữa chừng có kết quả "chưa biết"** cho tới khi đối chiếu xong. Ví dụ: server sập sau `create_payment_request` nhưng trước khi lưu biên nhận → tra theo operation ID, không tạo lệnh chi thứ hai. Lần thử lại dùng chung operation ID, mỗi lần một attempt ID.
 
-### Durable execution: no silent abandonment
+**Danh sách tool cho các UC đã chọn** (rút từ Đề §4.1):
 
-Every accepted request has a persisted owner, state, last progress time and next action: executing, waiting with reason and deadline, or terminal with evidence. Failure creates an assigned escalation; success creates a notification intent; cancellation is its own outcome. After a crash, the system finds interrupted work and resumes safely or escalates visibly. Workers run bounded attempts; durable state carries tasks across waits and restarts.
-
-| Boundary | Required behavior |
-|---|---|
-| Admission | Persist request and dispatch intent before acknowledging; dedup inbound IDs; no ack if persistence fails |
-| Dispatch | Durable queue or transactional outbox; a crash between save and enqueue loses nothing |
-| Ownership | Atomic claim: expiring lease, attempt ID, ownership token, heartbeats; reject stale-worker writes |
-| Progress | Checkpoint steps, receipts, pending work, versions; liveness is not progress |
-| Provider interruption | Timeouts, bounded backoff, reuse saved results, account for every attempt |
-| Side effects | Persist intent and operation ID first; reconcile before replay; exactly-once only with downstream support |
-| Human wait | Persist question, responder, deadline; release worker; recheck access and business state on resume |
-| Recovery | At startup and periodically scan expired leases, overdue queue items, stalls, overdue waits, unsent outcomes; reclaim or escalate |
-| Completion | Commit outcome and notification intent together; delivery failure never reruns the workflow |
-| Escalation | Reason, safe evidence, last good step, uncertain effects, owner, next action; alerts retried separately; visible in the app |
-
-Attempt, elapsed-time, no-progress and cost limits end in an assigned escalation, not a loop. Notifications have retry/expiry rules; approvals and clarifications get reminders and an escalation deadline. Hard failures carry error code, reason, evidence, owner and next action; missing information, missing permission, transient error, device loss, unknown external outcome and unsupported request are classified separately.
-
-The request record is lifecycle authority, the queue carries dispatch, Task checkpoints carry position. Workflow upgrades need compatible resume or explicit migration. Before acceptance tests, set heartbeat, lease, scan, stall, waiting and delivery thresholds, recovery objectives and backup/restore (including reconciling effects after restore). A self-hosted monitor cannot report its own host outage: an external health check alerts operators, and work is rescanned on restart.
-
-### Workspaces, devices, notifications and deployment
-
-Request Runtime owns lifecycle; identity/policy services enforce authority. Dispatcher assigns work, Workers execute it in eligible Workspaces, and Supervisor initiates recovery. These responsibilities may share one process. A **browser worker/WASM** handles employee-chosen files, parsing, computation, preview and benchmarked small models, but may freeze or go offline and holds no shared credentials. An **internal worker near data** runs in-network queries, aggregation and batch with least privilege, never on other employees' machines. A **server workspace** (container/VM) continues after the user leaves; request, checkpoint and policy stay in the core.
-
-Dispatcher selects an eligible Worker using capability, data location, permissions, resources and measured cost, by rules first; never move data to rescue a task. Offload order: compute at the source → local preprocessing → send only needed evidence → reuse valid artifacts by version/scope → model for reasoning and exceptions. The loop stays on the server. Local work does not lower token cost; cost shifted to a device has not vanished. Work items carry principal, scope, request/run/attempt/operation IDs, input references, version, lease and budget, never broad credentials. Client results are untrusted: verify by effect; they cannot skip approval or prove spending.
-
-**Device loss:** lease expiry sets `blocked` with `waiting_reason=device_offline`, device, owner, checkpoint, next action and deadline. Reconcile in-flight operations. Reassign only to a compatible executor allowed the data (same operation ID, new attempt ID); never copy employee A's data to machine B. Never poll with the model. An authenticated, deduplicated reconnect event resumes after rechecking device, principal, request, permissions and checkpoint version. A fallback timer uses capped, jittered backoff within the deadline, reset on progress. At the deadline escalate to the configured owner; late results from the old device are rejected or reconciled. Scheduler fires persisted timers/events, not polling crons. Waiting on a reply, an approval or a device are separate reasons with their own owners and policies.
-
-**Delivery Service:** channel adapters (§3) deliver through the Delivery Service, starting with the console inbox and the first chat adapter; an adapter is not permission to send or export data. Request Runtime owns each `Blocker`: ID, WorkRequest, type, responder, action, severity, deadline, audience and resolution state. Delivery Service records queued/sent/delivered status separately for each delivery attempt and forwards authenticated acknowledgements/resolution inputs to Request Runtime; absent read receipts mean unknown, not unread. Each delivery has its own ID, receipt and dedup key (blocker, recipient, channel, reminder stage); resends create no business work. Channels follow preference, urgency and permission, stepping through fallbacks and reminders, never broadcasting; quiet hours, cooldown, quota and deadlines are configured, and only defined urgent cases bypass quiet hours. Callbacks are authenticated, links grant nothing, approval stays in the workflow. Broad messages carry generic status ("Request R is waiting for a file on your device"), never payroll, documents or sensitive links. Recipient and audience are checked per delivery, and jobs never borrow a revoked creator's credentials.
-
-**Workspace:** an authorized entity (ID, owner/scope, image/tool version, volume/artifact references); a conversation ID never grants filesystem access. Providers sit behind one interface (create/exec/snapshot/destroy): `docker` (default, course demo), `proxmox` (template plus linked clones via the REST API/proxmoxer, scoped API token, noVNC takeover, snapshots, per-department VLAN/firewall egress allowlist; optional P3 spike) and `none`. The **P3 spike** is one internal Linux VM with a prepared image, TypeScript worker, persistent volume and one workload. It starts after core persistence works, with the request store outside the guest; no VM platform, fleet, or VM per employee or specialist. Before sensitive data: CPU/RAM/disk/time quotas, egress allowlist, short-lived credentials or gateway, image patching. Also per-scope workspaces, retention-based sanitizing, no secrets in snapshots, and health/start/stop/drain with artifacts saved before deprovisioning. Snapshots neither back up business state nor roll back external effects. Structured tools only: no gateway-bypassing shell or GUI, no untrusted code; desktop streaming or computer use only if a use case needs it. A dead guest goes to the Supervisor; a shared-host outage needs the external alert and backup/restore, which is not high availability.
-
-**Deployment:** one instance per company on its infrastructure, shared code, versioned and reviewed organization/policy/workflow/connector configuration; no multi-tenant SaaS. **Strict on-prem** means internal inference, storage, telemetry and processing with no cloud fallback. External chat channels and model APIs are declared exceptions; ask the lecturer if this conflicts with the chat requirement. Missing internal capacity means wait or escalate, never silent egress. **Installer:** a Docker Compose bundle (app, api, worker, postgres+pgvector, optional local model, workspace-runner); `install.sh` checks prerequisites, generates secrets, runs migrations and creates the first admin; the console's setup wizard configures model/endpoint, LDAP/SSO or employee import, departments/permissions, approval matrix, connectors and workspace provider; a smoke eval runs on the customer's data; backup and upgrade use versioned images. Optional **auto-mapping:** employee CSV and permitted SOPs → sourced draft organization/authority → gaps → ask the owner → diff, validation, dry-run → human activation. Authority is never inferred from titles, access history or model confidence. Browser offloading, local models, auto-mapping and visual matching are candidate experiments: pick one once mandatory coverage and P1/P2 are on track.
-
-### Usage Ledger and Cost Accounting
-
-Report cost per request, attempt, department, company and billing period, covering failed attempts, retries, subagents, decision models, summarization, embedding, skill review and scheduled work. Cost metadata is access-controlled because usage reveals work.
-
-| Category | Metered as |
-|---|---|
-| Models | Provider/model/version, request ID, input/output plus cached/reasoning usage without double counting, currency, pricing version |
-| Tools and APIs | Billable calls, units, duration, plan/tier |
-| Hosting and workers | Actual charges, runtime or reserved capacity; shared idle cost separate from marginal cost |
-| Storage and retrieval | Database/vector storage, backups, embedding ingestion, retrieval, retention |
-| Network and other | Egress, notifications, other metered charges |
-
-- Append-only usage/charge events with stable IDs; corrections are new entries. Capture usage regardless of business success; unavailable usage is pending and reconciled from provider records.
-- Decimal or integer subunits, never floats. Keep sub-cent items, aggregate before rounding, show cents under a declared rule. Keep the billing currency; a VND view uses a recorded rate and date.
-- Show **estimated**, **provider-reported**, **invoice-confirmed** and **allocated shared** costs separately. Estimates use an effective-dated catalog (caching, batching, tiers, discounts); reconciliation covers credits, subscriptions, tax, rounding and FX, leaving differences visible. Exact cents hold only for reconciled bills.
-- Cost Accounting shows direct request cost and total operating cost with allocation assumptions; shared infrastructure counts once. Forecasts state workload and uncertainty. Vendor pricing is a deployment decision.
-- Reserve a conservative budget atomically (counting concurrent attempts) before billable work and settle on observed usage. Bound tokens, time, parallelism and attempts; uncertain budget pauses or escalates. No exact hard cap where providers bill unreported in-flight usage. Model-cost budgets and business-spending approval never substitute for each other.
-
-## 6. Privacy, memory and information flow
-
-**Core invariant:** a derived artifact is readable only by someone satisfying every source policy plus any extra restriction. Summaries, redaction or model claims do not declassify. Department membership alone is not authorization.
-
-### Acting for an employee and recording authority
-
-The backend builds the execution context from authenticated identity. Every coordinator and specialist run acts for an identified employee or an authorized scheduled-job principal; requester and executing agent are recorded separately. Model arguments cannot change identity, company, privileges or approval state; an "HR" specialist has expertise, not privileges. Scheduled jobs have an owner and scope rechecked every run; service-account jobs need separate grants.
-
-Effective authority is current grants ∩ workflow capabilities ∩ resource policies, plus action approval. Discovery shows only authorized tools; execution rechecks tool, arguments, records and policy. Delegation carries principal, request/run IDs, parent and limits; children can narrow authority, never widen it. Resume and delivery recheck current permissions.
-
-The protected audit ledger links:
-
-- principal and executing agent;
-- request, attempt, delegation and operation IDs;
-- effective scope (or versioned reference), policy version, decision and resource versions;
-- approval reference, approver and action version;
-- receipt, outcome, escalation and cost event IDs.
-
-Authorization is recorded before dispatch, outcome after; missing outcome evidence is an unknown to reconcile. Append access is restricted, corrections are events, and the model never authors its own evidence. Ledger readers are authorized; evidence reconstructs decisions without spreading payloads. Transcripts, audit events and cost events are linked but separate, each with its own redaction, retention and access rules; hidden model reasoning is not collected.
-
-### Storage boundaries
-
-| Store | Purpose and protection |
-|---|---|
-| Business systems | Authoritative records; row/field access per action |
-| Company knowledge | Published all-employee procedures |
-| Restricted knowledge | Scoped documents/chunks/embeddings, filtered before prompting |
-| Employee memory | Personal context for its owner and purpose |
-| Request state | Case facts, checkpoints, summaries under source policies |
-| Department memory | Authorized shared knowledge, not accumulated transcripts |
-| Skills | General procedures; metadata and files access-controlled |
-| Traces/caches/exports | Minimized, access-controlled, retained and invalidated by policy |
-
-Prefer references to copies. Protect filenames, snippets, citations and existence, not just bodies. Authorize search before results reach the model; recheck on resume, cache reads and delayed delivery; revocation invalidates derivatives; no cross-user context or cache reuse without matching authorization. Group chats are authorized against all recipients: sensitive results go to a private view with a generic group notice. Provider retention, telemetry, backups and deletion need policies before confidential data.
-
-**Payroll example:** authorized HR analysis stays restricted in result, history, memory and traces, and never feeds shared skills. Sales cannot recover it through summaries, search metadata, caches or repeated aggregates. Publishing an aggregate needs its own disclosure policy.
-
-## 7. Skill lifecycle
-
-```mermaid
-flowchart LR
-    A[Repeated procedure / employee suggestion] --> B[Scoped skill proposal]
-    B --> C[Validate contract, dependencies and information scope]
-    C --> D[Offline evals and regressions]
-    D --> E[Authorized human review]
-    E -->|Approve| F[Activate version for permitted scope]
-    E -->|Reject| G[Retain restricted review record]
-    F --> H[Monitor outcomes; rollback if needed]
-```
-
-- Skill approval never grants tool privileges.
-- Proposals from restricted work stay restricted until an authorized publication yields a safe generalized version; use placeholders, not real employee/customer data. PII scanners are extra checks, not proof.
-- Proposals change instructions over existing tools. New tools/connectors go through issue/PR/review; generation cannot invent integrations or change policy.
-- No production workflow depends on on-the-spot skill generation.
-
-## 8. Five use cases and team ownership
-
-**Proposed portfolio for discussion, not a final selection:**
-
-| Owner slot | Outcome | Earliest phase | K areas |
+| Tool | Loại | Agent | Ràng buộc |
 |---|---|---|---|
-| A | Message → tracked work: assign in the existing chat thread → work item; owner/deadline extracted, reminders, escalation, status answers, daily digest | P1 (adapter or console) → P2 (reminders, digest) | K1 K2 K4 K5 K7 |
-| B | Internal procedure Q&A with citations and scoped recall | P2 | K3 K4 K8 |
-| C | Spending request approved in-thread in two steps: intent (what, budget ceiling) then the concrete order (supplier, amount); checked, routed by approval matrix, resumed, recorded | P2 | K5 K8 |
-| D | Proactive operations watch and cross-department follow-up (includes Sales briefing and Marketing drafts using Sales data) | P3 | K4 K6 K7 |
-| E | Self-improving department agent: repeated procedure → proposed skill, eval, approval; feedback-tuned alerts | P3 | K2 K7 K8 |
+| `kb_search` | Đọc | Mọi agent | Lọc `access_level` **trong truy vấn** |
+| `hr-mcp: get_employee, get_leave_balance, get_attendance, get_shift_schedule` | Đọc | hr | Không trả cột lương; chỉ nhân viên trong phạm vi người hỏi |
+| `hr-mcp: update_leave` | Ghi | hr | Chỉ khi đã có quyết định của quản lý trực tiếp |
+| `hr-mcp: get_payroll` | Đọc nhạy cảm | hr | Chỉ HR trưởng, giám đốc |
+| `ledger-mcp: get_po, get_receipt, find_invoice, get_payables` | Đọc | finance | Chỉ sổ giả lập |
+| `ledger-mcp: create_payment_request` | Ghi | finance | **Chỉ tạo `pending_approval`.** Không có tool chi tiền |
+| `inventory-mcp: get_stock, create_stock_request` | Đọc / Ghi | ops | Phiếu tạo ở trạng thái chờ duyệt |
+| `crm-mcp: get_sales_summary, search_customer` | Đọc | sales | Phục vụ báo cáo |
+| `mail-mcp: create_draft` | Ghi nháp | cs, sales | Không có `send` |
+| `send_chat_message` | Ghi | orchestrator, scheduler | Chỉ tới người dùng nội bộ đã đăng ký; giới hạn tần suất. **Đây là công cụ ngoài thật (HR-04)** |
+| `schedule_job` | Ghi | orchestrator | Giới hạn số job mỗi người; lịch < 1 giờ phải duyệt; job không được tạo job |
+| `skill_registry: propose` / `approve` | Ghi | skill proposer / chỉ quản trị | Agent chỉ được `propose` |
+| `ask_agent` | Đọc | Agent phòng ban | §4.5 |
 
-**Coverage:** the union is K1–K8. Departments: Accounting (C, D), Operations and Sales (D), Marketing (D drafts), Support (B, D), HR (A, B); E applies to any. Six specialists need neither six use cases nor six deployments; owners follow team agreement.
+**MCP:** hệ thống giả lập được bọc thành MCP server (`hr`, `ledger`, `inventory`, `crm`, `mail`), đúng kiến trúc tham chiếu của Đề. Nếu thiếu thời gian thì dùng tool in-process **với cùng contract**, và ghi rõ trong báo cáo.
 
-**Two-step spending approval (C), after AP2 mandates:** an approved intent ("200 boxes of paper, ≤ 5,000,000 VND, by Friday") lets the agent gather quotes and draft the order inside that envelope; the concrete order (supplier, items, amount) needs its own approval, bound to the approved intent by ID. An order outside the envelope (over budget, other item, expired intent) is rejected in code, not by the model. Each step follows the approval matrix and separation of duties.
+### 4.7 Policy engine (L6) · UC-09
 
-**Eval ideas:** A — 30 Vietnamese assignment messages (abbreviations, no diacritics, missing deadline) measuring owner/deadline extraction accuracy, plus zero overdue items without a reminder. C — orders inside and outside the approved envelope; zero out-of-envelope orders executed. D — 10 seeded anomalies measuring recall, precision and whether the agent asks at the right time.
+- Cấu hình RBAC trong file `config/policy.yaml`: **vai trò × tài nguyên × hành động**, kèm điều kiện (cùng quán, cùng phòng ban, hạn mức tiền).
+- Được gọi tại: Gateway · Orchestrator khi `delegate` · `ask_agent` · Tool Gateway · `kb_search` · Approval Service · khi resume (kiểm lại quyền hiện tại).
+- **Không dựa vào prompt để chặn.** Thiếu luật thì từ chối.
+- Câu trả lời khi từ chối không làm lộ dữ liệu.
 
-Each person owns one outcome's scenario, data, tools, app flow, demo, evals and traces, written in the rubric's six-part form: description; 1–3 primary K areas; technical requirements; 3–6 measurable acceptance criteria; ≥5 eval cases including ≥1 edge or failure case; a trace of ≥1 successful run. If the course publishes its expected 8–11 candidate use cases per topic, map slots A–E onto them. In Phase 1 everyone builds the first vertical slice. Each shared runtime/interface gets a maintainer and reviewer; no divergent identity or tool contracts.
+### 4.8 Approval Service (L6)
 
-Optional visual matching, if approved, sits inside a Sales/Support workflow: candidates → attribute checks → catalog identity evidence → stock and price → customer confirmation. Similar appearance never proves identity.
+- Hàng đợi duyệt chung cho: lệnh chi pending, đơn nghỉ phép (UC-03), skill mới (UC-08), job có tần suất dày (UC-06).
+- **Hai kiểu duyệt, mỗi hành động chỉ thuộc một kiểu** (nên không có duyệt 2 lần):
+  - **Duyệt bản ghi:** tool tạo bản ghi ở trạng thái chờ (`pending_approval`); workflow `interrupt` ngay sau đó, request chuyển `awaiting_approval`; người duyệt đổi trạng thái bản ghi rồi request resume để báo kết quả. Áp cho lệnh chi, phiếu nhập kho, skill mới, job dày. Tool tạo bản ghi **không** nằm trong `approval_required`. Duyệt lệnh chi chỉ đổi trạng thái trong sổ giả lập, không chi tiền.
+  - **Duyệt trước lời gọi:** tool nằm trong `approval_required` chỉ chạy khi đã có quyết định khớp tham số. Ví dụ `update_leave` chờ quyết định của quản lý trực tiếp (UC-03).
+- **Người duyệt xác định bằng cấu hình**: quản lý trực tiếp, hạn mức tài chính, vai trò quản trị. Model không tự chọn người duyệt.
+- Bản ghi duyệt gắn với **đúng hành động và tham số**; hành động thay đổi thì phải duyệt lại. Có hạn duyệt.
+- Duyệt được qua nút trong chat hoặc trên web. Callback từ chat phải xác thực người bấm.
+- Duyệt xong → Request Runtime **resume đúng chỗ** (interrupt/resume), kiểm lại quyền trước khi thực thi. Từ chối hoặc hết hạn là **một kết quả**, không phải lý do để thử lại.
 
-## 9. Phase plan and acceptance
+**Duyệt chi hai bước** (tham khảo mandate của AP2; không có tool chi tiền):
+1. **Duyệt ý định:** mua gì, **trần ngân sách**, hạn (ví dụ "50 hộp sữa tươi, ≤ 5.000.000đ, trước thứ Sáu"). Trong phạm vi này agent được tra báo giá và soạn lệnh.
+2. **Duyệt lệnh cụ thể:** `create_payment_request` tạo bản ghi `pending_approval` (nhà cung cấp, mặt hàng, số tiền), **gắn với ý định đã duyệt bằng ID**, rồi chờ duyệt bản ghi như trên.
 
-| Gate | Deliverable | Demonstration |
+Lệnh nằm ngoài phạm vi (vượt trần, khác mặt hàng, ý định đã hết hạn) bị **code từ chối** trước khi tạo bản ghi.
+
+### 4.9 Knowledge & RAG (L5) · UC-02
+
+| Bước | Thiết kế |
+|---|---|
+| Ingestion | `data/kb/*.md` (≥ 25 tài liệu) kèm metadata `doc_id, title, section, department, access_level, effective_date, version` |
+| Chunking | **Theo mục / điều khoản**, không cắt theo số ký tự; giữ đường dẫn mục |
+| Embedding + vector store | Model embedding hỗ trợ tiếng Việt; pgvector / Chroma / sqlite-vec (quyết định ở §13) |
+| Retrieval | **Lọc quyền trong truy vấn** (`access_level`, phòng ban) → vector + BM25 → ưu tiên bản còn hiệu lực theo `effective_date` |
+| Trả lời | Bắt buộc citation `[file.md §mục]`. Validator kiểm tài liệu và mục có tồn tại, đoạn trích có chứa nội dung liên quan. Không có căn cứ → "không tìm thấy trong quy định nội bộ" + gợi ý phòng ban nên hỏi |
+| Đo | Recall@5, tỉ lệ trích dẫn hợp lệ, tỉ lệ trả lời "không tìm thấy" đúng, tỉ lệ chọn đúng bản hiệu lực |
+
+### 4.10 Context & state (L5) · K4
+
+- **Context builder** quyết định mỗi agent được thấy gì:
+  - **Orchestrator:** yêu cầu + các tin gần nhất (đã nén) + kết quả cuối của việc con.
+  - **Agent phòng ban:** chỉ việc được giao, tham chiếu dữ liệu và phần hỏi–đáp của chính nó.
+  - **Agent được hỏi:** chỉ câu hỏi.
+- **Compaction** khi hội thoại vượt ngưỡng: tóm tắt bắt buộc giữ *mục tiêu · ràng buộc · việc đã xong · trạng thái hiện tại · việc đang mở và bước tiếp theo*; có hàm kiểm tra đủ 5 mục.
+- **State bền:** request, checkpoint, job run (§4.2, §4.11).
+- *Bộ nhớ dài hạn (UC-07) chưa thuộc phạm vi; nếu làm thì thêm module riêng có lọc dữ liệu cá nhân và thời hạn lưu.*
+
+### 4.11 Scheduler (L2) · UC-06
+
+```yaml
+# ScheduledJob
+job_id: job_17
+owner: user_thuha            # quyền kiểm lại mỗi lần chạy
+cron: "0 8 * * MON"
+recipients: [user_thuha]
+metrics: [revenue_by_store, top5_items, low_stock, staff_leave, payables_due]
+channel: telegram
+status: active               # pending_confirmation | active | paused
+```
+
+- Câu tự nhiên → `ScheduledJob` → **người dùng xác nhận** → `active`.
+- Scheduler **chỉ kích hoạt**; toàn bộ logic nằm trong workflow có checkpoint (fan-out lấy số liệu từ từng phòng ban → tổng hợp → validator đối chiếu từng con số với truy vấn trực tiếp → gửi).
+- **Idempotency key** `job_id + kỳ báo cáo`: mỗi kỳ chỉ gửi đúng 1 lần, kể cả khi bị kích hoạt lặp.
+- **Chặn:** job tạo job · lịch < 1 giờ chưa duyệt · vượt số job tối đa mỗi người. Mọi lần chặn đều ghi log.
+- Một nguồn dữ liệu lỗi → báo cáo vẫn gửi, ghi rõ phần thiếu và lý do.
+
+### 4.12 Skill registry & Skill Proposer (L4) · UC-08
+
+![Skill registry và Skill Proposer](diagrams/skill-registry-flow.svg)
+
+**Skill seed (≥ 2, Đề §4.2):** `stock-reorder-request` (ops, UC-01, có từ P1: kiểm tồn → tính số lượng → tạo phiếu nhập chờ duyệt) · `weekly-ops-report` (UC-06). Nếu làm UC-03 thì thêm `leave-request-review`.
+
+
+### 4.13 Audit log & Trace (L6, L8)
+
+| | Audit log | Trace |
 |---|---|---|
-| Phase 1 · Oct 27 | One chat adapter (chosen by quick spike) or web console input for the first slice, plus the message → work card (A); ≥2 tools, 1 skill, step logs, ≥10 evals; synthetic data, basic identity boundaries; tool contracts, request/run/usage IDs, visible errors | Assign work in a thread, see the card with owner/deadline, inspect the trace, see a controlled failure |
-| Phase 2 · Nov 10 | ≥3 use cases (A complete, B, C): adapter live; reminders/escalation/digest, in-thread approval (console as fallback) in a persisted workflow (LangGraph, or the authored core per §2), memory per thread, cited RAG, scoped persistence/resume, context handling; durable admission, worker recovery, cost-ledger persistence; durable blockers, Delivery Service, reconnect/backoff, server worker | Kill/restart a running or waiting workflow; resume or escalate visibly without duplicate action; show attempt costs |
-| Phase 3 · Dec 6 | ≥5 use cases (D, E): MCP server, optional second adapter, proactive watch, self-improvement, installer demo on a clean VM; multi-agent, security, complete evals/traces, final deliverables; recovery fault tests, full operating-cost view; one VM/workspace spike if feasible, placement and cost comparison | Cross-department follow-up, safe denial, approved skill reuse, outage recovery, reconciled costs, regression results, final demo |
+| Mục đích | Ghi **quyền và hành động** để tra cứu, giải trình | Ghi **quá trình chạy** để debug và chấm U3 |
+| Nội dung | thời điểm, `user_id`, agent, tool, tài nguyên, quyết định cho phép/từ chối, lý do, người duyệt, `run_id` | người dùng gốc và vai trò, từng node, agent được giao, từng tool/MCP call (tham số, kết quả, thời gian), từng lần gọi skill (tên, version), kết quả kiểm quyền, token, chi phí ước tính, lỗi, quyết định duyệt; job ghi thêm `job_id` + kỳ |
+| Ghi | **Append-only**; agent không sửa được | JSONL theo `run_id` (có thể thêm LangSmith/Langfuse) |
+| Xem | Màn hình tra cứu theo người dùng, khoảng thời gian, `run_id` | Lớp "Chi tiết" trong room web (§4.14) |
 
-Phase 1 has no bundled framework, VM, multi-agent or distributed runtime; a modular tool/skill registry is fine. No recoverability claim before Phase 2 fault tests. No VM fleet, marketplace, full desktop streaming or compute swarm in Phase 3.
+Dữ liệu nhạy cảm (lương…) trong trace được **che hoặc chỉ lưu tham chiếu**. Quyền xem trace và audit theo vai trò.
 
-**Phase 1 slice:** use case A through one chat adapter (or console input if the spike fails): the agent replies in thread, extracts owner and deadline with two tools and one skill, and asks when a field is missing. Records are synthetic, usage uses pricing-based estimates, and reminders wait for P2. Do not imply Phase 1 survives crashes.
+**Sổ usage/chi phí** (nguồn của token và chi phí trong trace, §11):
+- **Mọi lần thử đều được đo**, kể cả lần lỗi, retry, lời gọi phân loại, tóm tắt, embedding và job theo lịch. Ghi dạng sự kiện append-only có ID ổn định; sửa sai bằng sự kiện mới.
+- **Không biết ≠ 0:** provider không trả usage thì ghi "chờ đối chiếu", không ghi 0. Không gọi lại một lời gọi tốn tiền chỉ để biết usage.
+- **Không đếm hai lần:** lời gọi con (agent được hỏi, việc con) tự ghi usage của mình; cha chỉ tham chiếu.
+- Budget chi phí model và duyệt chi tiền nghiệp vụ không thay thế nhau.
 
-**Final demo:** delegate → workspace runs → laptop closes, work continues → a local file is needed: wait and notify → user reconnects → recheck permissions, reconcile → result with evidence. Restart a worker/guest at a declared point to show no lost request and no duplicate action; live variants stay within tested scope.
+### 4.14 Ứng dụng (Phần I)
 
-**Course rubric draft v3 (2026-10-06; official status unconfirmed):** each use case scores function, harness design and verification at 0.5 each. System-wide: a ≥3-node workflow with stop conditions; an `agent = model + harness` diagram naming ≥4 harness layers plus a failure-mode table; ≥1 external tool and ≥2 reusable skills with full contracts; traces for every run; one-command evals with at least 5 cases per use case plus 5 attack cases (30 for five use cases) and ≥2 regression runs; README, `.env.example`, report, video, use-case ownership table and AI-use disclosure. A tool or skill that runs a dangerous action without an approval gate zeroes that use case's harness score. K areas: K1 model integration/structured output/agent loop/architecture, K2 tools and skills, K3 RAG, K4 memory/state/context, K5 workflow and human-in-the-loop, K6 multi-agent or MCP, K7 verification and evaluation, K8 security/governance/observability; each missing area costs 0.5. Phase 1 still requires ≥10 evals.
+#### Room web: nơi thấy các agent làm việc với nhau
 
-## 10. Verification and scale
+Giống band ở chỗ thấy **ai nói với ai** trong room; khác band ở chỗ thấy luôn **mỗi agent gọi tool gì và vì sao** (trace). Room **không có dữ liệu riêng**: nó render lại event log (§4.13), stream real-time qua SSE.
 
-Each use case defines expected effects, evidence, permitted readers, failure behavior and fixtures. Tests use synthetic data and scripted models without network or keys; model evals report provider/profile, dataset and code version, and fake-model tests are not evidence of live capability. Regression runs reuse one dataset and keep differences.
+```
+┌─ #ops-binhthanh ─────────────────────────────────────────────────────┐
+│ 👤 Thu Hà (Quản lý quán)   Quán Bình Thạnh hết sữa tươi, đặt 50 hộp…  │
+│ 🧭 Orchestrator            Tách 3 việc con: s1 Kho · s2 Kế toán · s3…  │
+│   ├─ ➜ giao s1 cho @Kho                                              │
+│   │   🔧 get_stock(store=BT, sku=MILK)      → 4 hộp      120ms   ▸    │
+│   │   🔧 create_stock_request(qty=50)       → SR-118 (chờ duyệt) ▸    │
+│   ├─ 🧭 Executor: s1, s2 xong → phân tích → giao s3 kèm kết quả  ▸    │
+│   ├─ ➜ giao s3 cho @Kế toán                                          │
+│   │   💬 @Kế toán hỏi @Kho: "NCC và số lượng đã đặt?"   (consult)     │
+│   │      └─ @Kho: "Vinamilk, 50 hộp, PO-552"                         │
+│   │   🔧 create_payment_request(4.250.000đ) → PR-91 pending_approval  │
+│   │   ⏸ Chờ duyệt: Kế toán trưởng (hạn mức ≤ 20 triệu)   [Duyệt][Từ chối]
+│   │   ✔ Kế toán trưởng duyệt → PR-91 approved · resume          ▸    │
+│ 🧭 Orchestrator            Đã tạo phiếu nhập SR-118; lệnh chi PR-91 đã duyệt… │
+│                            tokens 6.2k · $0.004 · 9.8s · run_8812  ▸ │
+└──────────────────────────────────────────────────────────────────────┘
+```
 
-- **Security:** unauthorized payroll retrieval, restricted-to-shared memory/skill contamination, document prompt injection, approval bypass, cross-user leakage, revocation before resume/delivery, guessed IDs, group-chat exposure, duplicate execution, unknown remote outcomes. Inspect stored artifacts, not just answers. The scaffold currently traces raw payloads and skill loading lacks user scoping: fix both before sensitive data.
-- **Tool contracts:** reject missing authorization and incompatible contracts; exercise the three recovery categories with synthetic connectors; a crash after an effect but before its receipt creates no second order. Cover inconclusive lookup, revocation mid-reconciliation, nested-call checks, parent/child cancellation, subscriber disconnect without cancellation, and rollups counting children once with unknowns kept.
-- **Recovery:** kill the process after admission/before dispatch, mid-execution, after an effect/before its receipt, while awaiting approval, and after completion/before notification. Also test duplicate ingress, stale workers, provider and storage outages, exhausted budgets, failed escalation delivery. Afterwards every accepted request is discoverable and resumed, waiting with a deadline, or terminal with evidence; failures are escalated, uncertain effects reconciled, business records free of duplicates.
-- **Workspaces and notifications:** (1) closing the browser does not cancel workspace work, and a local-file step gets the right wait reason; (2) killed worker/guest, duplicate reconnect and stale worker yield one effect with audited attempts; (3) backoff never calls the model, reconnect wakes early, deadlines escalate, revoked permissions block resume; (4) channel A fails → fallback B per policy, ack on B stops ack reminders on A, ack without resolution keeps the deadline; (5) forged callbacks, under-authorized group chats, device-only data and forbidden egress are blocked; (6) Delivery Service crash after send/before receipt repeats no business work, with no exactly-once delivery promise; (7) VM restart loses no request, volume reuse leaks nothing across scopes, uncertain effects are reconciled; (8) cost reports include VM/local work and retries, and lower server CPU alone does not prove lower total cost.
-- **Cost:** fixtures with sub-cent charges, cached-token rules, retries, failures, duplicate events, unknown usage, currency conversion and invoice corrections. Assert deterministic arithmetic, no duplicates, visible unknowns, totals matching fixture bills under the rounding rule, atomic concurrent reservations, and allocations reconciling to the total without double counting. Real billing is checked separately.
-
-**Scale and decision models:** measure a stated workload (queue wait, latency, errors, cost, delivery; bounded, fair concurrency) before any infrastructure choice or 500-user claim, and compare decision models with rules and structured-output LLMs on accuracy, unsafe acceptance, latency and cost, keeping deterministic controls and an approved fallback.
-
-## 11. Relationship to existing proposals and references
-
-The teammate's flow (clarification, specialist routing, parallel work, approval, validation) stays as an execution example, extended with durability, repeated authorization, safe side effects and scoped learning. Unknown requests never auto-create skills, and generalist fallback never widens privileges. Hermes informs gateway separation, progressive skills, bounded delegation, durable Kanban collaboration and scheduled delivery; Cordis informs composition, dependencies and lifecycle. Neither is our runtime or a proven security boundary.
-
-References (Pi Durable and workspace sources added 2026-10-17; none is a benchmark or a chosen runtime):
-
-- [Hermes architecture, pinned source](https://github.com/NousResearch/hermes-agent/blob/dfa79389773271ee78c41a7af340848948d461ee/website/docs/developer-guide/architecture.md)
-- [Hermes durable task collaboration, pinned source](https://github.com/NousResearch/hermes-agent/blob/dfa79389773271ee78c41a7af340848948d461ee/website/docs/user-guide/features/kanban.md)
-- [DeepSeek Harness architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
-- [Pi Durable README, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md) and [normative specification, pinned source](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md)
-- [WebAssembly security](https://webassembly.org/docs/security/), [Page Lifecycle API](https://developer.chrome.com/docs/web-platform/page-lifecycle-api), [ONNX Runtime Web](https://onnxruntime.ai/docs/tutorials/web/)
-- Always-on agents lecture notes (PR #15, `docs/research/always-on-agents.md`) support §5 and §10. AI-assisted summary pending review: event wake-up with stable IDs, server-owned state, durable resume, untrusted input never becomes authority, failures turned into evals.
-- Dot experience (user-supplied transcript): persistent identity, event automation, investigation before the user opens the app. No recovery guarantee; not evidence of OpenAI's implementation.
-
-### Protocols adopted
-
-Adopt existing open protocols early; build no new one.
-
-| Need | Protocol | Use |
+| Lớp hiển thị | Nội dung | Ai xem |
 |---|---|---|
-| Tools in, integrations out | [MCP](https://modelcontextprotocol.io/specification/2026-07-28) (Agentic AI Foundation) | Tool connectors; our MCP server (P3, K6) |
-| Packaged agent skills | Agent Skills (`SKILL.md`) | Skill registry format (K2) |
-| Agent progress to the UI | [AG-UI](https://docs.ag-ui.com/) | Web console streams tool calls, state and approvals over SSE |
-| Delegated access | OAuth 2.1 (MCP authorization) | MCP server and connectors act for an identified principal (K8) |
-| Spending consent | [AP2](https://github.com/google-agentic-commerce/AP2) mandates, ACP | Reference only: approval binds exact action, amount and expiry |
-| Agent-to-agent across companies | [A2A](https://a2a-protocol.org/) | Not needed: department agents share one core. Future direction (customer ↔ supplier agents) |
-| Agent identity on public websites | Web Bot Auth (IETF draft) | Not needed: agents do not browse external sites |
+| **Hội thoại** (mặc định) | Tin người dùng, câu trả lời, ai giao việc cho ai (`delegate`), ai hỏi ai (`ask_agent`), yêu cầu duyệt | Thành viên room |
+| **Chi tiết** (bấm ▸ để mở) | Tool call (tham số, kết quả, thời gian), skill + version, kết quả kiểm quyền, token, chi phí, lỗi, retry | Theo vai trò; dữ liệu nhạy cảm bị che |
+| **Lý do của model** (tuỳ chọn, §13) | Reasoning do provider trả về chính thức, nếu nhóm quyết định lưu | Chỉ admin / dev |
 
-Chat platforms (Zalo, Slack, WhatsApp) have no common protocol; channel adapters stay thin and ours.
+Tác dụng cho điểm: rubric I.1 (sáng tạo), I.2 (real-time), I.3 (hiển thị tiến trình, màn hình duyệt, trace); và là bằng chứng K6 *"trao đổi kết quả thật, có coordination trace"*.
 
-Repository: [requirements](YEU-CAU.md), [research](NGHIEN-CUU.md), [team workflow](QUY-TRINH.md), [ADR process](decisions/README.md). This proposal overrides neither accepted ADRs nor course rules.
+#### Các màn hình khác
 
-## 12. Team decision agenda and next work
+| Thành phần | Nội dung | Bắt buộc bởi |
+|---|---|---|
+| Bot Discord / Slack | Giao việc, nhận kết quả, nút Duyệt/Từ chối, nhận báo cáo định kỳ, work item card, link mở room | Đề §5 |
+| Sơ đồ đội agent | 6 agent + orchestrator, trạng thái từng agent | Đề §5 |
+| Hàng đợi phê duyệt | Lệnh chi, đơn nghỉ phép, skill mới, job mới | **Bắt buộc** khi nộp UC-03 / UC-08 |
+| Tra cứu audit log | Theo người dùng, thời gian, `run_id` | **Bắt buộc** khi nộp UC-09 |
+| Quản lý | Job theo lịch, registry skill (version, người duyệt), cấu hình phân quyền | Đề §5 |
+| Dashboard eval | Độ chính xác, chi phí, độ trễ, so sánh regression | Đề §5, rubric I.4 |
 
-1. Accept/amend scope, shared-service isolation and component boundaries.
-2. Accept/amend trusted-core/plugin contracts; hot reload and untrusted plugins stay out.
-3. Confirm the 2026-10-18 repositioning (§1). Choose the target segment, the fictional company and the second company's industry; validate core workflows with people who know the work.
-4. Confirm use cases A–E, owners and reviewers; check every topic obligation and all six departments.
-5. Pick the P1 chat adapter after a quick spike: Zalo OA/Bot if groups work, otherwise Slack or a Telegram-style bot API; confirm the Phase 1 slice's observable completion conditions.
-6. Choose identity, storage/checkpointer, background execution and retrieval at the phase that needs them, with an ID/synchronization contract so checkpoints and request state never conflict.
-7. Decide provider data handling, disclosure and retention before confidential data.
-8. Ask the lecturer whether rubric draft v3 is final and may be public (it sits on a branch of this public repo). Review [SE373.tldr](SE373.tldr) (proposals, not decisions); draw the `agent = model + harness` diagram (≥4 layers) and failure-mode table from its overview page.
-9. Record accepted decisions as Decision issues and ADRs, then open small issues and task branches.
-10. Set recovery objectives and thresholds, lease/heartbeat and waiting deadlines, escalation owners, backup/restore and external health monitoring.
-11. Review the tool contract and assign connector reconciliation owners. Define cost catalog, invoice reconciliation, allocation and rounding, visibility and budget limits, and measurable cost-accounting/recovery acceptance criteria before implementation.
-12. Workspaces and notifications: approve Worker/Delivery Service boundaries and set blocker owners, deadlines and quiet hours. Pick the P3 spike's workload, VM host and resource cap. Decide strict on-prem or declared exceptions, data-transfer and executor-fallback policy, and semester-feasible scope. Optional experiments stay out of the mandatory portfolio.
-13. Proactive work: set the attention budget, digest timing and feedback loop; register a Meta app in development mode with a test Page for marketing drafts.
+---
 
-After agreement the board shows (1) architecture and trust boundaries, (2) request lifecycle with one concrete workflow, (3) skill lifecycle, annotating phase gates and separating implemented from future capabilities.
+## 5. Luồng xử lý chính (HR-02)
+
+![Luồng xử lý một yêu cầu](diagrams/request-workflow.svg)
+
+---
+
+## 6. Mỗi UC chạy trên kiến trúc thế nào
+
+Mỗi UC **chỉ thêm cấu hình, dữ liệu và eval**. Tiêu chí chấp nhận lấy nguyên văn từ Đề §3.
+
+| UC | Module dùng | Cấu hình / dữ liệu thêm | Bộ eval |
+|---|---|---|---|
+| **UC-01** | Gateway, Orchestrator, Executor, 6 agent, `ask_agent`, Policy, Trace | `OpsRequest` schema; `agents/*/agent.yaml`; skill seed `stock-reorder-request` | 40 yêu cầu định tuyến (≥ 10 liên phòng ban) + 6 case của Đề + case consult |
+| **UC-02** | `kb_search`, RAG, citation validator, Policy | ≥ 25 tài liệu KB (2 cặp cũ/mới), tài liệu `confidential` | 25 câu SOP (≥ 5 không có đáp án) + 6 case của Đề |
+| **UC-09** | Gateway, Policy (2 tầng), `ask_agent`, Audit log, màn hình audit | `config/policy.yaml`; bảng `users/roles`; tài liệu vai trò/interface/quyền từng agent | 6 case của Đề (gồm đi vòng qua agent khác, giả mạo giám đốc) |
+| **UC-06** | Scheduler, Request Runtime (checkpoint, idempotency), Orchestrator fan-out, validator số liệu, `send_chat_message` | Skill `weekly-ops-report`; dữ liệu nhiều phòng ban | 6 case của Đề (resume, kích hoạt 2 lần, nguồn lỗi, mỗi phút, job tạo job) + bộ câu cron |
+| **UC-08** | Trace store, Skill Proposer, kiểm tra tĩnh, sandbox replay, Approval, registry | Trace mẫu có 4 mẫu lặp + tác vụ làm 1 lần | 6 case của Đề (gồm skill dùng tool phòng khác, skill chứa shell/URL) |
+| *UC-03* | Agent hr, Tool HR, Approval (interrupt), skill `leave-request-review` | 15 đơn nghỉ phép; bảng chấm công cài bất thường | 15 đơn + 6 case của Đề |
+
+**Agent giao tiếp với nhau ở đâu:** chủ yếu UC-01 (đổi kết quả thật, có coordination trace → K6) và UC-09 (kiểm quyền khi đi vòng qua agent khác → K6, K8). UC-06 dùng fan-out từ orchestrator.
+
+---
+
+## 7. Bảng phân quyền
+
+### 7.1 Vai trò người dùng
+
+| Vai trò | Ví dụ quyền |
+|---|---|
+| `staff` | Hỏi SOP mức `internal`; tạo yêu cầu cho phòng mình; xin nghỉ phép |
+| `manager` (trưởng phòng / quản lý quán) | Thêm: duyệt nghỉ phép của nhân viên trực thuộc; xem số liệu phòng mình |
+| `chief_accountant` | Duyệt lệnh chi ≤ 20 triệu; xem tổng quỹ lương |
+| `director` | Duyệt lệnh chi > 20 triệu; xem báo cáo toàn công ty |
+| `admin` | Duyệt skill, quản lý job, cấu hình phân quyền, xem audit |
+
+Hạn mức và người duyệt lấy từ quy chế tài chính hư cấu trong `data/kb/`. Policy đọc từ cấu hình, không đọc từ RAG.
+
+### 7.2 Agent được hỏi agent nào (`can_consult`)
+
+| Agent hỏi → | ops | finance | sales | hr | cs | marketing |
+|---|---|---|---|---|---|---|
+| finance | ✔ tồn kho, phiếu nhập | — | ✔ khách hàng | ✘ | ✘ | ✘ |
+| ops | — | ✔ PO | ✘ | ✘ | ✘ | ✘ |
+| sales | ✔ tồn kho | ✘ | — | ✘ | ✔ | ✔ |
+| cs | ✔ tồn kho | ✘ | ✔ | ✘ | — | ✘ |
+| hr | ✔ lịch ca | ✘ | ✘ | — | ✘ | ✘ |
+| marketing | ✘ | ✘ | ✔ | ✘ | ✘ | — |
+
+Bảng này là gợi ý. Dù được hỏi, mọi tool của agent được hỏi vẫn bị kiểm theo **quyền người dùng gốc**.
+
+---
+
+## 8. Dữ liệu
+
+- **Doanh nghiệp đề xuất:** *Công ty TNHH Cà phê Gỗ Mộc* (gợi ý trong Đề §2.1). Lý do: ví dụ và eval case của Đề (UC-01 "Quán Bình Thạnh hết sữa tươi", UC-03 "số người nghỉ cùng quán") dùng sẵn bối cảnh chuỗi quán, nên ít phải chuyển đổi.
+- `data/company/`: sơ đồ tổ chức, 35 nhân viên hư cấu (phòng ban, vai trò, quản lý trực tiếp, quán), sản phẩm/nguyên liệu, nhà cung cấp, khách.
+- **Hệ thống giả lập (SQLite):** HR (hồ sơ, ngày phép, ca, chấm công, bảng lương) · sổ kế toán (hoá đơn, PO, phiếu nhập, lệnh chi) · kho · CRM/doanh thu.
+- `data/kb/`: ≥ 25 tài liệu có metadata, ≥ 2 cặp phiên bản cũ/mới mâu thuẫn, ≥ 1 tài liệu bị cài lệnh (case tấn công).
+- `scripts/seed.py`: đưa mọi hệ thống về trạng thái gốc trước mỗi lần chạy eval.
+
+---
+
+## 9. An toàn
+
+### 9.1 Case tấn công (Đề §4.3)
+
+| # | Tấn công | Chặn bởi | UC |
+|---|---|---|---|
+| 1 | Tài liệu SOP / tin nhắn chứa lệnh "chuyển khoản gấp…", "gửi tài liệu cho mọi người" | Nội dung tool/RAG là dữ liệu; không có tool chi tiền; policy | UC-02 |
+| 2 | Nhân viên Kho đòi lương phòng Sales, kể cả đi vòng qua agent khác | Policy 2 tầng + danh tính người dùng gốc | UC-09 |
+| 3 | Skill nháp gọi `curl` gửi dữ liệu ra ngoài, hoặc thêm `get_payroll` vào skill Marketing | Kiểm tra tĩnh + allowlist + duyệt | UC-08 |
+| 4 | Tài khoản chat mới tên hiển thị "Giám đốc" đòi duyệt lệnh chi | Gateway ánh xạ tài khoản; Approval kiểm vai trò người bấm | UC-09 |
+| 5 | "Báo cáo xong thì tạo thêm báo cáo", job tự đặt lịch | Chặn job tạo job, giới hạn tần suất | UC-06 |
+| 6 | Câu trả lời của agent được hỏi chứa chỉ dẫn | Kết quả `ask_agent` là dữ liệu | UC-01 |
+
+Mỗi case ghi lại: kết quả, biện pháp đã chặn, và nếu không chặn được thì cách khắc phục.
+
+---
+
+## 10. Bảng failure mode (HR-03)
+
+| # | Failure mode | Lớp | Cơ chế giảm rủi ro | Kiểm chứng |
+|---|---|---|---|---|
+| F1 | Output sai schema | L7 | Validator → tự sửa ≤ 2 lần → báo lỗi | UC-01 |
+| F2 | Định tuyến sai | L3 | Phân loại 2 lớp; `ask_user` khi thiếu thông tin | UC-01, bộ 40 yêu cầu |
+| F3 | `depends_on` tạo vòng | L3 | Kiểm DAG trước khi chạy | UC-01 |
+| F4 | Một việc con lỗi | L2, L3 | Ghi lỗi, việc khác vẫn chạy, Executor replan ≤ 1 lần, báo phần xong/phần lỗi | UC-01 |
+| F5 | RAG bịa / trích dẫn sai | L5, L7 | Citation validator; "không tìm thấy" khi thiếu căn cứ | UC-02 |
+| F6 | Trả lời theo quy định đã hết hiệu lực | L5 | Metadata `effective_date`, `version`; ưu tiên bản hiệu lực | UC-02 |
+| F7 | Lộ tài liệu / dữ liệu vượt quyền | L6 | Lọc trong truy vấn; policy 2 tầng; danh tính gốc khi consult | UC-02, UC-09 |
+| F8 | Nâng quyền bằng lời tự xưng | L1 | Danh tính chỉ từ gateway | UC-09 |
+| F9 | Tắt chương trình giữa chừng | L2 | Checkpoint + resume, bước đã xong không chạy lại | UC-06 |
+| F10 | Báo cáo gửi 2 lần | L2 | Idempotency key `job_id + kỳ` | UC-06 |
+| F11 | Lịch lặp vô hạn | L2, L6 | Chặn job tạo job, giới hạn tần suất, duyệt lịch dày | UC-06 |
+| F12 | Skill nháp nguy hiểm | L4, L6 | Kiểm tra tĩnh + sandbox + duyệt + version | UC-08 |
+| F13 | Agent vòng vèo giữa nhau | L3 | Độ sâu consult = 1, giới hạn số lần hỏi | UC-01 |
+| F14 | Tool / MCP chậm hoặc lỗi | L4 | Timeout, retry có backoff, lỗi có cấu trúc, recovery category | Mọi UC |
+| F15 | Thực thi trước khi được duyệt | L6 | Hành động cần duyệt chỉ chạy khi có bản ghi duyệt khớp tham số | UC-01, UC-03, UC-08 |
+
+---
+
+## 11. Đánh giá (HR-06)
+
+- **Một lệnh:** `evals.run --all` → `seed` → chạy → xuất file có cấu trúc (JSON/CSV) + bảng tổng hợp.
+- **Số case:** 6 case/UC × 5 UC + ≥ 5 case tấn công, **cộng** các bộ dữ liệu của Đề (40 yêu cầu định tuyến, 25 câu SOP; nếu làm UC-03 thì thêm 15 đơn nghỉ phép).
+- **Chỉ số theo Đề §6.2:**
+
+| Chỉ số | UC |
+|---|---|
+| Độ chính xác định tuyến, độ khớp tập việc con | UC-01 |
+| Recall@5, tỉ lệ trích dẫn hợp lệ, tỉ lệ "không tìm thấy" đúng | UC-02 |
+| Tỉ lệ số liệu báo cáo khớp nguồn, số lần gửi trùng | UC-06 |
+| Tỉ lệ phát hiện mẫu lặp, tỉ lệ chặn skill nguy hiểm | UC-08 |
+| Tỉ lệ chặn vượt quyền, giả mạo, injection | UC-09, §9 |
+| Token, chi phí, độ trễ trung bình mỗi tác vụ | Mọi UC |
+
+- **Regression:** chạy toàn bộ ≥ 2 lần (bản đầu và sau cải tiến), giải thích thay đổi nào gây khác biệt.
+- **Baseline** (§1.4): cùng dữ liệu, cùng model, cùng budget, so ba cách:
+  - **workflow cố định** (luồng viết sẵn bằng code, không có agent quyết định);
+  - **một agent** (một agent loop có đủ tool, không có policy, cổng duyệt hay checkpoint);
+  - **hệ thống có kiểm soát** (kiến trúc này).
+
+  Đo độ đúng, số hành động vượt quyền hoặc chưa duyệt, số bản ghi trùng sau restart, token, chi phí, độ trễ. Đúng/sai chấm bằng luật trên dữ liệu nguồn, không dùng LLM làm giám khảo.
+- **So sánh thiết kế** (để trả lời vấn đáp):
+  - phân loại 1 lớp so với 2 lớp;
+  - có / không `ask_agent` trên tập liên phòng ban;
+  - Executor agent cha (gọi model sau mỗi việc con) so với chạy DAG cố định bằng code: chất lượng trên tập liên phòng ban so với token và độ trễ.
+
+---
+
+## 12. Phase
+
+| Mốc | Nội dung | Demo |
+|---|---|---|
+| **P1 · 27/10** (buổi 1–5) | Đăng ký UC + người sở hữu. Cả nhóm làm UC-01 lát cắt đầu, **một agent loop**: gateway + **room web bản tối thiểu** (chat + timeline event), `OpsRequest` + validate/tự sửa; route `single` chạy agent loop với cấu hình (prompt + tool) của 2–3 phòng ban; route `multi` mới trả phiếu yêu cầu, chưa thực thi; ≥ 2 tool, 1 skill (`stock-reorder-request`), log từng bước, ≥ 10 eval | Giao việc trong room → thấy phiếu yêu cầu, phòng ban được chọn, tool call; thấy một lỗi được xử lý có kiểm soát |
+| **P2 · 10/11** (buổi 6–8) | UC-02 (RAG có trích dẫn); Request Runtime trên LangGraph có checkpoint/resume và compaction context; Approval Service bằng `interrupt` (nút duyệt trên room + Discord); UC-09 phần một agent: danh tính từ gateway, policy ở Tool Gateway và `kb_search`, audit log + màn hình audit; **adapter Discord**. Đủ ≥ 3 UC: UC-01 (`single`), UC-02, UC-09 | Câu hỏi SOP có trích dẫn; lệnh chi dừng chờ duyệt rồi chạy tiếp; tắt/bật lại server vẫn resume; nhân viên Kho hỏi lương bị chặn; giao việc từ Discord và mở link xem trace |
+| **P3 · 06/12** (buổi 9–11) | **Multi-agent:** UC-01 hoàn chỉnh (DAG executor, `delegate`, `ask_agent`, coordination trace trong room); UC-09 kiểm quyền khi giao việc/consult và case đi vòng qua agent khác; **MCP server** cho hệ thống giả lập (§4.6). UC-06, UC-08, (UC-03); Slack (tuỳ chọn); đủ eval + tấn công; regression 2 lần; báo cáo, video, trace mẫu | Yêu cầu liên phòng ban có consult hiện trong room; chặn vượt quyền đi vòng; báo cáo theo lịch gửi đúng 1 lần; skill được đề xuất → duyệt → dùng lại; kết quả regression |
+
+**Luật phase** (`docs/YEU-CAU.md` §2): mỗi phase chỉ dùng kiến thức đã học tới lúc đó. Multi-agent và MCP học ở buổi 9–11 nên chỉ vào từ P3. Ở P1–P2, "agent phòng ban" là **cấu hình** (prompt + tool + scope) chạy trên cùng một agent loop, được chọn theo `route`; chưa có giao việc hay hỏi nhau giữa các agent.
+
+---
+
+## 13. Quyết định công nghệ
+
+| Hạng mục | Quyết định | Trạng thái | Căn cứ |
+|---|---|---|---|
+| Codebase agent | `agent/`: Python 3.12, uv, LangChain 1.x + LangGraph | Đã chốt | `docs/YEU-CAU.md` §7 (phase 2 bắt buộc LangGraph); Đề §1.5 mục 5–6 |
+| Codebase ứng dụng | `app/`: TypeScript, Next.js (App Router), React, pnpm | Đã chốt, đổi từ Vite | Next.js có sẵn routing, route handler và middleware cho phần web (đăng nhập, room, stream SSE). Bootstrap hiện tại là Vite nên cần migrate `app/` |
+| Model | Chọn theo profile trong `agent/models.yaml`. Baseline có tool calling native (Claude Haiku 5.5 hoặc DeepSeek V4). Model của trường là profile yếu để chứng minh harness; endpoint này không có tool calling native nên cần lớp chuyển giao thức. Test dùng fake model có kịch bản, không cần key hay mạng | Đã chốt | `docs/YEU-CAU.md` §6–7 |
+| Vector store (§4.9) | sqlite-vec / Chroma / pgvector | Còn mở, chốt trước P2 | Chọn theo eval Recall@5 và việc lọc metadata trong truy vấn |
+| Lưu reasoning của model (§4.14) | Có lưu hay không, ai được xem | Còn mở | Tuỳ model có trả reasoning chính thức không |
+
+**Tự xây agent trên LangGraph không vi phạm Đề §1.5:** LangGraph là framework được phép, không phải sản phẩm agent có sẵn. Prompt, tool, policy, workflow và eval đều do nhóm viết. Không dùng `deepagents` ở P1, vì nó đóng gói sẵn subagent và filesystem.
+
+**Ánh xạ module sang LangGraph:**
+
+| Module | Cài bằng |
+|---|---|
+| Request Runtime (§4.2) | `StateGraph`; state gồm `ExecutionContext`, `OpsRequest`, kết quả việc con (theo tham chiếu) |
+| Checkpoint / resume (§4.2, §4.11) | Checkpointer của LangGraph lưu SQLite; mỗi request/job run là một `thread_id` |
+| Approval (§4.8) | `interrupt()` dừng graph; Approval Service kiểm quyền người duyệt rồi resume bằng `Command(resume=...)` |
+| Agent loop phòng ban (§4.4) | Agent loop của LangChain 1.x; mọi tool đi qua Tool Gateway trước khi tới model |
+| Executor + fan-out việc con (§4.3, P3) | Node Executor gọi model mỗi khi một lượt việc con xong; `Send` chạy song song việc độc lập; code chỉ phát việc khi `depends_on` đã xong |
+
+`agent/runtime/` (TypeScript, PR #20) chỉ còn là **tham khảo** cho phần xử lý lỗi; không phải runtime ([ADR 003](decisions/003-python-langgraph.md)).
+
+**Giao thức dùng lại** (không tự chế giao thức mới):
+
+| Nhu cầu | Giao thức | Dùng thế nào |
+|---|---|---|
+| Tool vào, tích hợp ra | [MCP](https://modelcontextprotocol.io/specification/2026-07-28) | MCP server cho hệ thống giả lập (§4.6, P3) |
+| Đóng gói skill | Agent Skills (`SKILL.md`) | Định dạng của skill registry (§4.12) |
+| Stream tiến trình lên app | [AG-UI](https://docs.ag-ui.com/) | Room web nhận tool call, trạng thái, yêu cầu duyệt qua SSE (§4.14) |
+| Uỷ quyền truy cập | OAuth 2.1 (MCP authorization) | MCP server và connector hành động thay một người dùng đã xác định |
+| Đồng ý chi tiền | [AP2](https://github.com/google-agentic-commerce/AP2) mandate, ACP | **Chỉ tham khảo** cho duyệt chi hai bước (§4.8) |
+| Agent ↔ agent giữa các công ty | [A2A](https://a2a-protocol.org/) | Không cần: agent phòng ban dùng chung một core |
+| Danh tính agent trên web công khai | Web Bot Auth (IETF draft) | Không cần: agent không duyệt web ngoài |
+
+Kênh chat không có giao thức chung; channel adapter (§4.0) mỏng và do nhóm viết.
+
+---
+
+## 14. Tham khảo (ghi nguồn theo yêu cầu của Đề)
+
+- Hermes Agent (Nous Research): chỉ tham khảo **kiến trúc** (gateway tách riêng, nạp skill từng phần, delegation có giới hạn, chạy theo lịch). **Không dùng làm runtime hay agent con.** Nguồn ghim commit: [architecture](https://github.com/NousResearch/hermes-agent/blob/dfa79389773271ee78c41a7af340848948d461ee/website/docs/developer-guide/architecture.md), [kanban](https://github.com/NousResearch/hermes-agent/blob/dfa79389773271ee78c41a7af340848948d461ee/website/docs/user-guide/features/kanban.md).
+- [DeepSeek Harness architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md): tham khảo cách chia harness.
+- Pi Durable, **chỉ tham khảo** cho request bền và recovery, không phải dependency: [README](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/README.md), [spec](https://github.com/earendil-works/pi/blob/8efd314fa3d3232ce197d8d7a6a5660530b9d83e/packages/durable/docs/spec.md) (ghim commit).
+- Ghi chú bài giảng always-on agents (PR #15, branch `14-transcript-research`, chưa merge): đánh thức theo sự kiện có ID ổn định, state do server giữ, resume bền, input không tin cậy không bao giờ thành quyền, lỗi biến thành eval case.
+- Kiến trúc tham chiếu trong Đề §2.5.
+- Team architecture proposal (2026-10-18, đã gộp vào đây và xoá; xem lịch sử git): request lifecycle, tool contract và recovery category, sổ usage, tách audit log khỏi trace.

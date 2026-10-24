@@ -1,6 +1,6 @@
 # Architecture vocabulary
 
-Updated 2026-10-17. Canonical names for the proposal in [ARCHITECTURE.md](ARCHITECTURE.md) and [SE373.tldr](SE373.tldr). This is a terminology change, not a runtime implementation or new deployment topology. Code names are English; employee-facing labels can be localized.
+Updated 2026-10-17. Canonical names from the 2026-10-18 proposal, now folded into [ARCHITECTURE.md](ARCHITECTURE.md) (2026-10-24; it wins on any conflict), and [SE373.tldr](SE373.tldr). This is a terminology change, not a runtime implementation or new deployment topology. Code names are English; employee-facing labels can be localized.
 
 ## Business and execution records
 
@@ -61,4 +61,4 @@ Pi's `run` (input-to-answer turns) is not automatically the application's `Run` 
 
 ## Runtime selection is separate
 
-Per the user's lecturer clarification (2026-10-17), language/framework choice is open. The proposal targets a team-authored TypeScript agent and durability core, with Pi Durable for reference/testing only. Cordis remains a composition candidate; DSH is not selected as our runtime. Existing Python code is not migrated by this PR. Each module must be explainable as described in ARCHITECTURE.md; one execution owner and mandatory security/recovery contracts remain required.
+Superseded by [ADR 003](decisions/003-python-langgraph.md) (2026-10-24): the agent core is Python 3.12 + LangChain 1.x + LangGraph; `agent/runtime/` (TypeScript) and Pi Durable are reference only. DSH and Cordis are not our runtime. Each module must be explainable as described in ARCHITECTURE.md; one execution owner and mandatory security/recovery contracts remain required.
