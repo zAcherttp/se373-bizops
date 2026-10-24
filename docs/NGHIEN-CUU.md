@@ -1,5 +1,9 @@
 # Nghiên cứu nền · Business Ops Agent
 
+Nghiên cứu bổ sung: [Always-on agents: kiến trúc, context, persistence và eval](research/always-on-agents.md)
+(2026-10-15; có transcript và timestamp; đề xuất chưa phải quyết định đã chốt).
+Tool thu thập nguồn: [`tools/transcripts/`](../tools/transcripts/README.md).
+
 Tổng hợp ban đầu ngày 10/10/2026; đồng bộ hướng thiết kế ngày 15/10/2026 theo đề xuất kiến trúc lúc đó (issue [#16](https://github.com/zAcherttp/se373-bizops/issues/16)). Kiến trúc hiện hành ở [ARCHITECTURE.md](ARCHITECTURE.md) (24/10/2026); chỗ nào khác thì ARCHITECTURE.md thắng. Tài liệu này là nghiên cứu, không phải ADR. Các nhận định về sản phẩm/model và giá cần xác minh lại trước khi triển khai; không dùng bảng so sánh cũ làm bằng chứng một framework thiếu năng lực.
 
 ## 1. Các hệ thống tham khảo
