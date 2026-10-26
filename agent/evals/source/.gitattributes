@@ -1,1 +1,1 @@
-agent/evals/source/** -text
+*.csv -text
