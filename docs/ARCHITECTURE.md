@@ -17,6 +17,10 @@ Chỗ nào tài liệu này khác Đề hoặc rubric thì **rubric > Đề > t�
 
 ## 1. Phạm vi
 
+### 1.0 Mô hình sản phẩm
+
+Công ty tự host hệ thống A. Mỗi nhân viên kết nối tới A qua client tải về, web hoặc kênh chat của công ty, và chat với ops agent để giao và kiểm tra việc. Các luồng dữ liệu nghiệp vụ (kho, kế toán, CRM, nhân sự) được nối dần vào A dưới dạng MCP server (từ P3). A cũng là một MCP server để bộ phận engineering tích hợp vào công cụ của họ. Chức năng mở rộng qua plugin do admin cài và review; tự cải thiện chỉ đi qua đề xuất skill có người duyệt (UC-08). Agent không tự cài plugin.
+
 ### 1.1 Use case đã chọn
 
 | UC | Tên (theo Đề) | K chính | Phase | Người sở hữu |
@@ -484,6 +488,7 @@ Mỗi case ghi lại: kết quả, biện pháp đã chặn, và nếu không ch
 ## 11. Đánh giá (HR-06)
 
 - **Một lệnh:** `evals.run --all` → `seed` → chạy → xuất file có cấu trúc (JSON/CSV) + bảng tổng hợp.
+- **Bộ case:** [`agent/evals/cases.jsonl`](../agent/evals/cases.jsonl) (schema và số liệu trong [README](../agent/evals/README.md)).
 - **Số case:** 6 case/UC × 5 UC + ≥ 5 case tấn công, **cộng** các bộ dữ liệu của Đề (40 yêu cầu định tuyến, 25 câu SOP; nếu làm UC-03 thì thêm 15 đơn nghỉ phép).
 - **Chỉ số theo Đề §6.2:**
 
